@@ -51,7 +51,7 @@
           <top-theme></top-theme>
         </div>
       </el-tooltip>
-      <el-tooltip effect="dark"
+      <el-tooltip v-if="showLang" effect="dark"
                   :content="$t('navbar.language')"
                   placement="bottom">
         <div class="top-bar__item top-bar__item--show">
@@ -113,7 +113,24 @@ export default {
   },
   name: "top",
   data () {
-    return {};
+    return {
+      // 隐藏顶部菜单
+      showMenu: false,
+      // 隐藏顶部搜索
+      showSearch: false,
+      // 隐藏顶部选色器
+      showColor: false,
+      // 隐藏顶部 bug
+      showDebug: false,
+      // 隐藏顶部锁屏按钮
+      showLock: false,
+      // 隐藏顶部主题选择按钮
+      showTheme: false,
+      // 隐藏顶部语言选择按钮
+      showLang: false,
+      // 隐藏顶部全屏按钮
+      showFullScren: false,
+    };
   },
   filters: {},
   created () { },
