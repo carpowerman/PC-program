@@ -25,7 +25,7 @@
         </el-tab-pane>
 
       </el-tabs>
-      <el-dropdown class="avue-tags__menu">
+      <el-dropdown class="avue-tags__menu" v-if="avueTagsMenuShow">
         <el-button type="primary"
                    size="mini">
           {{$t('tagsView.menu')}}
@@ -50,7 +50,8 @@ export default {
       active: "",
       contentmenuX: "",
       contentmenuY: "",
-      contextmenuFlag: false
+      contextmenuFlag: false,
+      avueTagsMenuShow: false,
     };
   },
   created () { },

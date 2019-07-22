@@ -49,17 +49,19 @@ export default {
   width: 240px;
   height: 64px;
   line-height: 64px;
-  background-color: #20222a;
+  // background-color: #20222a;
   font-size: 20px;
   overflow: hidden;
   box-sizing: border-box;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  // color: rgba(255, 255, 255, 0.8);
   z-index: 1024;
+  color: #101010;
+  background-color: #F6C506;
   &_title {
     display: block;
     text-align: center;
-    font-weight: 300;
+    font-weight: 700;
     font-size: 20px;
   }
   &_subtitle {

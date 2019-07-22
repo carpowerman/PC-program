@@ -139,15 +139,15 @@ export default {
   },
   computed: {
     ...mapState({
-      showDebug: state => state.common.showDebug,
-      showTheme: state => state.common.showTheme,
-      showLock: state => state.common.showLock,
-      showFullScren: state => state.common.showFullScren,
+    //  showDebug: state => state.common.showDebug,
+    //  showTheme: state => state.common.showTheme,
+    //  showLock: state => state.common.showLock,
+    //  showFullScren: state => state.common.showFullScren,
       showCollapse: state => state.common.showCollapse,
-      showSearch: state => state.common.showSearch,
-      showMenu: state => state.common.showMenu,
-      showColor: state => state.common.showColor
-    }),
+    //  showSearch: state => state.common.showSearch,
+    //  showMenu: state => state.common.showMenu,
+    //  showColor: state => state.common.showColor
+    }), 
     ...mapGetters([
       "userInfo",
       "isFullScren",
