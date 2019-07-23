@@ -18,8 +18,11 @@ import i18n from './lang' // Internationalization
 import './styles/common.scss';
 import AVUE from '@smallwei/avue';
 import '@smallwei/avue/lib/index.css';
+import echarts from 'echarts';
 
 import basicContainer from './components/basic-container/main'
+
+Vue.prototype.$echarts = echarts;
 
 Vue.use(router)
 Vue.use(VueAxios, axios)
@@ -29,6 +32,7 @@ Vue.use(Element, {
 Vue.use(AVUE, {
     i18n: (key, value) => i18n.t(key, value)
 })
+
 //注册全局容器
 Vue.component('basicContainer', basicContainer)
 // 加载相关url地址

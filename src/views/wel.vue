@@ -1,5 +1,55 @@
 <template>
   <div>
+    <!-- 改写主页 -->
+    <el-row :span="24">
+      <el-col :span="8">
+        <basic-container>
+          <template v-slot:header>客户资料</template>
+          <template v-slot:body>
+            <div>欢迎尊敬的 <b>周晓宇</b> 客户</div>
+            <div>
+              <img>
+              <div>
+                <div>用户类型：业务员</div>
+                <div>所属组织：行中创汇科技有限公司</div>
+              </div>
+            </div>
+          </template>
+        </basic-container>
+      </el-col>
+      <el-col :span="16">
+        <basic-container>
+          <template v-slot:header>待办事项</template>
+          <template v-slot:body>
+            <div>
+              <div>
+                <div>11</div>
+                <div>预约中数量</div>
+              </div>
+              <div>
+                <div>11</div>
+                <div>已拒绝数量</div>
+              </div>
+              <div>
+                <div>11</div>
+                <div>总数量</div>
+              </div>
+            </div>
+          </template>
+        </basic-container>
+      </el-col>
+    </el-row>
+    <el-row :span="24">
+      <el-col :span="18">
+        <basic-container>
+          <template v-slot:header>数据图表</template>
+          <template v-slot:body>
+            <div id="echarts" style="width: 100%;height: 500px;"></div>
+          </template>
+        </basic-container>
+      </el-col>
+      <el-col :span="6"></el-col>
+    </el-row>
     <div class="wel__header">
       <div class="wel__info">
         <img :src="userInfo.avatar"
@@ -95,7 +145,8 @@ export default {
           nr: "这是一条很长很长很长很长很长很长很长很长很长的工作内容",
           sj: "2019-01-01"
         }
-      ]
+      ],
+      myChart: ''
     };
   },
   computed: {
@@ -258,7 +309,32 @@ export default {
       };
     }
   },
-  created() {},
+  mounted() {
+    this.myChart = this.$echarts.init(document.getElementById('echarts'));
+    this.myChart.setOption({
+      color: ['#F6C506', '#232323'],
+      dataset: {
+        dimensions: ['product', '审核通过数量', '当月申请数量'],
+        source: [
+          { product: '2019-01', '审核通过数量': 11, '当月申请数量': 22},
+          { product: '2019-02', '审核通过数量': 11, '当月申请数量': 22},
+          { product: '2019-03', '审核通过数量': 11, '当月申请数量': 22},
+          { product: '2019-04', '审核通过数量': 11, '当月申请数量': 22},
+        ]
+      },
+      xAxis: { type: 'category' },
+      yAxis: {},
+      series: [
+        { type: 'bar' },
+        { type: 'bar' }
+      ]
+
+    });
+    console.log(this.myChart);
+  },
+  created() {
+
+  },
   methods: {}
 };
 </script>
