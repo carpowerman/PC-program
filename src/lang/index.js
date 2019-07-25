@@ -21,7 +21,8 @@ const messages = {
 }
 
 const i18n = new VueI18n({
-  locale: getStore({ name: 'language' }) || 'en',
+  // 默认使用语言
+  locale: getStore({ name: 'language' }) || 'zh',
   messages
 })
 

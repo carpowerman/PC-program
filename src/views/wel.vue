@@ -48,7 +48,23 @@
           </template>
         </basic-container>
       </el-col>
-      <el-col :span="6"></el-col>
+      <el-col :span="6">
+        <basic-container>
+          <template v-slot:header>公告</template>
+          <template v-slot:body>
+            <ul class="notice">
+              <li>
+                <p>从今晚20:00到次日08:00，客户端系统维护通知。啊啊啊啊啊啊啊</p>
+                <span>2019-02-01 14:00:00</span>
+              </li>
+              <li>
+                <p>从今晚20:00到次日08:00，客户端系统维护通知</p>
+                <span>2019-02-01 14:00:00</span>
+              </li>
+            </ul>
+          </template>
+        </basic-container>
+      </el-col>
     </el-row>
     <div class="wel__header">
       <div class="wel__info">
@@ -312,6 +328,9 @@ export default {
   mounted() {
     this.myChart = this.$echarts.init(document.getElementById('echarts'));
     this.myChart.setOption({
+      // 图例配置
+      legend: {},
+      // 柱状图颜色配置
       color: ['#F6C506', '#232323'],
       dataset: {
         dimensions: ['product', '审核通过数量', '当月申请数量'],
@@ -325,9 +344,25 @@ export default {
       xAxis: { type: 'category' },
       yAxis: {},
       series: [
-        { type: 'bar' },
-        { type: 'bar' }
-      ]
+        {
+          type: 'bar',
+          label: {
+            show: true,
+            position: 'top'
+          }
+        },
+        {
+          type: 'bar',
+          label: {
+            show: true,
+            position: 'top'
+          }
+        }
+      ],
+      // 提示框组件
+      tooltip: {
+        trigger: 'axis',
+      }
 
     });
     console.log(this.myChart);
@@ -418,6 +453,30 @@ export default {
         color: rgba(0, 0, 0, 0.45);
         font-size: 20px;
       }
+    }
+  }
+}
+
+.notice {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    border-bottom: 1px solid #E0E4ED;
+    padding: 0 0 30px 0;
+    margin-bottom: 30px;
+    p {
+      color: #020202;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 0;
+      padding: 5px 0;
+      line-height: 22px;
+    }
+    span {
+      color: #898D98;
+      font-size: 12px;
     }
   }
 }
