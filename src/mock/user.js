@@ -8,7 +8,7 @@ export default ({ mock }) => {
         const username = window.CryptoJS.AES.decrypt(loginForm.username, 'avue').toString(window.CryptoJS.enc.Utf8).toString();
         const password = window.CryptoJS.AES.decrypt(loginForm.password, 'avue').toString(window.CryptoJS.enc.Utf8).toString();
         
-        if((username === 'tql' && password == '123456') || (username === 'jxj' && password === '123456')) return { data: '111', code: 1 }
+        if((username === 'tql' && password == '123456') || (username === 'jxj' && password === '123456')) return { data:  new Date().getTime() + '', code: 1 }
         //if()
         return { code: 0 };
     });
