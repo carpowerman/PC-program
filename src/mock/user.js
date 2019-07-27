@@ -2,8 +2,15 @@ import Mock from 'mockjs'
 export default ({ mock }) => {
     if (!mock) return;
     // 用户登录
-    Mock.mock('/user/login', 'post', {
-        data: new Date().getTime() + ''
+    Mock.mock('/user/login', 'post', (opts) => {
+        // opts 含 url type body 三个对象
+        const loginForm = JSON.parse(opts.body);
+        const username = window.CryptoJS.AES.decrypt(loginForm.username, 'avue').toString(window.CryptoJS.enc.Utf8).toString();
+        const password = window.CryptoJS.AES.decrypt(loginForm.password, 'avue').toString(window.CryptoJS.enc.Utf8).toString();
+        
+        if((username === 'tql' && password == '123456') || (username === 'jxj' && password === '123456')) return { data:  new Date().getTime() + '', code: 1 }
+        //if()
+        return { code: 0 };
     });
     //用户退出
     Mock.mock('/user/logout', 'get', {

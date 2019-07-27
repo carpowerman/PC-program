@@ -1,7 +1,10 @@
 <template>
   <div class="basic-container">
     <el-card>
-      <slot></slot>
+      <div slot="header">
+        <slot name="header"></slot>
+      </div>
+      <slot name="body"></slot>
     </el-card>
   </div>
 </template>

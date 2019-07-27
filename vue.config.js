@@ -33,5 +33,5 @@ module.exports = {
         entry
             .add('@/mock')
             .end()
-    }
+    },
 }

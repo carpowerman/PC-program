@@ -16,12 +16,15 @@
         <div class="login-main">
           <h4 class="login-title">
             {{ $t('login.title') }}{{website.title}}
-            <top-lang></top-lang>
+            <top-lang v-if="false"></top-lang>
           </h4>
           <userLogin v-if="activeName==='user'"></userLogin>
-          <codeLogin v-else-if="activeName==='code'"></codeLogin>
-          <thirdLogin v-else-if="activeName==='third'"></thirdLogin>
-          <div class="login-menu">
+          <!-- 手机登录 -->
+          <codeLogin v-else-if="activeName==='code' && false"></codeLogin>
+          <!-- 第三方登录 -->
+          <thirdLogin v-else-if="activeName==='third' && false"></thirdLogin>
+          <!-- 多种登录模式 选项 -->
+          <div class="login-menu" v-if="false">
             <a href="#"
                @click.stop="activeName='user'">{{ $t('login.userLogin') }}</a>
             <a href="#"

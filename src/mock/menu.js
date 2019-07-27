@@ -182,10 +182,77 @@ const third = [{
     i18n: 'test',
   },
   children: []
-}]
+}];
+// 全部菜单栏
+const admin = [
+ {
+    label: '小程序设置',
+    path: '/miniProgram',
+    component: '',
+    icon: '',
+    meta: {
+      i18n: 'miniProgram'
+    },
+    children: []
+  },  {
+    label: '门店管理',
+    path: '/miniProgram',
+    component: '',
+    icon: '',
+    meta: {
+      i18n: 'miniProgram'
+    },
+    children: []
+  },  {
+    label: '员工管理',
+    path: '/miniProgram',
+    component: '',
+    icon: '',
+    meta: {
+      i18n: 'miniProgram'
+    },
+    children: []
+  },  {
+    label: '客户管理',
+    path: '/miniProgram',
+    component: '',
+    icon: '',
+    meta: {
+      i18n: 'miniProgram'
+    },
+    children: []
+  },  {
+    label: '预约管理',
+    path: '/miniProgram',
+    component: '',
+    icon: '',
+    meta: {
+      i18n: 'miniProgram'
+    },
+    children: []
+  },  {
+    label: '金融方案',
+    path: '/miniProgram',
+    component: '',
+    icon: '',
+    meta: {
+      i18n: 'miniProgram'
+    },
+    children: []
+  },  {
+    label: '评分规则',
+    path: '/miniProgram',
+    component: '',
+    icon: '',
+    meta: {
+      i18n: 'miniProgram'
+    },
+    children: []
+  },
+]
 export default ({ mock }) => {
   if (!mock) return;
-  let menu = [first, second, third];
+  let menu = [first, second, third, admin];
   Mock.mock('/user/getMenu', 'get', (res) => {
     let body = JSON.parse(res.body);
     return {

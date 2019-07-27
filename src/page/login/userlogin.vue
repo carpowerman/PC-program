@@ -70,6 +70,7 @@
 <script>
 import { randomLenNum } from "@/util/util";
 import { mapGetters } from "vuex";
+
 export default {
   name: "userlogin",
   data() {
@@ -135,10 +136,20 @@ export default {
         : (this.passwordType = "");
     },
     handleLogin() {
+      // 表单字段验证
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.$store.dispatch("LoginByUsername", this.loginForm).then(() => {
-            this.$router.push({ path: this.tagWel.value });
+          // 调用 store 登录动作（包括登录 api ） --@store/modules/user
+          this.$store.dispatch("LoginByUsername", this.loginForm).then((res) => {
+            // 从 vuex 层获取 promise 对象 resolve 值
+            if(res.code === 0) {
+              this.$notify.error({ title: '登录失败', message: '用户名或密码错误' });
+            } else {
+              this.$notify.success({ title: '登录成功', message: '欢迎登录！' });
+              // 从 store-config 获取默认首页路由，并跳转
+              this.$router.push({ path: this.tagWel.value });
+            }
+            
           });
         }
       });

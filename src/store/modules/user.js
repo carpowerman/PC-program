@@ -42,19 +42,24 @@ const user = {
     actions: {
         //根据用户名登录
         LoginByUsername({ commit }, userInfo) {
+            // 加密，需与后端协调
             const user = encryption({
                 data: userInfo,
                 type: 'Aes',
                 key: 'avue',
-                param: ['useranme', 'password']
+                param: ['username', 'password']
             });
+            // 发起 api 请求
             return new Promise((resolve) => {
+                // api 请求 --@/api/user.js
                 loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr).then(res => {
-                    const data = res.data.data;
-                    commit('SET_TOKEN', data);
+                    const data = res.data;
+                    if(data.code === 0) resolve(data);
+                    // token 存入 store
+                    commit('SET_TOKEN', data.data);
                     commit('DEL_ALL_TAG');
                     commit('CLEAR_LOCK');
-                    resolve();
+                    resolve(data);
                 })
             })
         },
