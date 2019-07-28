@@ -188,7 +188,7 @@ const admin = [
  {
     label: '小程序设置',
     path: '/miniProgram',
-    component: '',
+    component: 'views/miniProgram/index',
     icon: '',
     meta: {
       i18n: 'miniProgram'
@@ -196,7 +196,7 @@ const admin = [
     children: []
   },  {
     label: '门店管理',
-    path: '/miniProgram',
+    path: '/miniProgram1',
     component: '',
     icon: '',
     meta: {
@@ -205,7 +205,7 @@ const admin = [
     children: []
   },  {
     label: '员工管理',
-    path: '/miniProgram',
+    path: '/miniProgram2',
     component: '',
     icon: '',
     meta: {
@@ -214,7 +214,7 @@ const admin = [
     children: []
   },  {
     label: '客户管理',
-    path: '/miniProgram',
+    path: '/miniProgram3',
     component: '',
     icon: '',
     meta: {
@@ -223,7 +223,7 @@ const admin = [
     children: []
   },  {
     label: '预约管理',
-    path: '/miniProgram',
+    path: '/miniProgram4',
     component: '',
     icon: '',
     meta: {
@@ -232,16 +232,16 @@ const admin = [
     children: []
   },  {
     label: '金融方案',
-    path: '/miniProgram',
-    component: '',
+    path: '/financialPlan',
+    component: 'views/financialPlan/index',
     icon: '',
     meta: {
-      i18n: 'miniProgram'
+      i18n: 'financialPlan'
     },
     children: []
   },  {
     label: '评分规则',
-    path: '/miniProgram',
+    path: '/miniProgram6',
     component: '',
     icon: '',
     meta: {
