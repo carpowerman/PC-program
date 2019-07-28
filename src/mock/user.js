@@ -25,7 +25,9 @@ export default ({ mock }) => {
         data: {
             userInfo: {
                 username: 'admin',
-                name: 'avue',
+                name: '周小雨',
+                type: '业务员',
+                org: '杭州创汇科技有限公司',
                 avatar: 'https://gitee.com/uploads/61/632261_smallweigit.jpg',
             },
             roles: 'admin',
