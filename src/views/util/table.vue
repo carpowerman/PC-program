@@ -19,9 +19,9 @@
         <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </el-col>
       <el-col :span="20">
-        <pc-table @search="search" :ch-table='dataTable'>
-          <template slot='status' scope="scope">
-             <el-select v-model="scope.obj.row.rowStatus" placeholder="请选择">
+        <pc-table @initTableData="initData" :ch-table='dataTable'>
+          <template slot='status' slot-scope="props">
+             <el-select v-model="props.obj.row.rowStatus" placeholder="请选择">
                 <el-option
                   v-for="item in statusOptions"
                   :key="item.value"
@@ -281,7 +281,7 @@
       nodeClick(data) {
         this.$message.success(JSON.stringify(data))
       },
-      search(obj) {
+      initData(obj) {
         this.getHeight();
         this.dataTable.tableData = [{
           username: '22',
@@ -295,12 +295,6 @@
         this.dataTable.pageSize = obj.pageSize;
         this.dataTable.pageNo = obj.pageNo;
         this.dataTable.total = 200;
-        this.dataTable.tableData.forEach(item=>{
-        })
-        // this.$post(‘你的后台API地址’,this.getTable).then((res) => {
-        //   this.dataTable.tableData = res.data.result;
-        //   this.dataTable.total = res.data.total
-        // })
       },
       getHeight() {
         let pageTopHeight = this.$refs.chTop.$el.offsetHeight;

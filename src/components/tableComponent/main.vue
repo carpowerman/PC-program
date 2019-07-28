@@ -3,7 +3,6 @@
      <el-table :data="chTable.tableData" 
                ref="orginalTable" 
                :height="chTable.tableHeight" 
-               @sort-change="sortChange" 
                border 
                stripe
        style="width: 100%">
@@ -45,24 +44,9 @@
      },
      methods: {
        inintData() {
+         debugger
          this.chTable.pageSize = 2
-         this.$emit('search', {
-           pageNo: this.chTable.pageNo,
-           pageSize: this.chTable.pageSize
-         });
-       },
-       //排序
-       sortChange(obj) {
-         let orderBy = {};
-         if (obj.order) {
-           if (obj.order.substr(0, 1) === 'a') {
-             orderBy = obj.prop + " asc"
-           }
-           if (obj.order.substr(0, 1) === 'd') {
-             orderBy = obj.prop + " desc"
-           }
-         }
-         this.$emit('search', {
+         this.$emit('initTableData', {
            pageNo: this.chTable.pageNo,
            pageSize: this.chTable.pageSize
          });
@@ -75,16 +59,15 @@
                     }
                 }
       },
-       handleSizeChange(val) {
-         debugger
-         this.$emit('search', {
+       handleSizeChange() {
+         this.$emit('initTableData', {
            pageNo: this.chTable.pageNo,
            pageSize: this.chTable.pageSize
          });
        },
        handleCurrentChange(val) {
          debugger
-         this.$emit('search', {
+         this.$emit('initTableData', {
            pageNo: val,
            pageSize: this.chTable.pageSize
          });

@@ -6,6 +6,13 @@
       width="30%"
   >
       <slot name='dialogText'></slot>
+       <el-dialog
+        width="30%"
+       :title="dialogData.innerDialogTitle"
+      :visible.sync="isInnerVisible"
+      append-to-body>
+      <slot name='innerDialogText'></slot>
+    </el-dialog>
     </el-dialog>
   </div>
  </template>
@@ -13,26 +20,38 @@
   export default {
     props:{
       dialogVisible:Boolean,
-      dialogData:Object
+      innerDialogVisible:Boolean,
+      dialogData:Object,
     },
     data() {
       return {
         isVisible:false,
+        isInnerVisible:false,
       };
     },
     watch:{
+      
       dialogVisible(val){
+        debugger
         this.isVisible=val
       },
       isVisible(val){
         if(!val){
           this.$emit("handle-close",val)
         }
+      },
+      innerDialogVisible(val){
+        this.isInnerVisible=val
+      },
+      isInnerVisible(val){
+        if(!val){
+          this.$emit("handle-close-inner",val)
+        }
       }
     },
     methods: {
       comfirmOption(){
-         this.$emit("comfirm-option",val)
+         this.$emit("comfirm-option")
       },
       // handleClose(done) {
       //   this.$confirm('确认关闭？')
