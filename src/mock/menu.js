@@ -27,6 +27,49 @@ const top = [{
   parentId: 2
 },
 {
+  label: "门店管理",
+  icon: 'el-icon-document',
+  path: "/storeManagement",
+  meta: {
+    i18n: 'storeManagement',
+  },
+  parentId: 3
+},
+{
+  label: "员工管理",
+  icon: 'el-icon-document',
+  path: "/employeeManagement",
+  meta: {
+    i18n: 'employeeManagement',
+  },
+  parentId: 4 
+},
+{
+  label: "客户管理",
+  icon: 'el-icon-document',
+  path: "/customerManagement",
+  meta: {
+    i18n: 'customerManagement',
+  },
+  parentId: 5
+},{
+  label: "预约管理",
+  icon: 'el-icon-document',
+  path: "/bookingManagement",
+  meta: {
+    i18n: 'bookingManagement',
+  },
+  parentId: 6
+},{
+  label: "评分规则",
+  icon: 'el-icon-document',
+  path: "/scoringRules",
+  meta: {
+    i18n: 'scoringRules',
+  },
+  parentId: 6
+},
+{
   label: "数据大屏",
   icon: 'el-icon-document',
   path: "http://data.avue.top",
@@ -184,6 +227,7 @@ const third = [{
   children: []
 }];
 // 全部菜单栏
+// 我们改这个就行了
 const admin = [
  {
     label: '小程序设置',
@@ -196,17 +240,19 @@ const admin = [
     children: []
   },  {
     label: '门店管理',
-    path: '/miniProgram',
-    component: '',
+    // url
+    path: '/storeManagement',
+    // 页面路径
+    component: 'views/storeManagement',
     icon: '',
     meta: {
-      i18n: 'miniProgram'
+      i18n: 'storeManagement'
     },
     children: []
   },  {
     label: '员工管理',
-    path: '/miniProgram',
-    component: '',
+    path: '/employeeManagement',
+    component: 'views/employeeManagement',
     icon: '',
     meta: {
       i18n: 'miniProgram'
@@ -214,8 +260,8 @@ const admin = [
     children: []
   },  {
     label: '客户管理',
-    path: '/miniProgram',
-    component: '',
+    path: '/customerManagement',
+    component: 'views/customerManagement',
     icon: '',
     meta: {
       i18n: 'miniProgram'
@@ -223,11 +269,11 @@ const admin = [
     children: []
   },  {
     label: '预约管理',
-    path: '/miniProgram',
-    component: '',
+    path: '/bookingManagement',
+    component: 'views/bookingManagement',
     icon: '',
     meta: {
-      i18n: 'miniProgram'
+      i18n: 'bookingManagement'
     },
     children: []
   },  {
@@ -241,11 +287,11 @@ const admin = [
     children: []
   },  {
     label: '评分规则',
-    path: '/miniProgram',
-    component: '',
+    path: '/scoringRules',
+    component: 'views/scoringRules',
     icon: '',
     meta: {
-      i18n: 'miniProgram'
+      i18n: 'scoringRules'
     },
     children: []
   },

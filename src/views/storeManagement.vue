@@ -14,7 +14,7 @@
       </el-col>
     </el-row>
     <el-row :span="24" class='tree-table'>
-      <el-col :span="4" class='left-tree' ref='leftTree'>
+      <el-col :span="4" class='left-tree'>
         <span class="title-tree">车力士所有门店</span>
         <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </el-col>
@@ -33,7 +33,7 @@
         </pc-table>
       </el-col>
     </el-row>
-    <ch-DIalog :dialog-visible='dialogVisible' :inner-dialog-visible='qrcodeVisible' :dialog-data="dialogDatas" @handle-close-inner='handleInnerDialogClose' @handle-close='handleDialogClose'>
+    <ch-DIalog :dialog-visible='dialogVisible' :dialog-data="dialogDatas" @handle-close='handleDialogClose'>
       <div slot="dialogText">
         <el-form ref="form" :model="formData">
             <el-row :span='24' :gutter="20">
@@ -108,41 +108,29 @@
               </el-form-item>
            </el-row>
          <el-form-item class="dialog-footer">
-            <el-button @click='getQrcodeVisible'>生成二维码</el-button>
             <el-button type="primary" @click="comfirmOption">确 定</el-button>
+            <el-button>取 消</el-button>
           </el-form-item>
         </el-form>
-      </div>
-      <div slot='innerDialogText'>
-           <vue-qr :bgSrc='config.logo' :logoSrc="config.logo" :text="config.value" :size="200"></vue-qr>
       </div>
     </ch-DIalog>
   </div>
 </template>
 
 <script>
- import VueQr from 'qrcode.vue'
   import pcTable from '@/components/tableComponent/main'
   import chDIalog from '@/components/chDIalog/main'
   export default {
-    name: "user-list", 
+    name: "user-list",
     components: {
-      pcTable,chDIalog,VueQr
+      pcTable,chDIalog
     },
     data: () => ({
-        config: {
-          value: 'www.baidu.com',//显示的值、跳转的地址
-          logo: require('../../../public/img/code/wechat-code.jpg')//中间logo的地址
-        },
-
       input: '',
        dialogVisible:false,
       dialogDatas:{
-        dialogTitle:'新增员工',
-        innerDialogTitle:'生成二维码'
-
+        dialogTitle:'新增员工'
       },
-      qrcodeVisible:false,
       formData:{
         storeName:'1',
       },
@@ -203,7 +191,7 @@
         total: 122
       },
       dataTable: {
-        tableHeight: 0,
+        tableHeight: 300,
         total: 0,
         pageNo: 1,//当前页
         pageSize: 10,
@@ -270,7 +258,6 @@
     created: function () {
     },
     mounted() {
-      this.getHeight()
       window.onresize = () => {
       return (() => {
         this.getHeight()
@@ -281,12 +268,6 @@
       //新增
       handleDialogClose(val){
         this.dialogVisible=val
-      },
-      handleInnerDialogClose(val){
-         this.qrcodeVisible=val
-      },
-      getQrcodeVisible(){
-        this.qrcodeVisible=true;
       },
       comfirmOption(){
         alert(2)
@@ -301,11 +282,12 @@
         this.$message.success(JSON.stringify(data))
       },
       initData(obj) {
+        this.getHeight();
         this.dataTable.tableData = [{
           username: '22',
           email: '0',
           rowStatus:true
-         }, {}, {}, {}, {}, {}, {}, {}, {}, {}, {
+        }, {}, {}, {}, {}, {}, {}, {}, {}, {}, {
            username: '333',
           email: '55',
            rowStatus:false
@@ -316,12 +298,12 @@
       },
       getHeight() {
         let pageTopHeight = this.$refs.chTop.$el.offsetHeight;
-        this.dataTable.tableHeight = document.body.clientHeight - pageTopHeight - 250;
-        document.getElementsByClassName('left-tree').height=this.dataTable.tableHeight;
+        this.dataTable.tableHeight = document.body.clientHeight - pageTopHeight - 280;
       },
     },
-  }
 
+    
+  }
 </script>
 
 <style lang="scss">

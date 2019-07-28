@@ -132,14 +132,14 @@
     data: () => ({
         config: {
           value: 'www.baidu.com',//显示的值、跳转的地址
-          logo: require('../../../public/img/code/wechat-code.jpg')//中间logo的地址
+          logo: require('../../public/img/code/wechat-code.jpg')//中间logo的地址
         },
 
       input: '',
        dialogVisible:false,
       dialogDatas:{
         dialogTitle:'新增员工',
-        innerDialogTitle:'生成二维码'
+        innerDialogTitle:'生成二维码',
 
       },
       qrcodeVisible:false,
