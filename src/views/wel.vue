@@ -7,12 +7,12 @@
           <template v-slot:header>客户资料</template>
           <template v-slot:body>
             <div class="user">
-              <div class="welcome">欢迎尊敬的 <b>周晓宇</b> 客户</div>
+              <div class="welcome">欢迎尊敬的 <b>{{userInfo.name}}</b> 客户</div>
               <div class="info">
                 <img />
                 <div>
-                  <span>用户类型：业务员</span>
-                  <span>所属组织：行中创汇科技有限公司</span>
+                  <span>用户类型：{{userInfo.type}}</span>
+                  <span>所属组织：{{userInfo.org}}</span>
                 </div>
               </div>
             </div>
@@ -25,15 +25,15 @@
           <template v-slot:body>
             <div class="appointment">
               <div class="item">
-                <div class="num">11</div>
+                <div class="num">{{home.appointment[0]}}</div>
                 <div class="label">预约中数量</div>
               </div>
               <div class="item">
-                <div class="num">11</div>
+                <div class="num">{{home.appointment[1]}}</div>
                 <div class="label">已拒绝数量</div>
               </div>
               <div class="item">
-                <div class="num">11</div>
+                <div class="num">{{home.appointment[2]}}</div>
                 <div class="label">总数量</div>
               </div>
             </div>
@@ -55,13 +55,9 @@
           <template v-slot:header>公告</template>
           <template v-slot:body>
             <ul class="notice">
-              <li>
-                <p>从今晚20:00到次日08:00，客户端系统维护通知。啊啊啊啊啊啊啊</p>
-                <span>2019-02-01 14:00:00</span>
-              </li>
-              <li>
-                <p>从今晚20:00到次日08:00，客户端系统维护通知</p>
-                <span>2019-02-01 14:00:00</span>
+              <li v-for="(item, index) in home.notice" :key="index">
+                <p>{{item.text}}</p>
+                <span>{{item.date}}</span>
               </li>
             </ul>
           </template>
@@ -72,7 +68,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "wel",
   data() {
@@ -80,7 +76,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(["userInfo", "homeEcharts"]),
+    ...mapState(['home'])
   },
   mounted() {
     this.myChart = this.$echarts.init(document.getElementById('echarts'));
@@ -90,13 +87,8 @@ export default {
       // 柱状图颜色配置
       color: ['#F6C506', '#232323'],
       dataset: {
-        dimensions: ['product', '审核通过数量', '当月申请数量'],
-        source: [
-          { product: '2019-01', '审核通过数量': 11, '当月申请数量': 22},
-          { product: '2019-02', '审核通过数量': 11, '当月申请数量': 22},
-          { product: '2019-03', '审核通过数量': 11, '当月申请数量': 22},
-          { product: '2019-04', '审核通过数量': 11, '当月申请数量': 22},
-        ]
+        dimensions: ['item', '审核通过数量', '当月申请数量'],
+        source: this.homeEcharts
       },
       xAxis: { type: 'category' },
       yAxis: {},
