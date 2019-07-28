@@ -232,7 +232,7 @@ const admin = [
  {
     label: '小程序设置',
     path: '/miniProgram',
-    component: '',
+    component: 'views/miniProgram/index',
     icon: '',
     meta: {
       i18n: 'miniProgram'
@@ -240,10 +240,15 @@ const admin = [
     children: []
   },  {
     label: '门店管理',
+<<<<<<< HEAD
     // url
     path: '/storeManagement',
     // 页面路径
     component: 'views/storeManagement',
+=======
+    path: '/miniProgram1',
+    component: '',
+>>>>>>> 92365f2da536fe36b0fa3232d2d17d3370e5b20f
     icon: '',
     meta: {
       i18n: 'storeManagement'
@@ -251,8 +256,13 @@ const admin = [
     children: []
   },  {
     label: '员工管理',
+<<<<<<< HEAD
     path: '/employeeManagement',
     component: 'views/employeeManagement',
+=======
+    path: '/miniProgram2',
+    component: '',
+>>>>>>> 92365f2da536fe36b0fa3232d2d17d3370e5b20f
     icon: '',
     meta: {
       i18n: 'miniProgram'
@@ -260,8 +270,13 @@ const admin = [
     children: []
   },  {
     label: '客户管理',
+<<<<<<< HEAD
     path: '/customerManagement',
     component: 'views/customerManagement',
+=======
+    path: '/miniProgram3',
+    component: '',
+>>>>>>> 92365f2da536fe36b0fa3232d2d17d3370e5b20f
     icon: '',
     meta: {
       i18n: 'miniProgram'
@@ -269,8 +284,13 @@ const admin = [
     children: []
   },  {
     label: '预约管理',
+<<<<<<< HEAD
     path: '/bookingManagement',
     component: 'views/bookingManagement',
+=======
+    path: '/miniProgram4',
+    component: '',
+>>>>>>> 92365f2da536fe36b0fa3232d2d17d3370e5b20f
     icon: '',
     meta: {
       i18n: 'bookingManagement'
@@ -278,17 +298,22 @@ const admin = [
     children: []
   },  {
     label: '金融方案',
-    path: '/miniProgram',
-    component: '',
+    path: '/financialPlan',
+    component: 'views/financialPlan/index',
     icon: '',
     meta: {
-      i18n: 'miniProgram'
+      i18n: 'financialPlan'
     },
     children: []
   },  {
     label: '评分规则',
+<<<<<<< HEAD
     path: '/scoringRules',
     component: 'views/scoringRules',
+=======
+    path: '/miniProgram6',
+    component: '',
+>>>>>>> 92365f2da536fe36b0fa3232d2d17d3370e5b20f
     icon: '',
     meta: {
       i18n: 'scoringRules'
