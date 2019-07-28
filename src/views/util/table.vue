@@ -1,6 +1,6 @@
 <template>
-  <basic-container class="ch-table">
-    <el-row>
+  <div class="ch-table">
+    <el-row ref='chTop'>
       <el-col :span=4>
         <el-input v-model="input" placeholder="门店名称/负责人"></el-input>
       </el-col>
@@ -8,214 +8,334 @@
         <el-button type="warning" class='ch-button'>查询</el-button>
       </el-col>
       <el-col :span=16 class='add-button'>
-        <el-button type="warning" class="ch-button">
+        <el-button type="warning" class="ch-button" @click='dialogVisible = true'>
           <i class='el-icon-plus'></i>
           新增</el-button>
       </el-col>
     </el-row>
     <el-row :span="24" class='tree-table'>
-      <el-col :span="4">
+      <el-col :span="4" class='left-tree'>
         <span class="title-tree">车力士所有门店</span>
         <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </el-col>
       <el-col :span="20">
-        <pc-table></pc-table>  
-        <avue-crud :option="option" :page="page" :data="tableData">
-          <template slot-scope="scope" slot="menu">
-            <el-button type="primary" size="small" class="edit-btn" @click.stop="handleEdit(scope.row,scope.index)">编辑
-            </el-button>
+        <pc-table @search="search" :ch-table='dataTable'>
+          <template slot='status' scope="scope">
+             <el-select v-model="scope.obj.row.rowStatus" placeholder="请选择">
+                <el-option
+                  v-for="item in statusOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+            </el-select>
           </template>
-        </avue-crud>
+        </pc-table>
       </el-col>
     </el-row>
-  </basic-container>
+    <ch-DIalog :dialog-visible='dialogVisible' :dialog-data="dialogDatas" @handle-close='handleDialogClose'>
+      <div slot="dialogText">
+        <el-form ref="form" :model="formData">
+            <el-row :span='24' :gutter="20">
+              <el-col :span='8'>
+                <el-form-item label="">
+                        <el-input v-model="formData.storeName" placeholder="门店名称"></el-input>
+                      </el-form-item>
+              </el-col>
+              <el-col :span='8'>
+                <el-form-item label="">
+                        <el-input v-model="formData.storeName" placeholder="门店编码"></el-input>
+                      </el-form-item>
+              </el-col>
+              <el-col :span='8'>
+              <el-form-item label="">
+                  <el-select v-model="formData.storeRegion" placeholder="组织性质">
+                          <el-option label="区域一" value="shanghai"></el-option>
+                          <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                  </el-form-item>
+              </el-col>
+          </el-row>
+          <el-row :span='24'  :gutter="20">
+              <el-col :span='8'>
+                <el-form-item label="">
+                        <el-input v-model="formData.storeName" placeholder="负责人"></el-input>
+                      </el-form-item>
+              </el-col>
+              <el-col :span='8'>
+                <el-form-item label="">
+                        <el-input v-model="formData.storeName" placeholder="负责电话"></el-input>
+                      </el-form-item>
+              </el-col>
+              <el-col :span='8'>
+                  <el-form-item label="">
+                        <el-select v-model="formData.storeRegion" placeholder="状态">
+                          <el-option label="区域一" value="shanghai"></el-option>
+                          <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                  </el-form-item>
+              </el-col>
+          </el-row>
+           <el-row :span='24'  :gutter="20">
+              <el-col :span='8'>
+                  <el-form-item label="">
+                        <el-select v-model="formData.storeRegion" placeholder="门店所在省份">
+                          <el-option label="区域一" value="shanghai"></el-option>
+                          <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                  </el-form-item>
+              </el-col>
+              <el-col :span='8'>
+                  <el-form-item label="">
+                        <el-select v-model="formData.storeRegion" placeholder="城市">
+                          <el-option label="区域一" value="shanghai"></el-option>
+                          <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                  </el-form-item>
+              </el-col>
+              <el-col :span='8'>
+              <el-form-item label="">
+                  <el-select v-model="formData.storeRegion" placeholder="县/区">
+                          <el-option label="区域一" value="shanghai"></el-option>
+                          <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                  </el-form-item>
+              </el-col>
+          </el-row>
+           <el-row>
+              <el-form-item label="">
+                <el-input v-model="formData.storeName" placeholder="详细地址"></el-input>
+              </el-form-item>
+           </el-row>
+         <el-form-item class="dialog-footer">
+            <el-button type="primary" @click="comfirmOption">确 定</el-button>
+            <el-button>取 消</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </ch-DIalog>
+  </div>
 </template>
 
 <script>
-import pcTable from'../../components/tableComponent/main'
+  import pcTable from '@/components/tableComponent/main'
+  import chDIalog from '@/components/chDIalog/main'
   export default {
-    components:{pcTable},
-    data() {
-      return {
-        treeData: [{
-          label: '一级 1',
+    name: "user-list",
+    components: {
+      pcTable,chDIalog
+    },
+    data: () => ({
+      input: '',
+       dialogVisible:false,
+      dialogDatas:{
+        dialogTitle:'新增员工'
+      },
+      formData:{
+        storeName:'1',
+      },
+      treeData: [{
+        label: '一级 1',
+        children: [{
+          label: '二级 1-1',
           children: [{
-            label: '二级 1-1',
-            children: [{
-              label: '三级 1-1-1'
-            }]
+            label: '三级 1-1-1'
+          }]
+        }]
+      }, {
+        label: '一级 2',
+        children: [{
+          label: '二级 2-1',
+          children: [{
+            label: '三级 2-1-1'
           }]
         }, {
-          label: '一级 2',
+          label: '二级 2-2',
           children: [{
-            label: '二级 2-1',
-            children: [{
-              label: '三级 2-1-1'
-            }]
-          }, {
-            label: '二级 2-2',
-            children: [{
-              label: '三级 2-2-1'
-            }]
+            label: '三级 2-2-1'
+          }]
+        }]
+      }, {
+        label: '一级 3',
+        children: [{
+          label: '二级 3-1',
+          children: [{
+            label: '三级 3-1-1'
           }]
         }, {
-          label: '一级 3',
+          label: '二级 3-2',
           children: [{
-            label: '二级 3-1',
-            children: [{
-              label: '三级 3-1-1'
-            }]
-          }, {
-            label: '二级 3-2',
-            children: [{
-              label: '三级 3-2-1'
-            }]
+            label: '三级 3-2-1'
           }]
-        }],
-        treeOption: {
-          nodeKey: 'id',
-          size: 'small',
-          formOption: {
-            labelWidth: 100,
-            column: [{
-              label: '自定义项',
-              prop: 'test'
-            }],
-          },
-          props: {
-            labelText: '标题',
-            label: 'label',
-            value: 'value',
-            children: 'children'
-          }
-        },
-        page: {
-          total: 122
-        },
-        tableData: [{
-            username: "smallwei",
-            name: "avue",
-            password: "123456",
-            newpassword: "123456",
-            date: "2019-01-01",
-            textarea: "签名"
-          },
-          {
-            username: "smallwei",
-            name: "avue",
-            password: "123456",
-            newpassword: "123456",
-            date: "2019-01-01",
-            textarea: "这是一条很名"
-          },
-
-          {
-            username: "smallwei",
-            name: "avue",
-            password: "123456",
-            newpassword: "123456",
-            date: "2019-01-01",
-            textarea: "这是一条很个性签名"
-          },
-          {
-            username: "smallwei",
-            name: "avue",
-            password: "123456",
-            newpassword: "123456",
-            date: "2019-01-01",
-            textarea: "这是一签名"
-          },
-          {
-            username: "smallwei",
-            name: "avue",
-            password: "123456",
-            newpassword: "123456",
-            date: "2019-01-01",
-            textarea: "这是一签名"
-          },{},{},{},{},{},{},{},{},{},{},{},{},{},{},
-        ],
-        option: {
-          columnBtn: false,
-          refreshBtn: false,
-          delBtn: false,
-          editBtn: false,
-          addBtn: false,
-          calcHeight:100,
+        }]
+      }],
+      defaultProps: [],
+      treeOption: {
+        nodeKey: 'id',
+        size: 'small',
+        formOption: {
+          labelWidth: 100,
           column: [{
-              label: "用户名",
-              prop: "username",
-              span: 14,
-              row: true
-            },
-            {
-              label: "姓名",
-              prop: "name",
-              span: 14,
-              row: true
-            },
-            {
-              label: "密码",
-              prop: "password",
-              type: "password",
-              span: 14,
-              row: true
-            },
-            {
-              label: "确认密码",
-              prop: "newpassword",
-              type: "password",
-              hide: true,
-              span: 14,
-              row: true
-            },
-            {
-              label: "申请日期",
-              prop: "date",
-              type: "date",
-              span: 14,
-              row: true
-            },
-            {
-              label: "个性签名",
-              prop: "textarea",
-              type: "textarea",
-              minRows: 8,
-              span: 24,
-              overHidden: true,
-              row: true
-            }
-          ]
+            label: '自定义项',
+            prop: 'test'
+          }],
+        },
+        props: {
+          labelText: '标题',
+          label: 'label',
+          value: 'value',
+          children: 'children'
         }
-      };
+      },
+      page: {
+        total: 122
+      },
+      dataTable: {
+        tableHeight: 300,
+        total: 0,
+        pageNo: 1,//当前页
+        pageSize: 10,
+        status: {
+          disabled: false
+        },
+        tableLabel: [{
+            prop: 'username',
+            title: '姓名',
+            width: '150',
+            fixed: true
+          },
+          {
+            prop: 'email',
+            title: '地址',
+            width: '200'
+          },
+          {
+            prop: 'roleName',
+            title: '简称',
+            width: '200'
+          },
+          {
+            prop: 'roleName',
+            title: '简称',
+            width: '200'
+          },
+          {
+            prop: 'roleName',
+            title: '简称',
+            width: '200'
+          },
+          {
+            prop: 'roleName',
+            title: '简称',
+            width: '200'
+          },
+          {
+            prop: 'createdTime',
+            title: '创建时间',
+            width: '200'
+          }
+        ],
+        tableData: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
+        tableOption:true,//操作
+        operation: {
+          width: '100',
+          buttons: [{
+              label: '删除',
+              methods: 'detail',
+              classname:'detail-btn'
+            },
+          ]
+        },
+      },
+      statusOptions:[{
+        label:'启用',
+        value:true
+      },{
+        label:'禁用',
+        value:false
+      }]
+    }),
+    created: function () {
+    },
+    mounted() {
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
     },
     methods: {
+      //新增
+      handleDialogClose(val){
+        this.dialogVisible=val
+      },
+      comfirmOption(){
+        alert(2)
+      },
       handleNodeClick(data) {
         console.log(data);
       },
       tip(node, data) {
         this.$message.success(JSON.stringify(data))
       },
-
-
       nodeClick(data) {
         this.$message.success(JSON.stringify(data))
-      }
-    }
-  };
+      },
+      search(obj) {
+        this.getHeight();
+        this.dataTable.tableData = [{
+          username: '22',
+          email: '0',
+          rowStatus:true
+        }, {}, {}, {}, {}, {}, {}, {}, {}, {}, {
+           username: '333',
+          email: '55',
+           rowStatus:false
+        }];
+        this.dataTable.pageSize = obj.pageSize;
+        this.dataTable.pageNo = obj.pageNo;
+        this.dataTable.total = 200;
+        this.dataTable.tableData.forEach(item=>{
+        })
+        // this.$post(‘你的后台API地址’,this.getTable).then((res) => {
+        //   this.dataTable.tableData = res.data.result;
+        //   this.dataTable.total = res.data.total
+        // })
+      },
+      getHeight() {
+        let pageTopHeight = this.$refs.chTop.$el.offsetHeight;
+        this.dataTable.tableHeight = document.body.clientHeight - pageTopHeight - 280;
+      },
+    },
+
+    
+  }
 </script>
 
 <style lang="scss">
   .ch-table {
-    tbody{
-      height:300px;
+    tbody {
+      height: 300px;
       overflow: auto;
     }
-    .el-table{
-      height:200px;
+
+    .el-table {
       overflow: auto;
+      .detail-btn{
+          background: transparent;
+          border: none;
+          font-size: 12px;
+          color:#1F65F5;
+      }
     }
+
     .tree-table {
-      margin-top: 46px;
+      margin-top: 26px;
+
+      .left-tree {
+        border: 1px solid rgba(224, 228, 237, 1);
+        border-radius: 3px;
+      }
 
       .el-table--medium td,
       .el-table--medium th {
@@ -234,8 +354,8 @@ import pcTable from'../../components/tableComponent/main'
       }
 
       .title-tree {
-        height: 38px;
-        line-height: 38px;
+        height: 46px;
+        line-height: 46px;
         border: 1px solid #ededed;
         width: 100%;
         display: inline-block;

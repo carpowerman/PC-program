@@ -51,6 +51,7 @@
            pageSize: this.chTable.pageSize
          });
        },
+   
        //排序
        sortChange(obj) {
          let orderBy = {};
