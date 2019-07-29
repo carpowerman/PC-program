@@ -1,120 +1,125 @@
-<template>
-  <div class="ch-table">
-    <el-row ref='chTop'>
-      <el-col :span=4>
-        <el-input v-model="input" placeholder="门店名称/负责人"></el-input>
-      </el-col>
-      <el-col :span=4 class='search-button'>
-        <el-button type="warning" class='ch-button'>查询</el-button>
-      </el-col>
-      <el-col :span=16 class='add-button'>
-        <el-button type="warning" class="ch-button" @click='dialogVisible = true'>
-          <i class='el-icon-plus'></i>
-          新增</el-button>
-      </el-col>
-    </el-row>
-    <el-row :span="24" class='tree-table'>
-      <el-col :span="4" class='left-tree'>
-        <span class="title-tree">车力士所有门店</span>
-        <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-      </el-col>
-      <el-col :span="20">
-        <pc-table @initTableData="initData" :ch-table='dataTable'>
-          <template slot='status' slot-scope="props">
-             <el-select v-model="props.obj.row.rowStatus" placeholder="请选择">
-                <el-option
-                  v-for="item in statusOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-            </el-select>
-          </template>
-        </pc-table>
-      </el-col>
-    </el-row>
-    <ch-DIalog :dialog-visible='dialogVisible' :dialog-data="dialogDatas" @handle-close='handleDialogClose'>
-      <div slot="dialogText">
-        <el-form ref="form" :model="formData">
-            <el-row :span='24' :gutter="20">
-              <el-col :span='8'>
-                <el-form-item label="">
-                        <el-input v-model="formData.storeName" placeholder="门店名称"></el-input>
-                      </el-form-item>
-              </el-col>
-              <el-col :span='8'>
-                <el-form-item label="">
-                        <el-input v-model="formData.storeName" placeholder="门店编码"></el-input>
-                      </el-form-item>
-              </el-col>
-              <el-col :span='8'>
-              <el-form-item label="">
-                  <el-select v-model="formData.storeRegion" placeholder="组织性质">
-                          <el-option label="区域一" value="shanghai"></el-option>
-                          <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
-                  </el-form-item>
-              </el-col>
+<template>   
+<basic-container>
+      <template v-slot:header>客户管理</template> 
+      <template v-slot:body>
+        <div class="ch-table">
+          <el-row ref='chTop'>
+            <el-col :span=4>
+              <el-input v-model="input" placeholder="门店名称/负责人"></el-input>
+            </el-col>
+            <el-col :span=4 class='search-button'>
+              <el-button type="warning" class='ch-button'>查询</el-button>
+            </el-col>
+            <el-col :span=16 class='add-button'>
+              <el-button type="warning" class="ch-button" @click='dialogVisible = true'>
+                <i class='el-icon-plus'></i>
+                新增</el-button>
+            </el-col>
           </el-row>
-          <el-row :span='24'  :gutter="20">
-              <el-col :span='8'>
-                <el-form-item label="">
-                        <el-input v-model="formData.storeName" placeholder="负责人"></el-input>
-                      </el-form-item>
-              </el-col>
-              <el-col :span='8'>
-                <el-form-item label="">
-                        <el-input v-model="formData.storeName" placeholder="负责电话"></el-input>
-                      </el-form-item>
-              </el-col>
-              <el-col :span='8'>
-                  <el-form-item label="">
-                        <el-select v-model="formData.storeRegion" placeholder="状态">
-                          <el-option label="区域一" value="shanghai"></el-option>
-                          <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
-                  </el-form-item>
-              </el-col>
+          <el-row :span="24" class='tree-table'>
+            <el-col :span="4" class='left-tree'>
+              <span class="title-tree">车力士所有门店</span>
+              <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+            </el-col>
+            <el-col :span="20">
+              <pc-table @initTableData="initData" :ch-table='dataTable'>
+                <template slot='status' slot-scope="props">
+                  <el-select v-model="props.obj.row.rowStatus" placeholder="请选择">
+                      <el-option
+                        v-for="item in statusOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                  </el-select>
+                </template>
+              </pc-table>
+            </el-col>
           </el-row>
-           <el-row :span='24'  :gutter="20">
-              <el-col :span='8'>
-                  <el-form-item label="">
-                        <el-select v-model="formData.storeRegion" placeholder="门店所在省份">
-                          <el-option label="区域一" value="shanghai"></el-option>
-                          <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
-                  </el-form-item>
-              </el-col>
-              <el-col :span='8'>
-                  <el-form-item label="">
-                        <el-select v-model="formData.storeRegion" placeholder="城市">
-                          <el-option label="区域一" value="shanghai"></el-option>
-                          <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
-                  </el-form-item>
-              </el-col>
-              <el-col :span='8'>
-              <el-form-item label="">
-                  <el-select v-model="formData.storeRegion" placeholder="县/区">
-                          <el-option label="区域一" value="shanghai"></el-option>
-                          <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
-                  </el-form-item>
-              </el-col>
-          </el-row>
-           <el-row>
-              <el-form-item label="">
-                <el-input v-model="formData.storeName" placeholder="详细地址"></el-input>
-              </el-form-item>
-           </el-row>
-         <el-form-item class="dialog-footer">
-            <el-button type="primary" @click="comfirmOption">确 定</el-button>
-            <el-button>取 消</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </ch-DIalog>
-  </div>
+          <ch-DIalog :dialog-visible='dialogVisible' :dialog-data="dialogDatas" @handle-close='handleDialogClose'>
+            <div slot="dialogText">
+              <el-form ref="form" :model="formData">
+                  <el-row :span='24' :gutter="20">
+                    <el-col :span='8'>
+                      <el-form-item label="">
+                              <el-input v-model="formData.storeName" placeholder="门店名称"></el-input>
+                            </el-form-item>
+                    </el-col>
+                    <el-col :span='8'>
+                      <el-form-item label="">
+                              <el-input v-model="formData.storeName" placeholder="门店编码"></el-input>
+                            </el-form-item>
+                    </el-col>
+                    <el-col :span='8'>
+                    <el-form-item label="">
+                        <el-select v-model="formData.storeRegion" placeholder="组织性质">
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                              </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :span='24'  :gutter="20">
+                    <el-col :span='8'>
+                      <el-form-item label="">
+                              <el-input v-model="formData.storeName" placeholder="负责人"></el-input>
+                            </el-form-item>
+                    </el-col>
+                    <el-col :span='8'>
+                      <el-form-item label="">
+                              <el-input v-model="formData.storeName" placeholder="负责电话"></el-input>
+                            </el-form-item>
+                    </el-col>
+                    <el-col :span='8'>
+                        <el-form-item label="">
+                              <el-select v-model="formData.storeRegion" placeholder="状态">
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                              </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :span='24'  :gutter="20">
+                    <el-col :span='8'>
+                        <el-form-item label="">
+                              <el-select v-model="formData.storeRegion" placeholder="门店所在省份">
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                              </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span='8'>
+                        <el-form-item label="">
+                              <el-select v-model="formData.storeRegion" placeholder="城市">
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                              </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span='8'>
+                    <el-form-item label="">
+                        <el-select v-model="formData.storeRegion" placeholder="县/区">
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                              </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-form-item label="">
+                      <el-input v-model="formData.storeName" placeholder="详细地址"></el-input>
+                    </el-form-item>
+                </el-row>
+              <el-form-item class="dialog-footer">
+                  <el-button type="primary" @click="comfirmOption">确 定</el-button>
+                  <el-button>取 消</el-button>
+                </el-form-item>
+              </el-form>
+            </div>
+          </ch-DIalog>
+        </div>
+      </template>
+  </basic-container>
 </template>
 
 <script>
@@ -298,7 +303,7 @@
       },
       getHeight() {
         let pageTopHeight = this.$refs.chTop.$el.offsetHeight;
-        this.dataTable.tableHeight = document.body.clientHeight - pageTopHeight - 280;
+        this.dataTable.tableHeight = document.body.clientHeight - pageTopHeight - 380;
       },
     },
 
