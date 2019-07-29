@@ -54,13 +54,19 @@ const user = {
                 // api 请求 --@/api/user.js
                 loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr).then(res => {
                     const data = res.data;
-                    if(data.code === 0) resolve(data);
-                    // token 存入 store
-                    commit('SET_TOKEN', data.data);
-                    commit('DEL_ALL_TAG');
-                    commit('CLEAR_LOCK');
-                    resolve(data);
-                })
+                    if(data.code === 0) {
+                        // token 存入 store
+                        commit('SET_TOKEN', data.data.token);
+                        commit('DEL_ALL_TAG');
+                        commit('CLEAR_LOCK');
+
+                    }
+                    // 成功为 code: 0 
+                    resolve({ code: data.code });
+                }).catch(err => {
+                    //在 store 层规避 catch 抛出
+                    resolve({ code: err.status });
+                });
             })
         },
         //根据手机号登录

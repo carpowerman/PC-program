@@ -143,13 +143,14 @@ export default {
           this.$store.dispatch("LoginByUsername", this.loginForm).then((res) => {
             // 从 vuex 层获取 promise 对象 resolve 值
             if(res.code === 0) {
-              this.$notify.error({ title: '登录失败', message: '用户名或密码错误' });
-            } else {
               this.$notify.success({ title: '登录成功', message: '欢迎登录！' });
               // 从 store-config 获取默认首页路由，并跳转
               this.$router.push({ path: this.tagWel.value });
+            } else if(res.code === 500){
+              this.$notify.error({ title: '登录失败', message: '用户名或密码错误。' });
+            } else {
+              this.$notify.error({ title: '登录失败', message: '网络连接错误。' });
             }
-            
           });
         }
       });

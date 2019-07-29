@@ -2,22 +2,16 @@ import Mock from 'mockjs'
 export default ({ mock }) => {
     if (!mock) return;
     // 用户登录
-    Mock.mock('/user/login', 'post', (opts) => {
-        // opts 含 url type body 三个对象
-        const loginForm = JSON.parse(opts.body);
-        const username = loginForm.username;
-        const password = window.CryptoJS.AES.decrypt(
-            loginForm.password,
-            window.CryptoJS.enc.Utf8.parse('/iqichenyun.com/')
-            ,{
-                iv: window.CryptoJS.enc.Utf8.parse('/iqichenyun.com/'),
-                mode: window.CryptoJS.mode.CBC,
-                padding: window.CryptoJS.pad.Pkcs7
-            }).toString(window.CryptoJS.enc.Utf8).toString();
-        
-        if((username === 'tql' && password == '123456') || (username === 'jxj' && password === '123456')) return { data:  new Date().getTime() + '', code: 1 }
-        //if()
-        return { code: 0 };
+    Mock.mock('/auth/login', 'post', {
+        code: 0,
+        message: 'SUCCESS',
+        data: {
+            username: 'ADMIN',
+            token: "eyJraWQiOiJpcWljaGVuY2xvdWQiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ3d3cuaXFpY2hlbi5jb20iLCJhdWQiOiJ1c2VyIiwic3ViIjoiQURNSU4iLCJleHAiOjIxNjQzOTAyMTIsImp0aSI6Ijl3UnVLbGJVeG1PT1AxYnJZY0R4VXciLCJpYXQiOjE1NjQzOTAyMTIsIm5iZiI6MTU2NDM5MDA5Mn0.KM_f2PMtyXpV4xEucqpcMv52col51SJJElF5eS3s5HlmVqEXD4ZqBCgsGE8qCOKswsZHFNMMl3Bd31IBizlXR1r7CQnLH49I0Npp-gR0OCfckO2xXI7b3pW4uxGVTDQrUHdBUCJBzsGpw2RlyB9_SUVi2VSuCllAT2hDKYkhjEsb9-v02wzpaSSO8T1-fV6p1UxuKPCFVvbR0FQrJoqE46TvD31ld7Fwxhkvw-rw6aSI4bad_uGEp0P60eJ1YiA9E1lR8nE2oTf1TKsyy5MKZCgGPdYihRR54Ir2l-Ki4rhEn_9O73sl2N9v_fGoDBG8FQ6abevoZqm1B0D-_Q1QZQ",
+            loginType: 'USER'
+        },
+        path: '/cls/auth/login',
+        timestamp: 1564390212248
     });
     //用户退出
     Mock.mock('/user/logout', 'get', {
