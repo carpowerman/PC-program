@@ -1,120 +1,26 @@
 <template>
 <basic-container>
-      <template v-slot:header>评分规则</template> 
+      <template v-slot:header>角色管理</template> 
       <template v-slot:body>
           <div class="ch-table">
             <el-row ref='chTop'>
-              <el-col :span=4>
-                <el-input v-model="input" placeholder="门店名称/负责人"></el-input>
-              </el-col>
               <el-col :span=4 class='search-button'>
-                <el-button type="warning" class='ch-button'>查询</el-button>
-              </el-col>
-              <el-col :span=16 class='add-button'>
-                <el-button type="warning" class="ch-button" @click='dialogVisible = true'>
-                  <i class='el-icon-plus'></i>
-                  新增</el-button>
+                <el-button type="warning" class='ch-button'>
+                     <i class='el-icon-plus'></i>
+                  添加</el-button>
               </el-col>
             </el-row>
             <el-row :span="24" class='tree-table'>
-              <el-col :span="4" class='left-tree'>
-                <span class="title-tree">车力士所有门店</span>
-                <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-              </el-col>
-              <el-col :span="20">
+              <el-col :span="24">
                 <pc-table @initTableData="initData" :ch-table='dataTable'>
                   <template slot='status' slot-scope="props">
-                    <el-select v-model="props.obj.row.rowStatus" placeholder="请选择">
-                        <el-option
-                          v-for="item in statusOptions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option>
-                    </el-select>
+                   
                   </template>
                 </pc-table>
               </el-col>
             </el-row>
             <ch-DIalog :dialog-visible='dialogVisible' :dialog-data="dialogDatas" @handle-close='handleDialogClose'>
               <div slot="dialogText">
-                <el-form ref="form" :model="formData">
-                    <el-row :span='24' :gutter="20">
-                      <el-col :span='8'>
-                        <el-form-item label="">
-                                <el-input v-model="formData.storeName" placeholder="门店名称"></el-input>
-                              </el-form-item>
-                      </el-col>
-                      <el-col :span='8'>
-                        <el-form-item label="">
-                                <el-input v-model="formData.storeName" placeholder="门店编码"></el-input>
-                              </el-form-item>
-                      </el-col>
-                      <el-col :span='8'>
-                      <el-form-item label="">
-                          <el-select v-model="formData.storeRegion" placeholder="组织性质">
-                                  <el-option label="区域一" value="shanghai"></el-option>
-                                  <el-option label="区域二" value="beijing"></el-option>
-                                </el-select>
-                          </el-form-item>
-                      </el-col>
-                  </el-row>
-                  <el-row :span='24'  :gutter="20">
-                      <el-col :span='8'>
-                        <el-form-item label="">
-                                <el-input v-model="formData.storeName" placeholder="负责人"></el-input>
-                              </el-form-item>
-                      </el-col>
-                      <el-col :span='8'>
-                        <el-form-item label="">
-                                <el-input v-model="formData.storeName" placeholder="负责电话"></el-input>
-                              </el-form-item>
-                      </el-col>
-                      <el-col :span='8'>
-                          <el-form-item label="">
-                                <el-select v-model="formData.storeRegion" placeholder="状态">
-                                  <el-option label="区域一" value="shanghai"></el-option>
-                                  <el-option label="区域二" value="beijing"></el-option>
-                                </el-select>
-                          </el-form-item>
-                      </el-col>
-                  </el-row>
-                  <el-row :span='24'  :gutter="20">
-                      <el-col :span='8'>
-                          <el-form-item label="">
-                                <el-select v-model="formData.storeRegion" placeholder="门店所在省份">
-                                  <el-option label="区域一" value="shanghai"></el-option>
-                                  <el-option label="区域二" value="beijing"></el-option>
-                                </el-select>
-                          </el-form-item>
-                      </el-col>
-                      <el-col :span='8'>
-                          <el-form-item label="">
-                                <el-select v-model="formData.storeRegion" placeholder="城市">
-                                  <el-option label="区域一" value="shanghai"></el-option>
-                                  <el-option label="区域二" value="beijing"></el-option>
-                                </el-select>
-                          </el-form-item>
-                      </el-col>
-                      <el-col :span='8'>
-                      <el-form-item label="">
-                          <el-select v-model="formData.storeRegion" placeholder="县/区">
-                                  <el-option label="区域一" value="shanghai"></el-option>
-                                  <el-option label="区域二" value="beijing"></el-option>
-                                </el-select>
-                          </el-form-item>
-                      </el-col>
-                  </el-row>
-                  <el-row>
-                      <el-form-item label="">
-                        <el-input v-model="formData.storeName" placeholder="详细地址"></el-input>
-                      </el-form-item>
-                  </el-row>
-                <el-form-item class="dialog-footer">
-                    <el-button type="primary" @click="comfirmOption">确 定</el-button>
-                    <el-button>取 消</el-button>
-                  </el-form-item>
-                </el-form>
               </div>
             </ch-DIalog>
           </div>
@@ -132,69 +38,13 @@
     },
     data: () => ({
       input: '',
-       dialogVisible:false,
+      dialogVisible:false,
       dialogDatas:{
         dialogTitle:'新增员工'
       },
-      formData:{
-        storeName:'1',
-      },
-      treeData: [{
-        label: '一级 1',
-        children: [{
-          label: '二级 1-1',
-          children: [{
-            label: '三级 1-1-1'
-          }]
-        }]
-      }, {
-        label: '一级 2',
-        children: [{
-          label: '二级 2-1',
-          children: [{
-            label: '三级 2-1-1'
-          }]
-        }, {
-          label: '二级 2-2',
-          children: [{
-            label: '三级 2-2-1'
-          }]
-        }]
-      }, {
-        label: '一级 3',
-        children: [{
-          label: '二级 3-1',
-          children: [{
-            label: '三级 3-1-1'
-          }]
-        }, {
-          label: '二级 3-2',
-          children: [{
-            label: '三级 3-2-1'
-          }]
-        }]
-      }],
+     
       defaultProps: [],
-      treeOption: {
-        nodeKey: 'id',
-        size: 'small',
-        formOption: {
-          labelWidth: 100,
-          column: [{
-            label: '自定义项',
-            prop: 'test'
-          }],
-        },
-        props: {
-          labelText: '标题',
-          label: 'label',
-          value: 'value',
-          children: 'children'
-        }
-      },
-      page: {
-        total: 122
-      },
+     
       dataTable: {
         tableHeight: 300,
         total: 0,
@@ -204,51 +54,59 @@
           disabled: false
         },
         tableLabel: [{
-            prop: 'username',
-            title: '姓名',
-            width: '150',
+            prop: 'roleId',
+            title: '序号',
+            width: '50',
             fixed: true
           },
           {
-            prop: 'email',
-            title: '地址',
-            width: '200'
-          },
-          {
             prop: 'roleName',
-            title: '简称',
-            width: '200'
+            title: '角色名称',
+            width: '100'
           },
           {
-            prop: 'roleName',
-            title: '简称',
-            width: '200'
+            prop: 'roleTag',
+            title: '角色标识',
+            width: '100'
           },
           {
-            prop: 'roleName',
-            title: '简称',
-            width: '200'
+            prop: 'roleDescribe',
+            title: '角色描述',
+            width: '80'
           },
           {
-            prop: 'roleName',
-            title: '简称',
-            width: '200'
+            prop: 'rolePermissions',
+            title: '数据权限',
+            width: '80'
           },
           {
-            prop: 'createdTime',
+            prop: 'creatTime',
             title: '创建时间',
-            width: '200'
-          }
+            width: '100'
+          },
         ],
         tableData: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
         tableOption:true,//操作
         operation: {
           width: '100',
-          buttons: [{
+          buttons: [
+            {
+              label: '查看',
+              methods: 'detail',
+              classname:''
+            },{
+              label: '编辑',
+              methods: 'detail',
+              classname:''
+            },{
               label: '删除',
               methods: 'detail',
-              classname:'detail-btn'
-            },
+              classname:''
+            },{
+              label: '权限',
+              methods: 'getPermissions',
+              classname:''
+            }
           ]
         },
       },
@@ -317,17 +175,6 @@
       height: 300px;
       overflow: auto;
     }
-
-    .el-table {
-      overflow: auto;
-      .detail-btn{
-          background: transparent;
-          border: none;
-          font-size: 12px;
-          color:#1F65F5;
-      }
-    }
-
     .tree-table {
       margin-top: 26px;
 

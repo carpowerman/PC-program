@@ -335,17 +335,6 @@
       height: 300px;
       overflow: auto;
     }
-
-    .el-table {
-      overflow: auto;
-      .detail-btn{
-          background: transparent;
-          border: none;
-          font-size: 12px;
-          color:#1F65F5;
-      }
-    }
-
     .tree-table {
       margin-top: 26px;
 
