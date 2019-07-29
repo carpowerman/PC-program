@@ -5,8 +5,15 @@ export default ({ mock }) => {
     Mock.mock('/user/login', 'post', (opts) => {
         // opts 含 url type body 三个对象
         const loginForm = JSON.parse(opts.body);
-        const username = window.CryptoJS.AES.decrypt(loginForm.username, 'avue').toString(window.CryptoJS.enc.Utf8).toString();
-        const password = window.CryptoJS.AES.decrypt(loginForm.password, 'avue').toString(window.CryptoJS.enc.Utf8).toString();
+        const username = loginForm.username;
+        const password = window.CryptoJS.AES.decrypt(
+            loginForm.password,
+            window.CryptoJS.enc.Utf8.parse('/iqichenyun.com/')
+            ,{
+                iv: window.CryptoJS.enc.Utf8.parse('/iqichenyun.com/'),
+                mode: window.CryptoJS.mode.CBC,
+                padding: window.CryptoJS.pad.Pkcs7
+            }).toString(window.CryptoJS.enc.Utf8).toString();
         
         if((username === 'tql' && password == '123456') || (username === 'jxj' && password === '123456')) return { data:  new Date().getTime() + '', code: 1 }
         //if()

@@ -46,8 +46,8 @@ const user = {
             const user = encryption({
                 data: userInfo,
                 type: 'Aes',
-                key: 'avue',
-                param: ['username', 'password']
+                key: '/iqichenyun.com/',
+                param: ['password']
             });
             // 发起 api 请求
             return new Promise((resolve) => {

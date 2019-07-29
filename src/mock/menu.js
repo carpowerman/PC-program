@@ -177,9 +177,7 @@ const first = [{
     i18n: 'affix',
   },
   children: []
-},
-
-{
+}, {
   label: "数据展示",
   path: '/data',
   component: 'views/util/data',
@@ -214,7 +212,7 @@ const first = [{
     icon: 'icon-caidan',
     children: []
   }]
-}]
+}];
 const second = []
 const third = [{
   label: "测试页面",
@@ -229,7 +227,36 @@ const third = [{
 // 全部菜单栏
 // 我们改这个就行了
 const admin = [
- {
+  {
+    label: '权限设置',
+    path: '/permission',
+    component: 'views/miniProgram/index',
+    icon: '',
+    meta: {
+      i18n: 'miniProgram'
+    },
+    children: [
+      {
+        label: '菜单设置',
+        path: '/miniProgram',
+        component: 'views/miniProgram/index',
+        icon: '',
+        meta: {
+          i18n: 'miniProgram'
+        },
+        children: []
+      }, {
+        label: '角色设置',
+        path: '/miniProgram',
+        component: 'views/miniProgram/index',
+        icon: '',
+        meta: {
+          i18n: 'miniProgram'
+        },
+        children: []
+      }
+    ]
+  }, {
     label: '小程序设置',
     path: '/miniProgram',
     component: 'views/miniProgram/index',

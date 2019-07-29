@@ -88,7 +88,14 @@ export const encryption = (params) => {
         })
     } else if (type == 'Aes') {
         param.forEach(ele => {
-            result[ele] = window.CryptoJS.AES.encrypt(result[ele], key).toString();
+            let iv = key;
+            key = window.CryptoJS.enc.Utf8.parse(key);
+            iv = window.CryptoJS.enc.Utf8.parse(iv);
+            result[ele] = window.CryptoJS.AES.encrypt(result[ele], key, {
+                iv: iv,
+                mode: window.CryptoJS.mode.CBC,
+                padding: window.CryptoJS.pad.Pkcs7
+            }).toString();
         })
 
     }
