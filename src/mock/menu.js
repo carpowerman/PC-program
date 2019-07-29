@@ -9,22 +9,13 @@ const top = [{
   parentId: 0
 },
 {
-  label: "官网",
+  label: "权限管理",
+  path: "/authorityManage",
   icon: 'el-icon-document',
   meta: {
-    i18n: 'website',
+    i18n: 'dashboard',
   },
-  path: "https://avuex.avue.top",
-  parentId: 1
-},
-{
-  label: "测试",
-  icon: 'el-icon-document',
-  path: "/test/index",
-  meta: {
-    i18n: 'test',
-  },
-  parentId: 2
+  parentId: 7
 },
 {
   label: "门店管理",
@@ -68,6 +59,24 @@ const top = [{
     i18n: 'scoringRules',
   },
   parentId: 6
+},
+{
+  label: "官网",
+  icon: 'el-icon-document',
+  meta: {
+    i18n: 'website',
+  },
+  path: "https://avuex.avue.top",
+  parentId: 1
+},
+{
+  label: "测试",
+  icon: 'el-icon-document',
+  path: "/test/index",
+  meta: {
+    i18n: 'test',
+  },
+  parentId: 2
 },
 {
   label: "数据大屏",
@@ -265,7 +274,22 @@ const admin = [
       i18n: 'miniProgram'
     },
     children: []
-  },  {
+  }, 
+//     {
+//   label: '权限管理',
+//   path: '/authorityManage',
+//   component: '',
+//   icon: '',
+//   meta: {
+//     i18n: 'authorityManage'
+//   },
+//   children: [{
+//     abel: '角色管理',
+//     path: '/roleBind',
+//     component: 'views/authorityManage/roleBind',
+//   }]
+// },
+  {
     label: '门店管理',
     // url
     path: '/storeManagement',

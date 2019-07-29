@@ -1,12 +1,17 @@
 <template>
-  <div class="score-rule">
-    <el-tabs type="border-card" class='tabTable' v-model="activeName" @tab-click="handleTabClick">
-      <el-tab-pane :label="item.name" :value="item.id" v-for="(item,index) in ruleTable" :key="index" >
-         <pc-table :ch-table="item.tabDatas">
-         </pc-table>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+<basic-container>
+    <template v-slot:header>评分规则</template> 
+    <template v-slot:body>
+        <div class="score-rule">
+          <el-tabs type="border-card" class='tabTable' v-model="activeName" @tab-click="handleTabClick">
+            <el-tab-pane :label="item.name" :value="item.id" v-for="(item,index) in ruleTable" :key="index" >
+              <pc-table :ch-table="item.tabDatas">
+              </pc-table>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+    </template>
+  </basic-container>
 </template>
 
 <script>
