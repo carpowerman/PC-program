@@ -10,7 +10,7 @@ import store from '@/store/';
 import router from '@/router/router'
 import { serialize } from '@/util/util'
 import { getToken } from '@/util/auth'
-import { Message } from 'element-ui'
+// import { Message } from 'element-ui'
 import website from '@/config/website';
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
@@ -53,10 +53,11 @@ axios.interceptors.response.use(res => {
     if (status === 401) store.dispatch('FedLogOut').then(() => router.push({ path: '/login' }));
     // 如果请求为非200否者默认统一处理
     if (status !== 200) {
-        Message({
-            message: message,
-            type: 'error'
-        })
+        // 注释，不再需要统一抛出错误
+        // Message({
+        //     message: message,
+        //     type: 'error'
+        // })
         return Promise.reject(new Error(message))
     }
     return res;
