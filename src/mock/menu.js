@@ -346,7 +346,122 @@ const admin = [
     },
     children: []
   },
-]
+];
+
+
+const menu1 = {
+  "code": 0,
+  "message": "SUCCESS",
+  "data": [
+      {
+          "id": 1,
+          "createdBy": 1,
+          "createdTime": "2019-07-19 14:55:00",
+          "remark": "",
+          "disabledFlag": 0,
+          "parentId": 0,
+          "parentName": "",
+          "permissionName": "系统管理",
+          "permissionNo": "sys",
+          "permissionType": 0,
+          "permissionTypeDesc": "目录",
+          "orderNum": "",
+          "icon": "",
+          "path": "",
+          "children": [
+              {
+                  "id": 2,
+                  "createdBy": 1,
+                  "createdTime": "2019-07-19 14:56:55",
+                  "remark": "",
+                  "disabledFlag": 0,
+                  "parentId": 1,
+                  "parentName": "系统管理",
+                  "permissionName": "用户管理",
+                  "permissionNo": "sys_user",
+                  "permissionType": 1,
+                  "permissionTypeDesc": "菜单",
+                  "orderNum": "",
+                  "icon": "",
+                  "path": "/user",
+                  "children": [
+                      {
+                          "id": 3,
+                          "createdBy": 1,
+                          "createdTime": "2019-07-19 14:58:13",
+                          "remark": "",
+                          "disabledFlag": 0,
+                          "parentId": 2,
+                          "parentName": "用户管理",
+                          "permissionName": "用户查询",
+                          "permissionNo": "sys_user_search",
+                          "permissionType": 2,
+                          "permissionTypeDesc": "按钮",
+                          "orderNum": "",
+                          "icon": "",
+                          "path": "",
+                          "children": []
+                      },
+                      {
+                          "id": 4,
+                          "createdBy": 1,
+                          "createdTime": "2019-07-19 14:58:51",
+                          "remark": "",
+                          "disabledFlag": 0,
+                          "parentId": 2,
+                          "parentName": "用户管理",
+                          "permissionName": "用户查看",
+                          "permissionNo": "sys_user_detail",
+                          "permissionType": 2,
+                          "permissionTypeDesc": "按钮",
+                          "orderNum": "",
+                          "icon": "",
+                          "path": "",
+                          "children": []
+                      },
+                      {
+                          "id": 5,
+                          "createdBy": 1,
+                          "createdTime": "2019-07-19 14:59:02",
+                          "remark": "",
+                          "disabledFlag": 0,
+                          "parentId": 2,
+                          "parentName": "用户管理",
+                          "permissionName": "用户编辑",
+                          "permissionNo": "sys_user_edit",
+                          "permissionType": 2,
+                          "permissionTypeDesc": "按钮",
+                          "orderNum": "",
+                          "icon": "",
+                          "path": "",
+                          "children": []
+                      },
+                      {
+                          "id": 6,
+                          "createdBy": 1,
+                          "createdTime": "2019-07-19 14:59:15",
+                          "remark": "",
+                          "disabledFlag": 0,
+                          "parentId": 2,
+                          "parentName": "用户管理",
+                          "permissionName": "用户删除",
+                          "permissionNo": "sys_user_del",
+                          "permissionType": 2,
+                          "permissionTypeDesc": "按钮",
+                          "orderNum": "",
+                          "icon": "",
+                          "path": "",
+                          "children": []
+                      }
+                  ]
+              }
+          ]
+      }
+  ],
+  "path": "/cls/menu/tree",
+  "timestamp": 1564469096082
+}
+
 export default ({ mock }) => {
   if (!mock) return;
   let menu = [first, second, third, admin];
@@ -361,5 +476,6 @@ export default ({ mock }) => {
       data: top
     }
   })
+  Mock.mock('/menu/tree', 'get', menu1)
 
 }

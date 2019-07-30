@@ -37,13 +37,10 @@ export const refeshToken = () => request({
     method: 'post'
 })
 
-// 此处的 type 即为角色 id
-export const getMenu = (type = 3) => request({
-    url: baseUrl + '/user/getMenu',
-    method: 'get',
-    data: {
-        type
-    }
+
+export const getMenu = () => request({
+    url: baseUrl + '/menu/tree',
+    method: 'get'
 });
 
 export const getTopMenu = () => request({

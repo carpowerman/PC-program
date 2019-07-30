@@ -1,38 +1,34 @@
 <template>
   <div class="menu-wrapper">
     <template v-for="item in menu">
-      <el-menu-item v-if="validatenull(item[childrenKey]) && vaildRoles(item)"
-                    :index="item[pathKey]"
+      <!-- 菜单 -->
+      <el-menu-item v-if="item.permissionType == 1 && item.isPermit"
+                    :index="item.path"
                     @click="open(item)"
-                    :key="item[labelKey]"
+                    :key="item.permissionName"
                     :class="{'is-active':vaildAvtive(item)}">
-        <i :class="item[iconKey]"></i>
-        <span slot="title"
-              :alt="item[pathKey]">{{generateTitle(item)}}</span>
+        <i :class="item.icon"></i>
+        <span slot="title" :alt="item.path">{{item.permissionName}}</span>
       </el-menu-item>
-      <el-submenu v-else-if="!validatenull(item[childrenKey])&&vaildRoles(item)"
-                  :index="item[pathKey]"
-                  :key="item[labelKey]">
+
+      <!-- 目录 -->
+      <el-submenu v-else-if="item.permissionType == 0 && item.isPermit"
+                  :index="item.path"
+                  :key="item.permissionName">
         <template slot="title">
-          <i :class="item[iconKey]"></i>
+          <i :class="item.icon"></i>
           <span slot="title"
-                :class="{'el-menu--display':collapse && first}">{{generateTitle(item)}}</span>
+                :class="{'el-menu--display':collapse && first}">{{item.permissionName}}</span>
         </template>
-        <template v-for="(child,cindex) in item[childrenKey]">
-          <el-menu-item :index="child[pathKey],cindex"
+        <template v-for="child in item.children">
+          <el-menu-item :index="child.path"
                         @click="open(child)"
                         :class="{'is-active':vaildAvtive(child)}"
-                        v-if="validatenull(child[childrenKey])"
-                        :key="child[labelKey]">
-            <i :class="child[iconKey]"></i>
-            <span slot="title">{{generateTitle(child)}}</span>
+                        v-if="child.permissionType == 1 && child.isPermit"
+                        :key="child.permissionName">
+            <i :class="child.icon"></i>
+            <span slot="title">{{child.permissionName}}</span>
           </el-menu-item>
-          <sidebar-item v-else
-                        :menu="[child]"
-                        :key="cindex"
-                        :props="props"
-                        :screen="screen"
-                        :collapse="collapse"></sidebar-item>
         </template>
       </el-submenu>
     </template>
@@ -71,7 +67,9 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log(this.menu);
+  },
   computed: {
     ...mapGetters(["roles"]),
     labelKey() {
@@ -93,7 +91,7 @@ export default {
   methods: {
     generateTitle(item) {
       return this.$router.$avueRouter.generateTitle(
-        item[this.labelKey],
+        item.permissionName,
         (item.meta || {}).i18n
       );
     },
@@ -116,8 +114,8 @@ export default {
       this.$router.$avueRouter.meta = item.meta;
       this.$router.push({
         path: this.$router.$avueRouter.getPath({
-          name: item[this.labelKey],
-          src: item[this.pathKey],
+          name: item.permissionName,
+          src: item.path,
           i18n: (item.meta || {}).i18n
         }),
         query: item.query

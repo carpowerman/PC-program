@@ -1,35 +1,71 @@
 import { setToken, removeToken } from '@/util/auth'
 import { setStore, getStore } from '@/util/store'
-import { isURL, validatenull } from '@/util/validate'
+// import { isURL, validatenull } from '@/util/validate'
 import { encryption, deepClone } from '@/util/util'
-import webiste from '@/config/website'
+// import webiste from '@/config/website'
 import { loginByUsername, getUserPermission, getUserInfo, getMenu, getTopMenu, logout, refeshToken } from '@/api/user'
 
+import menuComponent from './menu'
 
-function addPath(ele, first) {
-    const menu = webiste.menu;
-    const propsConfig = menu.props;
-    const propsDefault = {
-        label: propsConfig.label || 'label',
-        path: propsConfig.path || 'path',
-        icon: propsConfig.icon || 'icon',
-        children: propsConfig.children || 'children'
-    }
-    const icon = ele[propsDefault.icon];
-    ele[propsDefault.icon] = validatenull(icon) ? menu.iconDefault : icon;
-    const isChild = ele[propsDefault.children] && ele[propsDefault.children].length !== 0;
-    if (!isChild && first && !isURL(ele[propsDefault.path])) {
-        ele[propsDefault.path] = ele[propsDefault.path] + '/index'
+
+// 字段替换 暂时没必要
+// function addPath(ele, first) {
+//     const menu = webiste.menu;
+//     const propsConfig = menu.props;
+//     const propsDefault = {
+//         label: propsConfig.label || 'label',
+//         path: propsConfig.path || 'path',
+//         icon: propsConfig.icon || 'icon',
+//         children: propsConfig.children || 'children'
+//     }
+//     const icon = ele[propsDefault.icon];
+//     ele[propsDefault.icon] = validatenull(icon) ? menu.iconDefault : icon;
+//     const isChild = ele[propsDefault.children] && ele[propsDefault.children].length !== 0;
+//     if (!isChild && first && !isURL(ele[propsDefault.path])) {
+//         ele[propsDefault.path] = ele[propsDefault.path] + '/index'
+//     } else {
+//         ele[propsDefault.children].forEach(child => {
+//             if (!isURL(child[propsDefault.path])) {
+//                 child[propsDefault.path] = `${ele[propsDefault.path]}/${child[propsDefault.path] ? child[propsDefault.path] : 'index'}`
+//             }
+//             addPath(child);
+//         })
+//     }
+
+// }
+
+function replaceDoc(item, permission) {
+    if(item.permissionType === 0) {
+        if(permission[item.permissionNo]) {
+            item.isPermit = true;
+            item.children.forEach((item) => {
+                replaceDoc(item, permission);
+            })
+        } else {
+            item.isPermit = false;
+        }
+    } else if(item.permissionType === 1) {
+        const component = menuComponent.state.component;
+        if(component[item.permissionNo]) {
+            item.component = component[item.permissionNo];
+        }
+        if(permission[item.permissionNo]) {
+            item.isPermit = true;
+            item.children.forEach((item) => {
+                replaceDoc(item, permission);
+            })
+        } else {
+            item.isPermit = false;
+        }
     } else {
-        ele[propsDefault.children].forEach(child => {
-            if (!isURL(child[propsDefault.path])) {
-                child[propsDefault.path] = `${ele[propsDefault.path]}/${child[propsDefault.path] ? child[propsDefault.path] : 'index'}`
-            }
-            addPath(child);
-        })
+        if(permission[item.permissionNo]) {
+            item.isPermit = true;
+        } else {
+            item.isPermit = false;
+        }
     }
-
 }
+
 const user = {
     state: {
         userName: '',
@@ -160,16 +196,22 @@ const user = {
             })
         },
         //获取系统菜单
-        GetMenu({ commit }, parentId) {
-            return new Promise(resolve => {
-                getMenu(parentId).then((res) => {
-                    const data = res.data.data
-                    let menu = deepClone(data);
-                    menu.forEach(ele => {
-                        addPath(ele, true);
-                    })
-                    commit('SET_MENU', menu)
-                    resolve(menu)
+        GetMenu({ commit, state }) {
+            return new Promise((resolve, reject) => {
+                getMenu().then((res) => {
+                    if(res.data.code === 0) {
+                        const data = res.data.data;
+                        let menu = deepClone(data);
+                        menu.forEach((item) => {
+                            replaceDoc(item, state.permission);
+                        });
+                        console.log(menu);
+                        commit('SET_MENU', menu);
+                        resolve(menu)
+                    }
+                    reject();
+                }).catch((err) => {
+                    reject(err);
                 })
             })
         },
