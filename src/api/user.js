@@ -1,5 +1,6 @@
 import request from '@/router/axios';
 import { baseUrl } from '@/config/env';
+// 登录
 export const loginByUsername = (username, password, code, redomStr) => request({
     url: baseUrl + '/auth/login',
     method: 'post',
@@ -12,11 +13,23 @@ export const loginByUsername = (username, password, code, redomStr) => request({
         code,
         redomStr
     }
-})
+});
 
-export const getUserInfo = () => request({
-    url: baseUrl + '/user/getUserInfo',
-    method: 'get'
+// 获取用户权限信息
+export const getUserPermission = (username) => request({
+    url: baseUrl + '/user/allInfo',
+    method: 'get',
+    data: {
+        username: username
+    }
+});
+
+export const getUserInfo = (id) => request({
+    url: baseUrl + '/user/info',
+    method: 'get',
+    data: {
+        id: id
+    }
 });
 
 export const refeshToken = () => request({

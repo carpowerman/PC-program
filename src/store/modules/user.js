@@ -3,7 +3,7 @@ import { setStore, getStore } from '@/util/store'
 import { isURL, validatenull } from '@/util/validate'
 import { encryption, deepClone } from '@/util/util'
 import webiste from '@/config/website'
-import { loginByUsername, getUserInfo, getMenu, getTopMenu, logout, refeshToken } from '@/api/user'
+import { loginByUsername, getUserPermission, getUserInfo, getMenu, getTopMenu, logout, refeshToken } from '@/api/user'
 
 
 function addPath(ele, first) {
@@ -32,7 +32,10 @@ function addPath(ele, first) {
 }
 const user = {
     state: {
-        userInfo: {},
+        userName: '',
+        userId: '',
+        nickName: '',
+        avatar: '',
         permission: {},
         roles: [],
         menu: getStore({ name: 'menu' }) || [],
@@ -57,6 +60,7 @@ const user = {
                     if(data.code === 0) {
                         // token 存入 store
                         commit('SET_TOKEN', data.data.token);
+                        commit('SET_USERNAME', data.data.username);
                         commit('DEL_ALL_TAG');
                         commit('CLEAR_LOCK');
 
@@ -81,18 +85,31 @@ const user = {
                 })
             })
         },
-        GetUserInfo({ commit }) {
+        GetUserInfo({ state, commit }) {
             return new Promise((resolve, reject) => {
-                getUserInfo().then((res) => {
-                    const data = res.data.data;
-                    commit('SET_USERIFNO', data.userInfo);
-                    commit('SET_ROLES', data.roles);
-                    commit('SET_PERMISSION', data.permission)
-                    resolve(data);
+                getUserPermission(state.username).then((res) => {
+                    if(res.data.code === 0) {
+                        const data = res.data.data;
+                        commit('SET_ROLES', data.roles);
+                        commit('SET_PERMISSION', data.permissions);
+                        commit('SET_USERID', data.userId);
+                        getUserInfo(state.userId).then((res) => {
+                            if(res.data.code === 0) {
+                                const data = res.data.data;
+                                commit('SET_NICKNAME', data.nickname);
+                                commit('SET_AVATAR', data.avatar);
+                                commit('SET_ORGNAME', data.orgName);
+                                resolve();
+                            }
+                        }).catch(err => {
+                            reject(err);
+                        })
+                    }
                 }).catch(err => {
                     reject(err);
                 })
-            })
+            });
+
         },
         //刷新token
         RefeshToken({ state, commit }) {
@@ -163,8 +180,18 @@ const user = {
             state.token = token;
             setStore({ name: 'token', content: state.token, type: 'session' })
         },
-        SET_USERIFNO: (state, userInfo) => {
-            state.userInfo = userInfo;
+        SET_USERNAME: (state, username) => {
+            state.username = username;
+            setStore({ name: 'username', content: state.userName, type: 'session' })
+        },
+        SET_USERID: (state, userid) => {
+            state.userId = userid;
+        },
+        SET_NICKNAME: (state, nickname) => {
+            state.nickName = nickname;
+        },
+        SET_AVATAR: (state, avatar) => {
+            state.avatar = avatar;
         },
         SET_MENU: (state, menu) => {
             state.menu = menu

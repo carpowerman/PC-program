@@ -269,7 +269,7 @@ const admin = [
     label: '小程序设置',
     path: '/miniProgram',
     component: 'views/miniProgram/index',
-    icon: '',
+    icon: 'iconfont link',
     meta: {
       i18n: 'miniProgram'
     },
