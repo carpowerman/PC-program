@@ -27,7 +27,8 @@ export default ({ mock }) => {
             ],
             "permissions": [
                 "sys",
-                "sys_user"
+                "sys_user",
+                "customer"
             ],
             "dataPerms": [
                 1,

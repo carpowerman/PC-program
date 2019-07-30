@@ -32,6 +32,7 @@ const getters = {
             });
         });
         return echartsData;
-    }
+    },
+    orgTree: state => state.organization.tree
 }
 export default getters

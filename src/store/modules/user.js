@@ -205,7 +205,6 @@ const user = {
                         menu.forEach((item) => {
                             replaceDoc(item, state.permission);
                         });
-                        console.log(menu);
                         commit('SET_MENU', menu);
                         resolve(menu)
                     }
