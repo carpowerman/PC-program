@@ -239,28 +239,28 @@ const admin = [
   {
     label: '权限设置',
     path: '/permission',
-    component: 'views/miniProgram/index',
+    component: 'views/authorityManage',
     icon: '',
     meta: {
-      i18n: 'miniProgram'
+      i18n: 'authorityManage'
     },
     children: [
       {
         label: '菜单设置',
-        path: '/miniProgram',
-        component: 'views/miniProgram/index',
+        path: '/menuSet',
+        component: 'views/authorityManage/menuSet',
         icon: '',
         meta: {
-          i18n: 'miniProgram'
+          i18n: 'menuSet'
         },
         children: []
       }, {
         label: '角色设置',
-        path: '/miniProgram',
-        component: 'views/miniProgram/index',
+        path: '/roleBind',
+        component: 'views/authorityManage/roleBind',
         icon: '',
         meta: {
-          i18n: 'miniProgram'
+          i18n: 'roleBind'
         },
         children: []
       }

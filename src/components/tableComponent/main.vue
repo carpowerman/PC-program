@@ -7,19 +7,19 @@
                stripe
        style="width: 100%">
        <el-table-column v-for="(col,index) in chTable.tableLabel" :key='index' :type="col.type" :fixed="col.fixed"
-         :prop="col.prop" :label="$t(col.title)" :min-width="col.width" :sortable="col.sort" :formatter="col.formatter"
+         :prop="col.prop" :label="col.title" :min-width="col.width" :sortable="col.sort" :formatter="col.formatter"
          :show-overflow-tooltip="col.ellipsis">
        </el-table-column>
-       <el-table-column v-if="chTable.status" width="100" :label="$t('状态')">
+       <el-table-column v-if="chTable.status" width="100" label="状态">
          <template slot-scope="scope">
             <slot name="status" :obj="scope"></slot>
          </template>
        </el-table-column>
-       <el-table-column v-if="chTable.tableOption" align="center" header-align="center" :label="$t('操作')"
+       <el-table-column v-if="chTable.tableOption" align="center" header-align="center" label="操作"
          :width="chTable.tableOption.width">
            <template slot-scope="scope">
-              <el-button v-for="item in chTable.operation.buttons" size="small" :class="item.classname ? item.classname : ''" :key="item.id"
-                  @click.stop="handleOperation(scope.$index, scope.row, item.id)">{{$t( item.label) }}
+              <el-button v-for="item in chTable.operation.buttons" size="small" class='option-btn' :class="item.classname ? item.classname : ''" :key="item.id"
+                  @click.stop="handleOperation(scope.$index, scope.row, item.id)">{{item.label}}
               </el-button>
            </template>
        </el-table-column>
@@ -66,7 +66,6 @@
          });
        },
        handleCurrentChange(val) {
-         debugger
          this.$emit('initTableData', {
            pageNo: val,
            pageSize: this.chTable.pageSize
@@ -76,7 +75,17 @@
    }
  </script>
 
- <style>
+ <style lang='scss'>
+   .el-table {
+      overflow: auto;
+      .option-btn{
+          background: transparent;
+          border: none;
+          font-size: 12px;
+          color:#1F65F5;
+          padding:0;
+      }
+    }
    .block {
      text-align: right;
    }
