@@ -7,17 +7,18 @@
   >
       <slot name='dialogText'></slot>
        <el-dialog
-        width="30%"
-       :title="dialogData.innerDialogTitle"
-      :visible.sync="isInnerVisible"
-      append-to-body>
-      <slot name='innerDialogText'></slot>
-    </el-dialog>
+            width="30%"
+          :title="dialogData.innerDialogTitle"
+          :visible.sync="isInnerVisible"
+          append-to-body>
+          <slot name='innerDialogText'></slot>
+        </el-dialog>
     </el-dialog>
   </div>
  </template>
 <script>
   export default {
+    name: 'ch-DIalog',
     props:{
       dialogVisible:Boolean,
       innerDialogVisible:Boolean,
@@ -30,9 +31,7 @@
       };
     },
     watch:{
-      
       dialogVisible(val){
-        debugger
         this.isVisible=val
       },
       isVisible(val){
@@ -53,13 +52,6 @@
       comfirmOption(){
          this.$emit("comfirm-option")
       },
-      // handleClose(done) {
-      //   this.$confirm('确认关闭？')
-      //     .then(_ => {
-      //       done();
-      //     })
-      //     .catch(_ => {});
-      // }
     }
   };
 </script>

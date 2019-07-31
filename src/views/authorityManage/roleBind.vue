@@ -5,46 +5,123 @@
           <div class="ch-table">
             <el-row ref='chTop'>
               <el-col :span=4 class='search-button'>
-                <el-button type="warning" class='ch-button'>
-                     <i class='el-icon-plus'></i>
-                  添加</el-button>
+                <el-button type="warning" class='ch-button' @click='roleDialog=true'>
+                     <i class='el-icon-plus'></i>新增
+                </el-button>
+                   
               </el-col>
             </el-row>
             <el-row :span="24" class='tree-table'>
               <el-col :span="24">
-                <pc-table @initTableData="initData" :ch-table='dataTable'>
-                  <template slot='status' slot-scope="props">
+                <pc-table @initTableData="initData" :ch-table='dataTable'   @editRole="editRole" 
+                @detailRole='detailRole' @getdataPermType='getdataPermType'> 
+                  <!-- <template slot='status' slot-scope="props">
                    
-                  </template>
+                  </template> -->
                 </pc-table>
               </el-col>
             </el-row>
-            <ch-DIalog :dialog-visible='dialogVisible' :dialog-data="dialogDatas" @handle-close='handleDialogClose'>
-              <div slot="dialogText">
-              </div>
-            </ch-DIalog>
           </div>
+          <el-dialog
+                      :title="dialogDatas.dialogTitle"
+                      :visible.sync="roleDialog"
+                      width="30%">
+                        <el-form ref="ruleForm" :model="roleData" :rules="rules" label-width="80px" class='role-form'>
+                        <el-row :span='24' :gutter="20">
+                          <el-col>
+                            <el-form-item label="角色名称" prop="roleName">
+                                <el-input v-model="roleData.roleName" placeholder="角色名称"></el-input>
+                            </el-form-item>
+                          </el-col>
+                        </el-row>
+                        <el-row :span='24' :gutter="20">
+                          <el-col>
+                            <el-form-item label="角色标识" prop="disabledFlag">
+                                <el-input v-model="roleData.disabledFlag" placeholder="角色标识"></el-input>
+                            </el-form-item>
+                          </el-col>
+                        </el-row>
+                        <el-row :span='24' :gutter="20">
+                          <el-col>
+                            <el-form-item label="角色描述">
+                                <el-input v-model="roleData.permissions" placeholder="角色描述"></el-input>
+                            </el-form-item>
+                          </el-col>
+                        </el-row>
+                        <el-row :span='24' :gutter="20">
+                          <el-col>
+                            <el-form-item label="数据权限" prop='dataPermType'>
+                              <el-select v-model="roleData.dataPermType" placeholder="请选择数据权限">
+                                  <el-option label="全部" value="all"></el-option>
+                                  <el-option label="自定义" value="self"></el-option>
+                                  <el-option label="本级及子级" value="selfChild"></el-option>
+                                  <el-option label="本级" value="level"></el-option>
+                                </el-select>
+                            </el-form-item>
+                          </el-col>
+                        </el-row>
+                        <el-form-item class="dialog-footer">
+                        <el-button type="primary" @click="comfirmOption">确 定</el-button>
+                        <el-button>取 消</el-button>
+                        </el-form-item>
+                      </el-form>
+                    </el-dialog>
+      <el-dialog 
+       title="权限设置"
+       :visible.sync="rolePermissions"
+        width="30%">
+          <el-tree :data="permissionsData" :props="defaultProps" @node-click="handleNodeClick"
+          show-checkbox
+          node-key="id"
+          :default-expanded-keys="[2, 3]"
+          :default-checked-keys="[5]"
+          >
+
+          </el-tree>
+      </el-dialog>
+      
       </template>
   </basic-container>
 </template>
 
 <script>
   import pcTable from '@/components/tableComponent/main'
-  import chDIalog from '@/components/chDIalog/main'
+  import {getRoleList,editRoleList,delRoleList} from '@/api/role'
+import { parse } from 'path';
   export default {
     name: "user-list",
     components: {
-      pcTable,chDIalog
+      pcTable
     },
     data: () => ({
       input: '',
-      dialogVisible:false,
+      roleDialog:false,
       dialogDatas:{
-        dialogTitle:'新增员工'
+        dialogTitle:'新增角色'
       },
-     
-      defaultProps: [],
-     
+     roleData:{
+       roleName:'',
+       disabledFlag:'',
+       permissions:'',
+       dataPermType:'',
+     },
+     ruleForm: {
+          roleName: '',
+          disabledFlag: '',
+          dataPermType: ''
+        },
+      rules: {
+          roleName: [
+            { required: true, message: '请输入活动名称', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ],
+          disabledFlag: [
+            { required: true, message: '请填写角色标识', trigger: 'blur' }
+          ],
+          dataPermType: [
+            { required: true, message: '请选择数据权限', trigger: 'change' }
+          ]
+      },
       dataTable: {
         tableHeight: 300,
         total: 0,
@@ -54,7 +131,7 @@
           disabled: false
         },
         tableLabel: [{
-            prop: 'roleId',
+            prop: 'id',
             title: '序号',
             width: '50',
             fixed: true
@@ -65,61 +142,99 @@
             width: '100'
           },
           {
-            prop: 'roleTag',
+            prop: 'disabledFlag',
             title: '角色标识',
             width: '100'
           },
           {
-            prop: 'roleDescribe',
+            prop: 'permissions',
             title: '角色描述',
             width: '80'
           },
           {
-            prop: 'rolePermissions',
+            prop: 'dataPermType',
             title: '数据权限',
             width: '80'
           },
           {
-            prop: 'creatTime',
+            prop: 'createdTime',
             title: '创建时间',
             width: '100'
           },
         ],
-        tableData: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
+        tableData: [],
         tableOption:true,//操作
         operation: {
           width: '100',
           buttons: [
             {
               label: '查看',
-              methods: 'detail',
+              Fun: 'lookUp',
+              id: '1',                     // 按钮循环组件的key值
               classname:''
             },{
               label: '编辑',
-              methods: 'detail',
+              Fun: 'editRole',
+               id: '2',  
               classname:''
             },{
               label: '删除',
-              methods: 'detail',
+              Fun: 'detailRole',
+               id: '3',  
               classname:''
             },{
               label: '权限',
-              methods: 'getPermissions',
+               id: '4',  
+              Fun: 'getdataPermType',
               classname:''
             }
           ]
-        },
-      },
-      statusOptions:[{
-        label:'启用',
-        value:true
-      },{
-        label:'禁用',
-        value:false
-      }]
+        }
+    },
+       rolePermissions:false,
+       permissionsData:[{
+          id: 1,
+          label: '一级 1',
+          children: [{
+            id: 4,
+            label: '二级 1-1',
+            children: [{
+              id: 9,
+              label: '三级 1-1-1'
+            }, {
+              id: 10,
+              label: '三级 1-1-2'
+            }]
+          }]
+        }, {
+          id: 2,
+          label: '一级 2',
+          children: [{
+            id: 5,
+            label: '二级 2-1'
+          }, {
+            id: 6,
+            label: '二级 2-2'
+          }]
+        }, {
+          id: 3,
+          label: '一级 3',
+          children: [{
+            id: 7,
+            label: '二级 3-1'
+          }, {
+            id: 8,
+            label: '二级 3-2'
+          }]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
     }),
     created: function () {
     },
+  
     mounted() {
       window.onresize = () => {
       return (() => {
@@ -128,12 +243,51 @@
     }
     },
     methods: {
-      //新增
-      handleDialogClose(val){
-        this.dialogVisible=val
-      },
+      //关闭
+      // handleDialogClose(val){
+      //   this.roleDialog=val
+      // },
+      //新增确认
       comfirmOption(){
-        alert(2)
+        if(this.roleDialog.dialogTitle=='新增角色'){
+          alert(11)
+        }else{
+          editRoleList(this.roleData).then(res => {
+          let re=res.data;
+          if(re.message){
+            this.$notify({
+              title: '成功',
+              message: '编辑成功',
+              type: 'success'
+            });
+          }
+          }).catch(() => {
+                      
+          });
+        }
+      },
+      //编辑
+      editRole(index,row){
+        Vue.set(this,'roleData',JSON.parse(JSON.stringify(row)))
+        // Vue.set(this.roleData,'dataPermType',String(row.dataPermType))
+        this.roleDialog=true;
+        this.dialogDatas.dialogTitle='编辑角色';
+        
+        
+      },
+      //删除
+      detailRole(index,row){
+        let id=row.id
+        delRoleList(id).then(res=>{
+          if(res.message){
+              this.initData()
+          }
+        }).catch(()=>{
+
+        })
+      },
+      getdataPermType(index,row){
+        this.rolePermissions=true;
       },
       handleNodeClick(data) {
         console.log(data);
@@ -144,21 +298,19 @@
       nodeClick(data) {
         this.$message.success(JSON.stringify(data))
       },
-      initData(obj) {
+      initData() {
         this.getHeight();
-        this.dataTable.tableData = [{
-          username: '22',
-          email: '0',
-          rowStatus:true
-        }, {}, {}, {}, {}, {}, {}, {}, {}, {}, {
-           username: '333',
-          email: '55',
-           rowStatus:false
-        }];
-        this.dataTable.pageSize = obj.pageSize;
-        this.dataTable.pageNo = obj.pageNo;
-        this.dataTable.total = 200;
+        getRoleList().then(res => {
+          const data = res.data.data;
+          this.dataTable.tableData=data;
+          this.dataTable.pageSize = res.data.pageSize;
+          this.dataTable.pageNo = res.data.pageNo;
+          this.dataTable.total = res.data.total;
+        }).catch(() => {
+                    
+        });
       },
+
       getHeight() {
         let pageTopHeight = this.$refs.chTop.$el.offsetHeight;
         this.dataTable.tableHeight = document.body.clientHeight - pageTopHeight - 380;
@@ -171,71 +323,21 @@
 
 <style lang="scss">
   .ch-table {
-    tbody {
-      height: 300px;
-      overflow: auto;
-    }
-    .tree-table {
-      margin-top: 26px;
-
-      .left-tree {
-        border: 1px solid rgba(224, 228, 237, 1);
-        border-radius: 3px;
-      }
-
-      .el-table--medium td,
-      .el-table--medium th {
-        padding: 7px 0;
-        background: #fff;
-      }
-
-      .edit-btn {
-        background: transparent;
-        color: #1F65F5;
-        border-color: transparent;
-
-        &:hover {
-          color: rgb(31, 78, 172);
-        }
-      }
-
-      .title-tree {
-        height: 46px;
-        line-height: 46px;
-        border: 1px solid #ededed;
-        width: 100%;
-        display: inline-block;
-        text-align: center;
-        background: rgba(240, 242, 245, 1);
-        border-radius: 3px 3px 0px 0px;
-        color: #020202;
-        font-weight: 400;
-      }
-    }
-
     .ch-button {
       background: rgba(246, 197, 6, 1);
       border-radius: 3px;
       color: #333;
       padding: 13px 36px;
-
       &:hover {
         color: #333;
         background: rgba(246, 197, 6, 0.8);
       }
     }
-
-    .search-button {
-      padding-left: 10px;
-      box-sizing: border-box;
+    .role-form{
+      .el-select{
+        display:block;
+      }
     }
 
-    .add-button {
-      text-align: right;
-    }
-
-    .avue-crud__menu {
-      display: none;
-    }
   }
 </style>

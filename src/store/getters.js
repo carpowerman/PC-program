@@ -33,6 +33,7 @@ const getters = {
         });
         return echartsData;
     },
+    role: state => state.role.roleList,
     orgTree: state => state.organization.tree
 }
 export default getters

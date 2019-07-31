@@ -110,6 +110,7 @@
                     <el-input v-model="formData.storeName" placeholder="详细地址"></el-input>
                   </el-form-item>
               </el-row>
+           
             <el-form-item class="dialog-footer">
                 <el-button type="primary" @click="comfirmOption">确 定</el-button>
                 <el-button>取 消</el-button>

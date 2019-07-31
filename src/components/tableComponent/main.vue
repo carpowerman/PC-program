@@ -35,7 +35,7 @@
 
  <script>
    export default {
-     name: "voTable",
+     name: "pc-table",
      props: {
        chTable: Object
      },
@@ -44,7 +44,7 @@
      },
      methods: {
        inintData() {
-         debugger
+        
          this.chTable.pageSize = 2
          this.$emit('initTableData', {
            pageNo: this.chTable.pageNo,
@@ -52,12 +52,12 @@
          });
        },
       handleOperation(a, b, id) { // 点了操作按钮触发的函数
-                const data = this.chTable.operation.data;
-                for (let i = 0; i < data.length; i++) {
-                    if (id === data[i].id) {
-                        this.$emit(data[i].Fun, a, b);
-                    }
-                }
+         const data = this.chTable.operation.buttons;
+         for (let i = 0; i < data.length; i++) {
+            if (id === data[i].id) {
+               this.$emit(data[i].Fun, a, b);
+           }
+        }
       },
        handleSizeChange() {
          this.$emit('initTableData', {
