@@ -92,7 +92,7 @@
   import { mapGetters } from "vuex";
   import pcTable from '@/components/tableComponent/main'
   import {getRoleList,editRoleList,delRoleList,addRoleList,addPermRoleList} from '@/api/role'
-  import { parse } from 'path';
+ // import { parse } from 'path';
   export default {
     name: "user-list",
     components: {
@@ -108,7 +108,6 @@
      roleData:{
        roleName:'',
        roleNo:'',
-       permissions:'',
        permissions:'',
      },
      ruleForm: {
@@ -257,24 +256,24 @@
         }
       },
       //查看
-      lookUp(index,row){
+      lookUp(){
         this.roleDialog=true;
         this.isDisabled=true
         this.dialogDatas.dialogTitle='查看角色';
        
       },
       //编辑
-      editRole(index,row){
+      editRole(){
         this.isDisabled=false
         this.roleDialog=true;
         this.dialogDatas.dialogTitle='编辑角色';
-        Vue.set(this,'roleData',JSON.parse(JSON.stringify(row)))
+        // Vue.set(this,'roleData',JSON.parse(JSON.stringify(row)))
         // Vue.set(this.roleData,'permissions',String(row.permissions))
         
         
       },
       //删除
-      detailRole(index,row){
+      detailRole(row){
         let id=row.id
         delRoleList(id).then(res=>{
           if(res.message){
@@ -285,7 +284,7 @@
         })
       },
       //权限配置
-      getPermissions(index,row){
+      getPermissions(){
         this.rolePermissions=true;
         this.$store.dispatch("GetMenu").then(res => {
           if (res.length === 0) return;
@@ -301,7 +300,7 @@
         // //获取所有被选中的data的数组
         //     let takeDate = this.$refs.tree.getCheckedNodes();
             //获取所有被选中的key的数组
-       let keyDate = this.$refs.tree.getCheckedKeys();
+       // let keyDate = this.$refs.tree.getCheckedKeys();
           let params={
           "id":2,
           "permissions":[
