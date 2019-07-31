@@ -77,14 +77,12 @@
                 }
       },
        handleSizeChange(val) {
-         debugger
          this.$emit('search', {
            pageNo: this.chTable.pageNo,
            pageSize: this.chTable.pageSize
          });
        },
        handleCurrentChange(val) {
-         debugger
          this.$emit('search', {
            pageNo: val,
            pageSize: this.chTable.pageSize

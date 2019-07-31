@@ -32,6 +32,7 @@ const getters = {
             });
         });
         return echartsData;
-    }
+    },
+    role: state => state.role.roleList,
 }
 export default getters

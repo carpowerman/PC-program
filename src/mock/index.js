@@ -1,4 +1,5 @@
 import user from './user';
+import role from './role';
 import menu from './menu';
 
 /**
@@ -8,5 +9,5 @@ import menu from './menu';
  */
 
 user({ mock: true });
-
 menu({ mock: true });
+role({ mock: true });
