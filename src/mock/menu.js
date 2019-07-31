@@ -451,12 +451,45 @@ const menu1 = {
                           "orderNum": "",
                           "icon": "",
                           "path": "",
+                          "children": [
+                                                  {
+                          "id": 5,
+                          "createdBy": 1,
+                          "createdTime": "2019-07-19 14:59:02",
+                          "remark": "",
+                          "disabledFlag": 0,
+                          "parentId": 2,
+                          "parentName": "用户管理",
+                          "permissionName": "用户编辑",
+                          "permissionNo": "sys_user_edit",
+                          "permissionType": 2,
+                          "permissionTypeDesc": "按钮",
+                          "orderNum": "",
+                          "icon": "",
+                          "path": "",
                           "children": []
                       }
+                          ]
+                      }
                   ]
-              }
+              },{
+                  "id": 2,
+                  "createdBy": 1,
+                  "createdTime": "2019-07-19 14:56:55",
+                  "remark": "",
+                  "disabledFlag": 0,
+                  "parentId": 1,
+                  "parentName": "系统管理",
+                  "permissionName": "角色管理",
+                  "permissionNo": "sys_role",
+                  "permissionType": 1,
+                  "permissionTypeDesc": "菜单",
+                  "orderNum": "",
+                  "icon": "",
+                  "path": "/role",
+                  "children":[]
+                }
           ]
-      
       },
       {
         "id": 1,
@@ -468,7 +501,7 @@ const menu1 = {
         "icon": "iconfont people",
         "path": "/customer", // 菜单为必须 目录可为空
         "children": []
-      }
+      },
   ],
   "path": "/cls/menu/tree",
   "timestamp": 1564469096082

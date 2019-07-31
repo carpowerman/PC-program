@@ -1,6 +1,7 @@
 import Mock from 'mockjs'
 export default ({ mock }) => {
     if (!mock) return;
+    //角色列表
     Mock.mock('/role/list', 'get', {
         code: 0,
         message: "SUCCESS",
@@ -83,7 +84,14 @@ export default ({ mock }) => {
             "path": "/cls/role/edit",
             "timestamp": 1564502871251
     })
-
+    //添加
+   Mock.mock('/role/add','post',{
+        "code": 0,
+        "message": "SUCCESS",
+        "data": {},
+        "path": "/cls/role/add",
+        "timestamp": 1564502871251
+    })
     //删除
     Mock.mock('/role/del','delete',{
         "code": 1,
@@ -91,6 +99,14 @@ export default ({ mock }) => {
         "data": {},
         "path": "/cls/role/del",
         "timestamp": 1564504786145
+    })
+    //权限添加分配
+    Mock.mock('/role/addPerm','post', {
+        "code": 0,
+        "message": "SUCCESS",
+        "data": {},
+        "path": "/cls/role/addPerm",
+        "timestamp": 1564545349762
     })
 
   }
