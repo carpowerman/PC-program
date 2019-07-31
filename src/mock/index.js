@@ -1,6 +1,7 @@
 import user from './user';
 import menu from './menu';
-import organization from './organization'
+import org from './org';
+import customer from './customer';
 
 /**
  * 模拟数据mock
@@ -12,4 +13,6 @@ user({ mock: true });
 
 menu({ mock: true });
 
-organization({ mock: true });
+org({ mock: true });
+
+customer({ mock: true });
