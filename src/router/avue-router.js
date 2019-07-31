@@ -8,9 +8,9 @@ RouterPlugin.install = function (vue, router, store, i18n) {
     this.$router = router;
     this.$store = store;
     this.$vue = new vue({ i18n });
-    function isURL(s) {
-        return /^http[s]?:\/\/.*/.test(s)
-    }
+    // function isURL(s) {
+    //     return /^http[s]?:\/\/.*/.test(s)
+    // }
     function objToform(obj) {
         let result = [];
         Object.keys(obj).forEach(ele => {
@@ -80,9 +80,10 @@ RouterPlugin.install = function (vue, router, store, i18n) {
             return value;
         },
         //动态路由
-        formatRoutes: function (aMenu = [], first) {
+        formatRoutes: function (aMenu = []) {
             const aRouter = []
             const propsConfig = this.$website.menu.props;
+            // 拿到字段名称
             const propsDefault = {
                 label: propsConfig.label || 'label',
                 path: propsConfig.path || 'path',
@@ -91,81 +92,66 @@ RouterPlugin.install = function (vue, router, store, i18n) {
                 meta: propsConfig.meta || 'meta',
             }
             if (aMenu.length === 0) return;
+
+            // 循环
             for (let i = 0; i < aMenu.length; i++) {
                 const oMenu = aMenu[i];
+                // 已经包含在内 停止注册
                 if (this.routerList.includes(oMenu[propsDefault.path])) return;
-                let path = (() => {
-                    if (first) {
-                        return oMenu[propsDefault.path].replace('/index', '')
-                    } else {
-                        return oMenu[propsDefault.path]
-                    }
-                })(),
-                    component = oMenu.component,
-                    name = oMenu[propsDefault.label],
-                    icon = oMenu[propsDefault.icon],
-                    children = oMenu[propsDefault.children],
-                    meta = oMenu[propsDefault.meta] || {};
 
-                meta = Object.assign(meta, (function () {
+                // 判断是目录还是菜单
+                if (oMenu.permissionType === 0) {
+                    // 孩子递归
+                    this.formatRoutes(oMenu.children);
+                    // 自身结束
+                    continue;
+                }
+
+                // 不是菜单全部结束
+                if( oMenu.permissionType !=1 ) continue;
+
+                // 变量赋值
+                let path = oMenu.path,
+                    component = oMenu.component,
+                    name = oMenu.permissionName,
+                    icon = oMenu.icon,
+
+                    meta = oMenu.meta || {};
+
+                meta = Object.assign(meta, (() => {
                     if (meta.keepAlive === true) {
                         return {
                             $keepAlive: true
                         }
                     }
                 })());
-                const isChild = children.length !== 0;
+
                 const oRouter = {
                     path: path,
                     component(resolve) {
-                        // 判断是否为首路由
-                        if (first) {
-                            require(['../page/index'], resolve)
-                            return
-                            // 判断是否为多层路由
-                        } else if (isChild && !first) {
-                            require(['../page/index/layout'], resolve)
-                            return
-                            // 判断是否为最终的页面视图
-                        } else {
-                            require([`../${component}.vue`], resolve)
-                        }
+                        require(['../page/index'], resolve)
                     },
                     name: name,
                     icon: icon,
                     meta: meta,
                     redirect: (() => {
-                        if (!isChild && first && !isURL(path)) return `${path}/index`
-                        else return '';
+                        return `${path}/index`;
                     })(),
-                    // 处理是否为一级路由
-                    children: !isChild ? (() => {
-                        if (first) {
-                            if (!isURL(path)) oMenu[propsDefault.path] = `${path}/index`;
-                            return [{
-                                component(resolve) { require([`../${component}.vue`], resolve) },
-                                icon: icon,
-                                name: name,
-                                meta: meta,
-                                path: 'index'
-                            }]
-                        }
-                        return [];
-                    })() : (() => {
-                        return this.formatRoutes(children, false)
+                    children: (() => {
+                        oMenu.path = `${path}/index`;
+                        return [{
+                            component(resolve) { require([`../${component}.vue`], resolve)},
+                            icon: icon,
+                            name: name,
+                            meta: meta,
+                            path: 'index'
+                        }]
                     })()
                 }
                 aRouter.push(oRouter)
+                this.routerList.push(path);
             }
-            if (first) {
-                if (!this.routerList.includes(aRouter[0][propsDefault.path])) {
-                    this.safe.$router.addRoutes(aRouter)
-                    this.routerList.push(aRouter[0][propsDefault.path])
-                }
-            } else {
-                return aRouter
-            }
-
+            this.safe.$router.addRoutes(aRouter);
         }
     }
 }

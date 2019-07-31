@@ -68,21 +68,15 @@
         </div>
       </el-tooltip>
       <img class="top-bar__img"
-           :src="userInfo.avatar">
+           :src="avatar">
       <el-dropdown>
         <span class="el-dropdown-link">
-          {{userInfo.username}}
+          {{nickName}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
             <router-link to="/">{{$t('navbar.dashboard')}}</router-link>
-          </el-dropdown-item>
-          <el-dropdown-item>
-            <router-link to="/info/index">{{$t('navbar.userinfo')}}</router-link>
-          </el-dropdown-item>
-          <el-dropdown-item>
-            <router-link to="/info/setting">{{$t('navbar.setting')}}</router-link>
           </el-dropdown-item>
           <el-dropdown-item @click.native="logout"
                             divided>{{$t('navbar.logOut')}}</el-dropdown-item>
@@ -147,6 +141,8 @@ export default {
     //  showSearch: state => state.common.showSearch,
     //  showMenu: state => state.common.showMenu,
     //  showColor: state => state.common.showColor
+      nickName: state => state.user.nickName,
+      avatar: state => state.user.avatar
     }), 
     ...mapGetters([
       "userInfo",
@@ -185,4 +181,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-dropdown-link {
+  cursor: pointer;
+}
 </style>

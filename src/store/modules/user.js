@@ -1,38 +1,77 @@
 import { setToken, removeToken } from '@/util/auth'
 import { setStore, getStore } from '@/util/store'
-import { isURL, validatenull } from '@/util/validate'
+// import { isURL, validatenull } from '@/util/validate'
 import { encryption, deepClone } from '@/util/util'
-import webiste from '@/config/website'
-import { loginByUsername, getUserInfo, getMenu, getTopMenu, logout, refeshToken } from '@/api/user'
+// import webiste from '@/config/website'
+import { loginByUsername, getUserPermission, getUserInfo, getMenu, getTopMenu, logout, refeshToken } from '@/api/user'
+
+import menuComponent from './menu'
 
 
-function addPath(ele, first) {
-    const menu = webiste.menu;
-    const propsConfig = menu.props;
-    const propsDefault = {
-        label: propsConfig.label || 'label',
-        path: propsConfig.path || 'path',
-        icon: propsConfig.icon || 'icon',
-        children: propsConfig.children || 'children'
-    }
-    const icon = ele[propsDefault.icon];
-    ele[propsDefault.icon] = validatenull(icon) ? menu.iconDefault : icon;
-    const isChild = ele[propsDefault.children] && ele[propsDefault.children].length !== 0;
-    if (!isChild && first && !isURL(ele[propsDefault.path])) {
-        ele[propsDefault.path] = ele[propsDefault.path] + '/index'
+// 字段替换 暂时没必要
+// function addPath(ele, first) {
+//     const menu = webiste.menu;
+//     const propsConfig = menu.props;
+//     const propsDefault = {
+//         label: propsConfig.label || 'label',
+//         path: propsConfig.path || 'path',
+//         icon: propsConfig.icon || 'icon',
+//         children: propsConfig.children || 'children'
+//     }
+//     const icon = ele[propsDefault.icon];
+//     ele[propsDefault.icon] = validatenull(icon) ? menu.iconDefault : icon;
+//     const isChild = ele[propsDefault.children] && ele[propsDefault.children].length !== 0;
+//     if (!isChild && first && !isURL(ele[propsDefault.path])) {
+//         ele[propsDefault.path] = ele[propsDefault.path] + '/index'
+//     } else {
+//         ele[propsDefault.children].forEach(child => {
+//             if (!isURL(child[propsDefault.path])) {
+//                 child[propsDefault.path] = `${ele[propsDefault.path]}/${child[propsDefault.path] ? child[propsDefault.path] : 'index'}`
+//             }
+//             addPath(child);
+//         })
+//     }
+
+// }
+
+function replaceDoc(item, permission) {
+    if(item.permissionType === 0) {
+        if(permission[item.permissionNo]) {
+            item.isPermit = true;
+            item.children.forEach((item) => {
+                replaceDoc(item, permission);
+            })
+        } else {
+            item.isPermit = false;
+        }
+    } else if(item.permissionType === 1) {
+        const component = menuComponent.state.component;
+        if(component[item.permissionNo]) {
+            item.component = component[item.permissionNo];
+        }
+        if(permission[item.permissionNo]) {
+            item.isPermit = true;
+            item.children.forEach((item) => {
+                replaceDoc(item, permission);
+            })
+        } else {
+            item.isPermit = false;
+        }
     } else {
-        ele[propsDefault.children].forEach(child => {
-            if (!isURL(child[propsDefault.path])) {
-                child[propsDefault.path] = `${ele[propsDefault.path]}/${child[propsDefault.path] ? child[propsDefault.path] : 'index'}`
-            }
-            addPath(child);
-        })
+        if(permission[item.permissionNo]) {
+            item.isPermit = true;
+        } else {
+            item.isPermit = false;
+        }
     }
-
 }
+
 const user = {
     state: {
-        userInfo: {},
+        userName: '',
+        userId: '',
+        nickName: '',
+        avatar: '',
         permission: {},
         roles: [],
         menu: getStore({ name: 'menu' }) || [],
@@ -57,6 +96,7 @@ const user = {
                     if(data.code === 0) {
                         // token 存入 store
                         commit('SET_TOKEN', data.data.token);
+                        commit('SET_USERNAME', data.data.username);
                         commit('DEL_ALL_TAG');
                         commit('CLEAR_LOCK');
 
@@ -81,18 +121,31 @@ const user = {
                 })
             })
         },
-        GetUserInfo({ commit }) {
+        GetUserInfo({ state, commit }) {
             return new Promise((resolve, reject) => {
-                getUserInfo().then((res) => {
-                    const data = res.data.data;
-                    commit('SET_USERIFNO', data.userInfo);
-                    commit('SET_ROLES', data.roles);
-                    commit('SET_PERMISSION', data.permission)
-                    resolve(data);
+                getUserPermission(state.username).then((res) => {
+                    if(res.data.code === 0) {
+                        const data = res.data.data;
+                        commit('SET_ROLES', data.roles);
+                        commit('SET_PERMISSION', data.permissions);
+                        commit('SET_USERID', data.userId);
+                        getUserInfo(state.userId).then((res) => {
+                            if(res.data.code === 0) {
+                                const data = res.data.data;
+                                commit('SET_NICKNAME', data.nickname);
+                                commit('SET_AVATAR', data.avatar);
+                                commit('SET_ORGNAME', data.orgName);
+                                resolve();
+                            }
+                        }).catch(err => {
+                            reject(err);
+                        })
+                    }
                 }).catch(err => {
                     reject(err);
                 })
-            })
+            });
+
         },
         //刷新token
         RefeshToken({ state, commit }) {
@@ -143,16 +196,21 @@ const user = {
             })
         },
         //获取系统菜单
-        GetMenu({ commit }, parentId) {
-            return new Promise(resolve => {
-                getMenu(parentId).then((res) => {
-                    const data = res.data.data
-                    let menu = deepClone(data);
-                    menu.forEach(ele => {
-                        addPath(ele, true);
-                    })
-                    commit('SET_MENU', menu)
-                    resolve(menu)
+        GetMenu({ commit, state }) {
+            return new Promise((resolve, reject) => {
+                getMenu().then((res) => {
+                    if(res.data.code === 0) {
+                        const data = res.data.data;
+                        let menu = deepClone(data);
+                        menu.forEach((item) => {
+                            replaceDoc(item, state.permission);
+                        });
+                        commit('SET_MENU', menu);
+                        resolve(menu)
+                    }
+                    reject();
+                }).catch((err) => {
+                    reject(err);
                 })
             })
         },
@@ -163,8 +221,18 @@ const user = {
             state.token = token;
             setStore({ name: 'token', content: state.token, type: 'session' })
         },
-        SET_USERIFNO: (state, userInfo) => {
-            state.userInfo = userInfo;
+        SET_USERNAME: (state, username) => {
+            state.username = username;
+            setStore({ name: 'username', content: state.userName, type: 'session' })
+        },
+        SET_USERID: (state, userid) => {
+            state.userId = userid;
+        },
+        SET_NICKNAME: (state, nickname) => {
+            state.nickName = nickname;
+        },
+        SET_AVATAR: (state, avatar) => {
+            state.avatar = avatar;
         },
         SET_MENU: (state, menu) => {
             state.menu = menu

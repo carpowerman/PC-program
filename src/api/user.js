@@ -1,5 +1,6 @@
 import request from '@/router/axios';
 import { baseUrl } from '@/config/env';
+// 登录
 export const loginByUsername = (username, password, code, redomStr) => request({
     url: baseUrl + '/auth/login',
     method: 'post',
@@ -12,11 +13,23 @@ export const loginByUsername = (username, password, code, redomStr) => request({
         code,
         redomStr
     }
-})
+});
 
-export const getUserInfo = () => request({
-    url: baseUrl + '/user/getUserInfo',
-    method: 'get'
+// 获取用户权限信息
+export const getUserPermission = (username) => request({
+    url: baseUrl + '/user/allInfo',
+    method: 'get',
+    data: {
+        username: username
+    }
+});
+
+export const getUserInfo = (id) => request({
+    url: baseUrl + '/user/info',
+    method: 'get',
+    data: {
+        id: id
+    }
 });
 
 export const refeshToken = () => request({
@@ -24,13 +37,10 @@ export const refeshToken = () => request({
     method: 'post'
 })
 
-// 此处的 type 即为角色 id
-export const getMenu = (type = 3) => request({
-    url: baseUrl + '/user/getMenu',
-    method: 'get',
-    data: {
-        type
-    }
+
+export const getMenu = () => request({
+    url: baseUrl + '/menu/tree',
+    method: 'get'
 });
 
 export const getTopMenu = () => request({

@@ -13,6 +13,37 @@ export default ({ mock }) => {
         path: '/cls/auth/login',
         timestamp: 1564390212248
     });
+
+    // 用户权限信息
+    Mock.mock('/user/allInfo', 'get', {
+        "code": 0,
+        "message": "SUCCESS",
+        "data": {
+            "userId": 1,
+            "userName": "ADMIN",
+            "enabled": true,
+            "roles": [
+                "AMDIN"
+            ],
+            "permissions": [
+                "sys",
+                "sys_user",
+                "customer"
+            ],
+            "dataPerms": [
+                1,
+                2,
+                4,
+                5,
+                3,
+                7,
+                6
+            ]
+        },
+        "path": "/cls/user/allInfo",
+        "timestamp": 1564403849881
+    })
+
     //用户退出
     Mock.mock('/user/logout', 'get', {
         data: true,
@@ -22,30 +53,31 @@ export default ({ mock }) => {
         data: new Date().getTime() + ''
     });
     //获取用户信息
-    Mock.mock('/user/getUserInfo', 'get', {
-        data: {
-            userInfo: {
-                username: 'admin',
-                name: '周小雨',
-                type: '业务员',
-                org: '杭州创汇科技有限公司',
-                avatar: 'https://gitee.com/uploads/61/632261_smallweigit.jpg',
-            },
-            roles: 'admin',
-            permission: [
-                'sys_crud_btn_add',
-                'sys_crud_btn_export',
-                'sys_menu_btn_add',
-                'sys_menu_btn_edit',
-                'sys_menu_btn_del',
-                'sys_role_btn1',
-                'sys_role_btn2',
-                'sys_role_btn3',
-                'sys_role_btn4',
-                'sys_role_btn5',
-                'sys_role_btn6',
-            ], //权限级别
-        }
+    Mock.mock('/user/info', 'get', {
+        "code": 0,
+        "message": "SUCCESS",
+        "data": {
+            "id": 2,
+            "createdBy": 1,
+            "createdTime": "2019-07-19 16:29:43",
+            "remark": "",
+            "disabledFlag": 0,
+            "username": "ADMIN2",
+            "nickname": "系统管理员",
+            "orgId": 1,
+            "orgName": "浙江启辰云科技有限公司",
+            "email": "",
+            "mobile": "13145328745",
+            "avatar": "",
+            "roles": [
+                {
+                    "id": 1,
+                    "name": "超级管理员"
+                }
+            ]
+        },
+        "path": "/cls/user/info",
+        "timestamp": 1564448376701
     });
 
     //获取表格数据

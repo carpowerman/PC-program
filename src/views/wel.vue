@@ -7,12 +7,12 @@
           <template v-slot:header>客户资料</template>
           <template v-slot:body>
             <div class="user">
-              <div class="welcome">欢迎尊敬的 <b>{{userInfo.name}}</b> 客户</div>
+              <div class="welcome"><i class="iconfont smile"></i>欢迎尊敬的 <b>{{user.nickName}}</b> 客户</div>
               <div class="info">
-                <img />
+                <i class="iconfont car-o"></i>
                 <div>
-                  <span>用户类型：{{userInfo.type}}</span>
-                  <span>所属组织：{{userInfo.org}}</span>
+                  <span>用户类型：</span>
+                  <span>所属组织：</span>
                 </div>
               </div>
             </div>
@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo", "homeEcharts"]),
-    ...mapState(['home'])
+    ...mapState(['home', 'user'])
   },
   mounted() {
     this.myChart = this.$echarts.init(document.getElementById('echarts'));
@@ -128,6 +128,11 @@ export default {
   .welcome {
     font-size: 18px;
     color: #020202;
+
+    .iconfont {
+      color: #F6C506;
+      margin-right: 6px;
+    }
   }
   .info {
     font-size: 14px;
@@ -136,10 +141,9 @@ export default {
     flex-direction: row;
     align-items: center;
     margin-top: 30px;
-    img {
-      width: 70px;
-      height: 70px;
-      border-radius: 35px;
+    .iconfont {
+      font-size: 40px;
+      color: #F6C506;
       margin-right: 20px;
     }
     span{
