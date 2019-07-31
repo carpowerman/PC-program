@@ -1,4 +1,5 @@
 import Mock from 'mockjs';
+
 export default ({ mock }) => {
     if (!mock) return;
 
@@ -125,5 +126,7 @@ export default ({ mock }) => {
         ],
         "path": "/cls/org/tree",
         "timestamp": 1564488983772
-    })
+    });
+
+
 }

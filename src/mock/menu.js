@@ -522,5 +522,4 @@ export default ({ mock }) => {
     }
   })
   Mock.mock('/menu/tree', 'get', menu1)
-
 }

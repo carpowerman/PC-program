@@ -22,6 +22,7 @@ export default {
   box-sizing: border-box;
   .el-card {
     width: 100%;
+    height: 100%;
   }
   &:first-child {
     padding-top: 0;
