@@ -30,6 +30,7 @@ export default ({ mock }) => {
                 "sys_user",
                 "customer",
                 "sys_role",
+                'scoringRules'
             ],
             "dataPerms": [
                 1,

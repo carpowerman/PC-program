@@ -501,6 +501,16 @@ const menu1 = {
         "icon": "iconfont people",
         "path": "/customer", // 菜单为必须 目录可为空
         "children": []
+      }, {
+        "id": 3,
+        "permissionName": "评分规则", // 必须字段 在菜单栏显示
+        "permissionNo": "scoringRules", // 必须字段 与本地 component 映射
+        "permissionType": 1, // 必须字段 类型
+        "permissionTypeDesc": "菜单",
+        "orderNum": "",
+        "icon": "iconfont people",
+        "path": "/scoringRules", // 菜单为必须 目录可为空
+        "children": []
       },
   ],
   "path": "/cls/menu/tree",
