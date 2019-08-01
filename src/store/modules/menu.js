@@ -4,7 +4,9 @@ const menu = {
             "sys_user": "views/financialPlan/index",
             "customer": "views/customer/index",
             "sys_role": "views/authorityManage/roleBind",
-            'scoringRules':"views/scoringRules/index"
+            'rule':"views/scoringRules/index",
+            "sys_org": "views/organization/index",
+            "sys_menu": "views/menu/index"
         }
     }
 }

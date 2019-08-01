@@ -25,6 +25,7 @@ a{
 }
 *{
   outline: none;
+  box-sizing: border-box;
 }
 //滚动条样式
 @include scrollBar;
