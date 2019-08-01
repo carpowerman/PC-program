@@ -30,55 +30,25 @@
 
             <!-- 表单 -->
             <el-col :span="18">
-              <template v-if="selectedNode.permissionNo">
-                <div class="item-input">
-                    <label>父节点ID</label>
-                    <div class="input-block">
-                        <el-input v-model="selectedNode.parentId" size="medium" :disabled="true"></el-input>
-                    </div>
-                </div>
-                <div class="item-input">
-                    <label>父节点名称</label>
-                    <div class="input-block">
-                        <el-input v-model="selectedNode.parentName" size="medium" :disabled="true"></el-input>
-                    </div>
-                </div>
-                <div class="item-input">
-                    <label>节点ID</label>
-                    <div class="input-block">
-                        <el-input v-model="selectedNode.id" size="medium" :disabled="true"></el-input>
-                    </div>
-                </div>
-                <div class="item-input">
-                    <label>节点权限映射</label>
-                    <div class="input-block">
-                        <el-input v-model="selectedNode.permissionNo" size="medium" :disabled="true"></el-input>
-                    </div>
-                </div>
-                <div class="item-input">
-                    <label>节点路径</label>
-                    <div class="input-block">
-                        <el-input v-model="selectedNode.path" size="medium" :disabled="true"></el-input>
-                    </div>
-                </div>
-                <div class="item-input">
-                    <label>节点名称</label>
-                    <div class="input-block">
-                        <el-input v-model="selectedNode.permissionName" size="medium"></el-input>
-                    </div>
-                </div>
-                <div class="item-input">
-                    <label>节点类型</label>
-                    <div class="input-block">
-                        <el-radio disabled v-model="selectedNode.permissionType" :label=0>目录</el-radio>
-                        <el-radio disabled v-model="selectedNode.permissionType" :label=1>菜单</el-radio>
-                        <el-radio disabled v-model="selectedNode.permissionType" :label=2>操作</el-radio>
-                    </div>
-                </div>
-                <div class="item-input button-item">
-                    <el-button type="primary" @click="nodeSave">保存</el-button>
-                </div>
-              </template>
+              <el-form 
+                v-if="selectedNode.permissionNo"
+                label-width="120px"
+                :model="selectedNode"
+                :rules="rules"
+                ref="saveNodeForm">
+                <el-form-item label="父节点ID"><el-input v-model="selectedNode.parentId" size="medium" :disabled="true"></el-input></el-form-item>
+                <el-form-item label="父节点名称"><el-input v-model="selectedNode.parentName" size="medium" :disabled="true"></el-input></el-form-item>
+                <el-form-item label="节点ID"><el-input v-model="selectedNode.id" size="medium" :disabled="true"></el-input></el-form-item>
+                <el-form-item label="节点权限映射"><el-input v-model="selectedNode.permissionNo" size="medium" :disabled="true"></el-input></el-form-item>
+                <el-form-item label="节点路径"><el-input v-model="selectedNode.path" size="medium" :disabled="true"></el-input></el-form-item>
+                <el-form-item label="节点名称" prop="permissionName"><el-input v-model="selectedNode.permissionName" size="medium"></el-input></el-form-item>
+                <el-form-item label="节点类型">
+                  <el-radio disabled v-model="selectedNode.permissionType" :label=0>目录</el-radio>
+                  <el-radio disabled v-model="selectedNode.permissionType" :label=1>菜单</el-radio>
+                  <el-radio disabled v-model="selectedNode.permissionType" :label=2>操作</el-radio>
+                </el-form-item>
+                <el-form-item><el-button type="primary" @click="nodeSave">保存</el-button></el-form-item>
+              </el-form>
             </el-col>
           </el-row>
         </div>
@@ -205,9 +175,13 @@ export default {
     },
     nodeSave() {
       let that = this;
-      saveMenuNode(that.selectedNode).then(() => {
-          that.$notify.success({ title: '保存成功', message: '该节点信息已被修改。' });
-          that.$store.dispatch('GetMenu').then();
+      this.$refs.saveNodeForm.validate((val) => {
+        if(val) {
+          saveMenuNode(that.selectedNode).then(() => {
+              that.$notify.success({ title: '保存成功', message: '该节点信息已被修改。' });
+              that.$store.dispatch('GetMenu').then();
+          })
+        }
       })
     },
     nodeAdd() {
@@ -250,21 +224,5 @@ export default {
 .left-tree {
     width: 100%;
     padding-right: 15px;
-}
-.item-input {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
-    label {
-        width: 100px;
-    }
-    .input-block {
-        width: 370px;
-    }
-}
-.button-item {
-    padding-left: 100px;
-    margin-top: 20px;
 }
 </style>
