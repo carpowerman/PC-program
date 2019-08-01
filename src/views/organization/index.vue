@@ -1,6 +1,6 @@
 <template>
   <basic-container class="container">
-    <template v-slot:header>菜单管理</template>
+    <template v-slot:header>机构管理</template>
     <template v-slot:body>
         <div class="body">
 
@@ -9,8 +9,8 @@
             <!-- 操作按钮组 -->
             <el-col :span="24" class="search">
                 <el-button-group>
-                    <el-button type="primary" icon="el-icon-plus" @click.native="addNodeDialog = true">新增</el-button>
-                    <el-button type="primary" icon="el-icon-delete" @click="nodeDelete">删除</el-button>
+                    <el-button type="primary" size="medium" icon="el-icon-plus" @click.native="addNodeDialog = true">新增</el-button>
+                    <el-button type="primary" size="medium" icon="el-icon-delete" @click="nodeDelete">删除</el-button>
                 </el-button-group>
             </el-col>
           </el-row>
@@ -21,7 +21,7 @@
             <el-col :span="6">
                 <div class="left-tree">
                     <el-tree
-                    :data="menu"
+                    :data="orgTree"
                     :props="defaultProps"
                     accordion
                     @node-click="handleNodeClick"></el-tree>
@@ -30,25 +30,32 @@
 
             <!-- 表单 -->
             <el-col :span="18">
-              <el-form 
-                v-if="selectedNode.permissionNo"
-                label-width="120px"
-                :model="selectedNode"
-                :rules="rules"
-                ref="saveNodeForm">
-                <el-form-item label="父节点ID"><el-input v-model="selectedNode.parentId" size="medium" :disabled="true"></el-input></el-form-item>
-                <el-form-item label="父节点名称"><el-input v-model="selectedNode.parentName" size="medium" :disabled="true"></el-input></el-form-item>
-                <el-form-item label="节点ID"><el-input v-model="selectedNode.id" size="medium" :disabled="true"></el-input></el-form-item>
-                <el-form-item label="节点权限映射"><el-input v-model="selectedNode.permissionNo" size="medium" :disabled="true"></el-input></el-form-item>
-                <el-form-item label="节点路径"><el-input v-model="selectedNode.path" size="medium" :disabled="true"></el-input></el-form-item>
-                <el-form-item label="节点名称" prop="permissionName"><el-input v-model="selectedNode.permissionName" size="medium"></el-input></el-form-item>
-                <el-form-item label="节点类型">
-                  <el-radio disabled v-model="selectedNode.permissionType" :label=0>目录</el-radio>
-                  <el-radio disabled v-model="selectedNode.permissionType" :label=1>菜单</el-radio>
-                  <el-radio disabled v-model="selectedNode.permissionType" :label=2>操作</el-radio>
-                </el-form-item>
-                <el-form-item><el-button type="primary" @click="nodeSave">保存</el-button></el-form-item>
-              </el-form>
+              <template v-if="selectedNode.id">
+                <el-form label-width="120px" :model="selectedNode" :rules="rules" ref="saveNodeForm">
+                  <el-form-item label="父节点ID">
+                    <el-input v-model="selectedNode.parentId" size="medium" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="父节点名称">
+                    <el-input v-model="selectedNode.parentName" size="medium" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="节点ID">
+                    <el-input v-model="selectedNode.id" size="medium" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="节点映射">
+                    <el-input v-model="selectedNode.orgNo" size="medium" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="节点名称" prop="orgFullName">
+                    <el-input v-model="selectedNode.orgFullName" size="medium"></el-input>
+                  </el-form-item>
+                  <el-form-item label="节点类型">
+                    <el-radio disabled v-model="selectedNode.orgType" :label=0>公司</el-radio>
+                    <el-radio disabled v-model="selectedNode.orgType" :label=1>部门</el-radio>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="nodeSave" size="medium">保存</el-button>
+                  </el-form-item>
+                </el-form>
+              </template>
             </el-col>
           </el-row>
         </div>
@@ -62,24 +69,23 @@
               <el-cascader
                 v-model="addNode.parentId"
                 size="medium"
-                :options="cascaderMenu"
+                :options="cascaderOrgTree"
                 :props="defaultProps"
                 :show-all-levels="false">
               </el-cascader>
             </el-form-item>
-            <el-form-item label="节点权限映射" prop="permissionNo">
-              <el-input v-model="addNode.permissionNo" size="medium"></el-input>          
+            <el-form-item label="节点权限映射" prop="orgNo">
+              <el-input v-model="addNode.orgNo" size="medium"></el-input>          
             </el-form-item>
-            <el-form-item label="节点路径" prop="path">
-              <el-input v-model="addNode.path" size="medium"></el-input>
+            <el-form-item label="节点名称" prop="orgFullName">
+              <el-input v-model="addNode.orgFullName" size="medium"></el-input>
             </el-form-item>
-            <el-form-item label="节点名称" prop="permissionName">
-              <el-input v-model="addNode.permissionName" size="medium"></el-input>
+            <el-form-item label="节点简称" prop="orgSimpleName">
+              <el-input v-model="addNode.orgSimpleName" size="medium"></el-input>
             </el-form-item>
-            <el-form-item label="节点类型" prop="permissionType">
-              <el-radio v-model="addNode.permissionType" :label=0>目录</el-radio>
-              <el-radio v-model="addNode.permissionType" :label=1>菜单</el-radio>
-              <el-radio v-model="addNode.permissionType" :label=2>操作</el-radio>
+            <el-form-item label="节点类型" prop="orgType">
+              <el-radio v-model="addNode.orgType" :label=0>公司</el-radio>
+              <el-radio v-model="addNode.orgType" :label=1>部门</el-radio>
             </el-form-item>
           </el-form>
           <div slot="footer">
@@ -94,23 +100,23 @@
 <script>
 import { mapGetters } from "vuex";
 import { deepClone } from '@/util/util';
-import { deleteMenuNode, saveMenuNode, addMenuNode } from '@/api/menu';
+import { deleteOrgNode, saveOrgNode, addOrgNode } from '@/api/organization';
 export default {
   computed: {
-    ...mapGetters(['menu']),
-    cascaderMenu() {
-      let cmenu = deepClone(this.menu);
-      cmenu.forEach((item) => {
+    ...mapGetters(['orgTree']),
+    cascaderOrgTree() {
+      let corgTree = deepClone(this.orgTree);
+      corgTree.forEach((item) => {
         this.cascaderMenuRe(item);
       });
-      return cmenu;
+      return corgTree;
     }
   },
   data() {
     return {
       defaultProps: {
         children: 'children',
-        label: 'permissionName',
+        label: 'orgFullName',
         value: 'id',
         checkStrictly: true,
         emitPath: false
@@ -118,27 +124,26 @@ export default {
       selectedNode: {},
       addNode: {
         parentId: "",
-        permissionName: "",
-        permissionNo: "",
-        permissionType: "",
-        path: "",
+        orgFullName: "",
+        orgSimpleName: "",
+        orgNo: "",
+        orgType: "",
         orderNum: "",
-        remark: ""
       },
       rules: {
         parentId: [
           { required: true, message: '请选择父节点', trigger: 'change' }
         ],
-        permissionNo: [
+        orgNo: [
           { required: true, message: '请填写节点映射', trigger: 'change' }
         ],
-        path: [
-          { required: true, message: '请填写节点路径', trigger: 'change' }
+        orgFullName: [
+          { required: true, message: '请填写节点名称', trigger: 'blur' }
         ],
-        permissionName: [
-          { required: true, message: '请填写节点名称', trigger: 'change' }
+        orgSimpleName: [
+          { required: true, message: '请填写节点简称', trigger: 'change' }
         ],
-        permissionType: [
+        orgType: [
           { required: true, message: '请选择节点类型', trigger: 'change' }
         ]
       },
@@ -146,6 +151,9 @@ export default {
     }
   },
   created() {
+    if(this.orgTree.length === 0) {
+      this.$store.dispatch('GetOrgTree').then();
+    }
   },
   mounted() {
   },
@@ -164,11 +172,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteMenuNode({
+        deleteOrgNode({
           id: that.selectedNode.id
         }).then(() => {
           that.$notify.success({ title: '删除成功', message: '该节点已被删除。' });
-          that.$store.dispatch('GetMenu').then();
+          that.$store.dispatch('GetOrgTree').then();
         })
         
       })
@@ -177,9 +185,9 @@ export default {
       let that = this;
       this.$refs.saveNodeForm.validate((val) => {
         if(val) {
-          saveMenuNode(that.selectedNode).then(() => {
+          saveOrgNode(that.selectedNode).then(() => {
               that.$notify.success({ title: '保存成功', message: '该节点信息已被修改。' });
-              that.$store.dispatch('GetMenu').then();
+              that.$store.dispatch('GetOrgTree').then();
           })
         }
       })
@@ -188,7 +196,7 @@ export default {
       console.log(this.addNode);
       this.$refs.addNodeForm.validate((val) => {
         if(val) {
-          addMenuNode(this.addNode).then(() => {
+          addOrgNode(this.addNode).then(() => {
             this.$notify.success({ title: '新增成功', message: '新增节点成功。' });
           }).catch(() => {
             this.$notify.error({ title: '新增失败', message: '网络错误。' });
@@ -198,11 +206,7 @@ export default {
 
     },
     cascaderMenuRe(item) {
-      if(item.permissionType === 2) {
-        item.disabled = true;
-      } else {
-        item.disabled = false;
-      }
+      item.disabled = false;
       if(item.children.length === 0) {
         delete item.children
       } else {

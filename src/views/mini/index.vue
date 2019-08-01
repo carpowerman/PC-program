@@ -82,11 +82,32 @@
 </template>
 
 <script>
+import { getBarB, getBarC, getLogo } from '@/api/src';
 export default {
   data() {
     return {
       tabsDefault: 'C-banner',
+      barB: [],
+      barC: [],
+      logo: [],
     }
+  },
+  created() {
+    getBarB().then((res) => {
+      if(res.data.code === 0) {
+        this.$set(this, 'barB', res.data.data.content);
+      }
+    });
+    getBarC().then((res) => {
+      if(res.data.code === 0) {
+        this.$set(this, 'barC', res.data.data.content);
+      }
+    });
+    getLogo().then((res) => {
+      if(res.data.code === 0) {
+        this.$set(this, 'logo', res.data.data.content);
+      }
+    });
   }
 }
 </script>

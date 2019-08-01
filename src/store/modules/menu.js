@@ -6,7 +6,8 @@ const menu = {
             "sys_role": "views/authorityManage/roleBind",
             'rule':"views/scoringRules/index",
             "sys_org": "views/organization/index",
-            "sys_menu": "views/menu/index"
+            "sys_menu": "views/menu/index",
+            "mini": "views/mini/index",
         }
     }
 }

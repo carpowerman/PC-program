@@ -33,6 +33,7 @@ export default ({ mock }) => {
                 "sys_org",
                 "sys_menu",
                 "rule",
+                "mini"
             ],
             "dataPerms": [
                 1,

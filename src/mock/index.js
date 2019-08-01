@@ -4,6 +4,7 @@ import menu from './menu';
 import org from './org';
 import customer from './customer';
 import scoringRules from './scoringRules';
+import src from './src';
 
 
 /**
@@ -18,3 +19,4 @@ org({ mock: true });
 customer({ mock: true });
 role({ mock: true });
 scoringRules({ mock: true });
+src({ mock: true });
