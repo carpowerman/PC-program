@@ -226,14 +226,12 @@
       },
       addrow(){
           let listData={};
-          debugger
           let dataLength=this.ruleTable[this.currentId].tabDatas.tableData.length;
              listData=this.ruleTable[this.currentId].tabDatas.tableData[dataLength-1]
             this.ruleTable[this.currentId].tabDatas.tableData.push(listData)
             console.log(this.ruleTable[this.currentId].tabDatas.tableData,'111')
       },
       getHeight() {
-        debugger
         let pageTopHeight = this.$refs.chTop.$el.offsetHeight;
         let pageFootHeight = this.$refs.chFoot.$el.offsetHeight;
         this.ruleTable[this.currentId].tabDatas.tableHeight = document.body.clientHeight - pageTopHeight -pageFootHeight- 380;
