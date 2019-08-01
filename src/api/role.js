@@ -21,6 +21,9 @@ export const editRoleList = (list) => request({
 export const delRoleList = (id) => request({
     url: baseUrl + '/role/del',
     method: 'delete',
+    data: {
+        id: id,
+    }
 })
 //权限添加分配
 export const addPermRoleList = (list) => request({
