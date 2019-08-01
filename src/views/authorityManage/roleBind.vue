@@ -12,7 +12,7 @@
             </el-row>
             <el-row :span="24" class='tree-table'>
               <el-col :span="24">
-                <pc-table @initTableData="initData" :ch-table='dataTable'   @editRole="editRole" 
+                <pc-table :ch-table='dataTable'   @editRole="editRole" 
                 @detailRole='detailRole' @getPermissions='getPermissions' @lookUp='lookUp'> 
                   <!-- <template slot='status' slot-scope="props">
                    
@@ -128,7 +128,7 @@
           ]
       },
       dataTable: {
-        tableHeight: 300,
+        tableHeight: 0,
         total: 0,
         pageNo: 1,//当前页
         pageSize: 10,
@@ -137,32 +137,37 @@
             prop: 'id',
             title: '序号',
             width: '50',
-            fixed: true
+            tdType:'1'
           },
           {
             prop: 'roleName',
             title: '角色名称',
-            width: '100'
+            width: '100',
+            tdType:'1'
           },
           {
             prop: 'roleNo',
             title: '角色标识',
-            width: '100'
+            width: '100',
+            tdType:'1'
           },
           {
             prop: 'permissions',
             title: '角色描述',
-            width: '80'
+            width: '80',
+            tdType:'1'
           },
           {
             prop: 'permissions',
             title: '数据权限',
-            width: '80'
+            width: '80',
+            tdType:'1'
           },
           {
             prop: 'createdTime',
             title: '创建时间',
-            width: '100'
+            width: '100',
+            tdType:'1'
           },
         ],
         tableData: [],
@@ -208,6 +213,7 @@
     },
   
     mounted() {
+      this.initData();
       window.onresize = () => {
       return (() => {
         this.getHeight()
@@ -263,17 +269,18 @@
        
       },
       //编辑
-      editRole(){
+      editRole(index,row){
         this.isDisabled=false
+        debugger
         this.roleDialog=true;
         this.dialogDatas.dialogTitle='编辑角色';
-        // Vue.set(this,'roleData',JSON.parse(JSON.stringify(row)))
+        this.$set(this,'roleData',JSON.parse(JSON.stringify(row)))
         // Vue.set(this.roleData,'permissions',String(row.permissions))
         
         
       },
       //删除
-      detailRole(row){
+      detailRole(index,row){
         let id=row.id
         delRoleList(id).then(res=>{
           if(res.message){
@@ -328,7 +335,7 @@
         this.$message.success(JSON.stringify(data))
       },
       initData() {
-        this.getHeight();
+        this.getHeight()
         getRoleList().then(res => {
           const data = res.data.data;
           this.dataTable.tableData=data;
