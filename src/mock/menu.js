@@ -448,7 +448,7 @@ const menu1 = {
                         "icon": "",
                         "path": "",
                         "children": [{
-                            "id": 5,
+                            "id": 7,
                             "createdBy": 1,
                             "createdTime": "2019-07-19 14:59:02",
                             "remark": "",
@@ -466,7 +466,7 @@ const menu1 = {
                         }]
                     }]
                 }, {
-                    "id": 2,
+                    "id": 8,
                     "createdBy": 1,
                     "createdTime": "2019-07-19 14:56:55",
                     "remark": "",
@@ -482,7 +482,7 @@ const menu1 = {
                     "path": "/role",
                     "children":[]
                 }, {
-                    "id": 2,
+                    "id": 9,
                     "createdBy": 1,
                     "createdTime": "2019-07-19 14:56:55",
                     "remark": "",
@@ -498,7 +498,7 @@ const menu1 = {
                     "path": "/org",
                     "children":[]
                 }, {
-                    "id": 2,
+                    "id": 10,
                     "createdBy": 1,
                     "createdTime": "2019-07-19 14:56:55",
                     "remark": "",
@@ -516,7 +516,7 @@ const menu1 = {
                 }
             ]
         }, {
-            "id": 1,
+            "id": 11,
             "permissionName": "客户管理", // 必须字段 在菜单栏显示
             "permissionNo": "customer", // 必须字段 与本地 component 映射
             "permissionType": 1, // 必须字段 类型
@@ -526,7 +526,7 @@ const menu1 = {
             "path": "/customer", // 菜单为必须 目录可为空
             "children": []
         }, {
-            "id": 1,
+            "id": 12,
             "permissionName": "小程序设置", // 必须字段 在菜单栏显示
             "permissionNo": "mini", // 必须字段 与本地 component 映射
             "permissionType": 1, // 必须字段 类型
@@ -536,7 +536,7 @@ const menu1 = {
             "path": "/mini", // 菜单为必须 目录可为空
             "children": []
         },{
-            "id": 1,
+            "id": 13,
             "permissionName": "预约管理", // 必须字段 在菜单栏显示
             "permissionNo": "Appointment", // 必须字段 与本地 component 映射
             "permissionType": 1, // 必须字段 类型
@@ -546,7 +546,7 @@ const menu1 = {
             "path": "/Appointment", // 菜单为必须 目录可为空
             "children": []
         },{
-            "id": 1,
+            "id": 14,
             "permissionName": "金融方案", // 必须字段 在菜单栏显示
             "permissionNo": "financial", // 必须字段 与本地 component 映射
             "permissionType": 1, // 必须字段 类型
@@ -556,7 +556,7 @@ const menu1 = {
             "path": "/financial", // 菜单为必须 目录可为空
             "children": []
         },{
-            "id": 1,
+            "id": 15,
             "permissionName": "评分规则", // 必须字段 在菜单栏显示
             "permissionNo": "rule", // 必须字段 与本地 component 映射
             "permissionType": 1, // 必须字段 类型
