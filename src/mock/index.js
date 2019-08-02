@@ -5,6 +5,7 @@ import org from './org';
 import customer from './customer';
 import scoringRules from './scoringRules';
 import src from './src';
+import staff from './staff';
 
 
 /**
@@ -20,3 +21,4 @@ customer({ mock: true });
 role({ mock: true });
 scoringRules({ mock: true });
 src({ mock: true });
+staff({ mock: true });

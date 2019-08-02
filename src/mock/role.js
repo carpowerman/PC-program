@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 export default ({ mock }) => {
     if (!mock) return;
     //角色列表
-    Mock.mock('/role/list', 'get', {
+    Mock.mock('/role/list', 'post', {
         code: 0,
         message: "SUCCESS",
         data: [
@@ -93,7 +93,7 @@ export default ({ mock }) => {
         "timestamp": 1564502871251
     })
     //删除
-    Mock.mock('/role/del','delete',{
+    Mock.mock('/role/del','post',{
         "code": 1,
         "message": "该数据已被使用，无法删除",
         "data": {},

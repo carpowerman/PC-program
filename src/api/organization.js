@@ -3,7 +3,7 @@ import { baseUrl } from '@/config/env';
 
 export const getOrgTree = () => request({
     url: baseUrl + '/org/tree',
-    method: 'get'
+    method: 'post'
 });
 
 export const saveOrgNode = (data) => request({
@@ -20,6 +20,6 @@ export const addOrgNode = (data) => request({
 
 export const deleteOrgNode = (data) => request({
     url: baseUrl + '/org/del',
-    method: 'delete',
+    method: 'post',
     data: data
 });

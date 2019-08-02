@@ -122,7 +122,7 @@ const menu = {
                     "permissionTypeDesc": "菜单",
                     "orderNum": "",
                     "icon": "",
-                    "path": "/user",
+                    "path": "/staff",
                     "children": [{
                         "id": 3,
                         "createdBy": 1,

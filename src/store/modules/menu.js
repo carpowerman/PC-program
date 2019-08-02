@@ -1,7 +1,7 @@
 const menu = {
     state: {
         component: {
-            "sys_user": "views/financialPlan/index",
+            "sys_user": "views/staff/index",
             "customer": "views/customer/index",
             "sys_role": "views/authorityManage/roleBind",
             'rule':"views/scoringRules/index",
