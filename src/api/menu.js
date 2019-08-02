@@ -15,6 +15,6 @@ export const saveMenuNode = (data) => request({
 
 export const deleteMenuNode = (data) => request({
     url: baseUrl + '/menu/del',
-    method: 'delete',
+    method: 'post',
     data: data
 });

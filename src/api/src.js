@@ -3,7 +3,7 @@ import { baseUrl } from '@/config/env';
 
 const getFileList = (data) => request({
     url: baseUrl + '/file/list',
-    method: 'get',
+    method: 'post',
     data: data
 });
 
@@ -45,4 +45,17 @@ export const getOld = getFileList({
     paging: false,
     pageNum: "",
     pageSize: ""
+});
+
+export const deleteFile = (data) => request({
+    url: baseUrl + '/file/del',
+    method: "post",
+    data: data
+});
+
+export const addFile = (data) => request({
+    url: baseUrl + 'http://120.55.49.21:9450/cls/file/upload',
+    method: "post",
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: data
 });

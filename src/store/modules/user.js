@@ -123,7 +123,7 @@ const user = {
         },
         GetUserInfo({ state, commit }) {
             return new Promise((resolve, reject) => {
-                getUserPermission(state.username).then((res) => {
+                getUserPermission(state.userName).then((res) => {
                     if(res.data.code === 0) {
                         const data = res.data.data;
                         commit('SET_ROLES', data.roles);
@@ -222,7 +222,7 @@ const user = {
             setStore({ name: 'token', content: state.token, type: 'session' })
         },
         SET_USERNAME: (state, username) => {
-            state.username = username;
+            state.userName = username;
             setStore({ name: 'username', content: state.userName, type: 'session' })
         },
         SET_USERID: (state, userid) => {

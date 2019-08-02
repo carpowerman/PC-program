@@ -15,7 +15,7 @@ export default ({ mock }) => {
     });
 
     // 用户权限信息
-    Mock.mock('/user/allInfo', 'get', {
+    Mock.mock('/user/allInfo', 'post', {
         "code": 0,
         "message": "SUCCESS",
         "data": {
@@ -33,7 +33,9 @@ export default ({ mock }) => {
                 "sys_org",
                 "sys_menu",
                 "rule",
-                "mini"
+                "mini",
+                "financial",
+                "appointment",
             ],
             "dataPerms": [
                 1,
@@ -50,7 +52,7 @@ export default ({ mock }) => {
     })
 
     //用户退出
-    Mock.mock('/user/logout', 'get', {
+    Mock.mock('/user/logout', 'post', {
         data: true,
     });
     //刷新token
@@ -58,7 +60,7 @@ export default ({ mock }) => {
         data: new Date().getTime() + ''
     });
     //获取用户信息
-    Mock.mock('/user/info', 'get', {
+    Mock.mock('/user/info', 'post', {
         "code": 0,
         "message": "SUCCESS",
         "data": {
@@ -86,7 +88,7 @@ export default ({ mock }) => {
     });
 
     //获取表格数据
-    Mock.mock('/user/getTable', 'get', () => {
+    Mock.mock('/user/getTable', 'post', () => {
         let list = []
         for (let i = 0; i < 5; i++) {
             list.push(Mock.mock({

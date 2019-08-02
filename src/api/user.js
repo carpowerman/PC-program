@@ -16,17 +16,17 @@ export const loginByUsername = (username, password, code, redomStr) => request({
 });
 
 // 获取用户权限信息
-export const getUserPermission = (username) => request({
+export const getUserPermission = () => request({
     url: baseUrl + '/user/allInfo',
-    method: 'get',
+    method: 'post',
     data: {
-        username: username
+        username: 'admin'
     }
 });
 
 export const getUserInfo = (id) => request({
     url: baseUrl + '/user/info',
-    method: 'get',
+    method: 'post',
     data: {
         id: id
     }
@@ -40,12 +40,12 @@ export const refeshToken = () => request({
 
 export const getMenu = () => request({
     url: baseUrl + '/menu/tree',
-    method: 'get'
+    method: 'post'
 });
 
 export const getTopMenu = () => request({
     url: baseUrl + '/user/getTopMenu',
-    method: 'get'
+    method: 'post'
 });
 
 export const sendLogs = (list) => request({
@@ -59,5 +59,5 @@ export const logout = () => request({
     meta: {
         isToken: false
     },
-    method: 'get'
+    method: 'post'
 })

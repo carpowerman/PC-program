@@ -3,7 +3,7 @@ import { baseUrl } from '@/config/env';
 //获取列表
 export const getRoleList = () => request({
     url: baseUrl + '/role/list',
-    method: 'get'
+    method: 'post'
 });
 //添加
 export const addRoleList = (list) => request({
@@ -20,7 +20,7 @@ export const editRoleList = (list) => request({
 //删除
 export const delRoleList = (id) => request({
     url: baseUrl + '/role/del',
-    method: 'delete',
+    method: 'post',
     data: {
         id: id,
     }

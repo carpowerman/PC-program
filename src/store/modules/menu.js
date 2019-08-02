@@ -8,6 +8,8 @@ const menu = {
             "sys_org": "views/organization/index",
             "sys_menu": "views/menu/index",
             "mini": "views/mini/index",
+            "financial": "views/financial/index",
+            "appointment": "views/appointment/index"
         }
     }
 }

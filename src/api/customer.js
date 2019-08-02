@@ -3,6 +3,6 @@ import { baseUrl } from '@/config/env';
 
 export const getCustomerList = (data) => request({
     url: baseUrl + '/cust/list',
-    method: 'get',
+    method: 'post',
     data: data
 })

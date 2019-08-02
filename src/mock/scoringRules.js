@@ -3,7 +3,7 @@ import Mock from 'mockjs';
 export default ({ mock }) => {
     if (!mock) return;
 
-    Mock.mock('/rule/list', 'get', {
+    Mock.mock('/rule/list', 'post', {
             "code": 0,
             "message": "SUCCESS",
             "data": {

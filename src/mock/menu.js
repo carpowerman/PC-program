@@ -277,12 +277,12 @@ const menu = {
         },{
             "id": 13,
             "permissionName": "预约管理", // 必须字段 在菜单栏显示
-            "permissionNo": "Appointment", // 必须字段 与本地 component 映射
+            "permissionNo": "appointment", // 必须字段 与本地 component 映射
             "permissionType": 1, // 必须字段 类型
             "permissionTypeDesc": "菜单",
             "orderNum": "",
             "icon": "iconfont people",
-            "path": "/Appointment", // 菜单为必须 目录可为空
+            "path": "/appointment", // 菜单为必须 目录可为空
             "children": []
         },{
             "id": 14,
@@ -313,10 +313,10 @@ const menu = {
 export default ({ mock }) => {
   if (!mock) return;
 
-  Mock.mock('/user/getTopMenu', 'get', () => {
+  Mock.mock('/user/getTopMenu', 'post', () => {
     return {
       data: top
     }
   })
-  Mock.mock('/menu/tree', 'get', menu)
+  Mock.mock('/menu/tree', 'post', menu)
 }

@@ -4,7 +4,7 @@ export default ({ mock }) => {
     if (!mock) return;
 
     // 机构树
-    Mock.mock('/org/tree', 'get', {
+    Mock.mock('/org/tree', 'post', {
         "code": 0,
         "message": "SUCCESS",
         "data": [
