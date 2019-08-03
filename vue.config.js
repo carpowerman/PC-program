@@ -30,8 +30,8 @@ module.exports = {
         entry
             .add('classlist-polyfill')
             .end()
-        entry
-            .add('@/mock')
-            .end()
+        // entry
+        //     .add('@/mock')
+        //     .end()
     },
 }

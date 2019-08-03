@@ -15,7 +15,6 @@
 
             <!-- 新增 -->
             <el-col :span="5" class="add">
-              <el-button icon="el-icon-plus">新增</el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -52,9 +51,6 @@
                 </el-table-column>
                 <el-table-column
                   label="状态">
-                </el-table-column>
-                <el-table-column
-                  label="操作">
                 </el-table-column>
               </el-table>
               <div class="table-foot">

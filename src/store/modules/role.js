@@ -6,9 +6,13 @@ import {getRoleList} from '@/api/role'
     actions:{//对数据的异步修改
         GetRoleList({commit}){
             return new Promise((resolve) => {
-                getRoleList().then(res => {
+                getRoleList({
+                    "paging": false,
+                    "pageNum": "",
+                    pageSize: ""
+                }).then(res => {
                     const data = res.data.data;
-                    commit('SET_ROLE', data);
+                    commit('SET_ROLE', data.content);
                     resolve(data);
                 }).catch(() => {
                     

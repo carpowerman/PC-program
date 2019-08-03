@@ -38,9 +38,10 @@ export const refeshToken = () => request({
 })
 
 
-export const getMenu = () => request({
+export const getMenu = (data) => request({
     url: baseUrl + '/menu/tree',
-    method: 'post'
+    method: 'post',
+    data: data,
 });
 
 export const getTopMenu = () => request({

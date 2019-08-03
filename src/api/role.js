@@ -1,9 +1,10 @@
 import request from '@/router/axios';
 import { baseUrl } from '@/config/env';
 //获取列表
-export const getRoleList = () => request({
+export const getRoleList = (data) => request({
     url: baseUrl + '/role/list',
-    method: 'post'
+    method: 'post',
+    data: data
 });
 //添加
 export const addRoleList = (list) => request({

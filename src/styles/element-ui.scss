@@ -62,3 +62,24 @@
 .el-dropdown-menu__item--divided:before, .el-menu, .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .el-menu--horizontal>.el-submenu .el-submenu__title:hover{
     background-color: transparent !important;
 }
+
+
+// 按钮样式覆盖
+.el-button--primary {
+    background-color: $themeColor;
+    border-color: $themeColor;
+    color: $fontColor;
+}
+.el-button--primary:hover {
+    background-color: $secColor;
+    border-color: $themeColor;
+    color: $fontColor;
+}
+
+//下拉框样式覆盖
+.el-select {
+    width: 100%;
+}
+.el-cascader {
+    width: 100%;
+}

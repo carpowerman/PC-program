@@ -74,7 +74,7 @@ const user = {
         avatar: '',
         permission: {},
         roles: [],
-        menu: getStore({ name: 'menu' }) || [],
+        menu: [],
         menuAll: [],
         token: getStore({ name: 'token' }) || '',
     },
@@ -198,7 +198,10 @@ const user = {
         //获取系统菜单
         GetMenu({ commit, state }) {
             return new Promise((resolve, reject) => {
-                getMenu().then((res) => {
+                getMenu({
+                    id: "",
+                    parentId: ""
+                }).then((res) => {
                     if(res.data.code === 0) {
                         const data = res.data.data;
                         let menu = deepClone(data);
@@ -236,7 +239,6 @@ const user = {
         },
         SET_MENU: (state, menu) => {
             state.menu = menu
-            setStore({ name: 'menu', content: state.menu, type: 'session' })
         },
         SET_MENU_ALL: (state, menuAll) => {
             state.menuAll = menuAll;

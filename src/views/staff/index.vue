@@ -8,14 +8,14 @@
             <!-- 查询 -->
             <el-col :span="19" class="search">
               <div class="search-input">
-                <el-input v-model="input" placeholder="用户名" size="medium"></el-input>
+                <el-input v-model="searchUsername" placeholder="用户名" size="medium"></el-input>
               </div>
-              <el-button size="medium">查询</el-button>
+              <el-button size="medium" type="primary">查询</el-button>
             </el-col>
 
             <!-- 新增 -->
             <el-col :span="5" class="add">
-              <el-button icon="el-icon-plus" size="medium" @click="addStaffDialog = true">新增</el-button>
+              <el-button icon="el-icon-plus" type="primary" size="medium" @click="addStaffDialog = true">新增</el-button>
             </el-col>
           </el-row>
           <el-row class="row">
@@ -75,17 +75,17 @@
 
           <!-- 新增用户 -->
           <el-dialog title="新增用户" :visible.sync="addStaffDialog">
-            <el-form label-width="120px" ref="addNodeForm" :model="addStaff" :rules="rules">
-              <el-form-item label="用户名">
+            <el-form label-width="120px" ref="addStaffForm" :model="addStaff" :rules="rules">
+              <el-form-item label="用户名" prop="username">
                 <el-input v-model="addStaff.username" size="medium"></el-input>
               </el-form-item>
-              <el-form-item label="密码">
-                <el-input v-model="addStaff.password" size="medium" type="password"></el-input>
+              <el-form-item label="密码" prop="enPassword">
+                <el-input v-model="addStaff.enPassword" size="medium" show-password></el-input>
               </el-form-item>
-              <el-form-item label="昵称">
+              <el-form-item label="昵称" prop="nickname">
                 <el-input v-model="addStaff.nickname" size="medium"></el-input>
               </el-form-item>
-              <el-form-item label="所属部门" prop="parentId">
+              <el-form-item label="所属部门" prop="orgId">
                 <el-cascader
                   v-model="addStaff.orgId"
                   size="medium"
@@ -94,11 +94,11 @@
                   :show-all-levels="false">
                 </el-cascader>
               </el-form-item>
-              <el-form-item label="手机号" prop="orgNo">
-                <el-input v-model="addStaff.moblie" size="medium"></el-input>          
+              <el-form-item label="手机号" prop="moblie">
+                <el-input v-model="addStaff.mobile" size="medium"></el-input>          
               </el-form-item>
-              <el-form-item label="角色" prop="parentId">
-                <el-select v-model="addStaff.rules" multiple size="medium">
+              <el-form-item label="角色" prop="rolesArr">
+                <el-select v-model="addStaff.rolesArr" multiple size="medium">
                   <el-option
                     v-for="(item, index) in role"
                     :key="index"
@@ -110,7 +110,7 @@
             </el-form>
             <div slot="footer">
               <el-button @click="addStaffDialog = false">取 消</el-button>
-              <el-button type="primary" @click="handleAddStaff">确 定</el-button>
+              <el-button type="primary" @click="handleAddStaff" size="medium">确 定</el-button>
             </div>
           </el-dialog>
 
@@ -123,13 +123,13 @@
               <el-form-item label="用户名">
                 <el-input v-model="selectedStaff.username" :disabled="true" size="medium"></el-input>
               </el-form-item>
-              <el-form-item label="密码">
-                <el-input v-model="selectedStaff.password" size="medium" type="password"></el-input>
+              <el-form-item label="密码" prop="enPassowrd">
+                <el-input v-model="selectedStaff.enPassword" size="medium" show-password></el-input>
               </el-form-item>
-              <el-form-item label="昵称">
+              <el-form-item label="昵称" prop="nickname">
                 <el-input v-model="selectedStaff.nickname" size="medium"></el-input>
               </el-form-item>
-              <el-form-item label="所属部门" prop="parentId">
+              <el-form-item label="所属部门" prop="orgId">
                 <el-cascader
                   v-model="selectedStaff.orgId"
                   size="medium"
@@ -138,11 +138,11 @@
                   :show-all-levels="false">
                 </el-cascader>
               </el-form-item>
-              <el-form-item label="手机号" prop="orgNo">
-                <el-input v-model="selectedStaff.moblie" size="medium"></el-input>          
+              <el-form-item label="手机号" prop="mobile">
+                <el-input v-model="selectedStaff.mobile" size="medium"></el-input>          
               </el-form-item>
-              <el-form-item label="角色" prop="parentId">
-                <el-select v-model="selectedStaff.rules" multiple size="medium">
+              <el-form-item label="角色" prop="rolesArr">
+                <el-select v-model="selectedStaff.rolesArr" multiple size="medium">
                   <el-option
                     v-for="(item, index) in role"
                     :key="index"
@@ -154,7 +154,7 @@
             </el-form>
             <div slot="footer">
               <el-button @click="editStaffDialog = false">取 消</el-button>
-              <el-button type="primary" @click="handleEditStaff">确 定</el-button>
+              <el-button type="primary" @click="handleEditStaff">保 存</el-button>
             </div>
           </el-dialog>
         </div>
@@ -165,7 +165,7 @@
 <script>
 import { getStaffList, deleteStaff, editStaff, addStaff } from '@/api/staff';
 import { mapGetters } from "vuex";
-import { deepClone } from '@/util/util';
+import { deepClone, encryption } from '@/util/util';
 export default {
   computed: {
     ...mapGetters(['orgTree', 'role']),
@@ -186,6 +186,27 @@ export default {
         checkStrictly: true,
         emitPath: false
       },
+      rules: {
+        username: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
+        ],
+        enPassword: [
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { min: 6, message: '密码必须大于等于 6 个字符', trigger: 'change' }
+        ],
+        nickname: [
+          { required: true, message: '昵称不能为空', trigger: 'blur' }
+        ],
+        orgId: [
+          { required: true, message: '请选择所属机构', trigger: 'blur' }
+        ],
+        moblie: [
+          { required: true, message: '请填写手机号', trigger: 'blur' }
+        ],
+        rolesArr: [
+          { required: true, message: '请选择绑定角色', trigger: 'blue' }
+        ]
+      },
       tableData: {},
       tableGet: {
         username: '',
@@ -194,14 +215,16 @@ export default {
         pageSize: 10,
         orgId: ""
       },
-      input: '',
+      searchUsername: "",
       addStaffDialog: false,
       addStaff: {
         username: "",
+        enPassword: "",
         password: "",
         nickname: "",
-        moblie: "",
+        mobile: "",
         orgId: "",
+        rolesArr: [],
         roles: [],
       },
       editStaffDialog: false,
@@ -250,20 +273,69 @@ export default {
       })
     },
     handleAddStaff() {
-      addStaff(this.addStaff).then(() => {
-        this.$notify.success({ title: '添加成功', message: '已添加新用户。' });
-        this.tableDateGet();
+      this.$refs.addStaffForm.validate((val) => {
+        if(val) {
+          let temp = encryption({
+            data: this.addStaff,
+            type: "Aes",
+            key: "/iqichenyun.com/",
+            param: ['enPassword']
+          });
+          this.addStaff.password = temp.enPassword;
+          temp = [];
+          this.addStaff.rolesArr.forEach((item) => {
+            temp.push({
+              id: item
+            });
+          });
+          this.addStaff.roles = temp;
+          addStaff(this.addStaff).then((res) => {
+            if(res.data.code === 0) {
+              this.$notify.success({ title: '添加成功', message: '已添加新用户。' });
+              this.tableDateGet();
+              this.addStaffDialog = false;
+            }
+          }).catch(() => {
+            this.$notify.error({ title: '添加失败', message: '网络错误。' });
+          });
+        }
       })
+ 
     },
     handleEditDialog(obj) {
       this.$set(this, 'selectedStaff', deepClone(obj));
+      let temp = [];
+      this.selectedStaff.roles.forEach((item) => {
+        temp.push(item.id);
+      })
+      this.$set(this.selectedStaff, 'rolesArr', temp);
       this.editStaffDialog = true;
+      console.log(this.selectedStaff);
       console.log(obj);
     },
     handleEditStaff() {
-      editStaff(this.selectedStaff).then(() => {
-        this.$notify.success({ title: '保存成功', message: '编辑已保存。' });
-        this.tableDateGet();
+      let temp = encryption({
+        data: this.selectedStaff,
+        type: "Aes",
+        key: "/iqichenyun.com/",
+        param: ['enPassword']
+      });
+      this.selectedStaff.password = temp.enPassword;
+      temp = [];
+      this.selectedStaff.rolesArr.forEach((item) => {
+        temp.push({
+          id: item
+        })
+      })
+      this.selectedStaff.roles = temp;
+      editStaff(this.selectedStaff).then((res) => {
+        if(res.data.code === 0) {
+          this.$notify.success({ title: '保存成功', message: '编辑已保存。' });
+          this.tableDateGet();
+          this.editStaffDialog = false;
+        }
+      }).catch(() => {
+        this.$notify.error({ title: '保存失败', message: '网络错误。' });
       })
     },
     cascaderMenuRe(item) {

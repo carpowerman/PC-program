@@ -7,7 +7,10 @@ const organization = {
     actions: {
         GetOrgTree({commit}) {
             return new Promise((resolve, reject) => {
-                getOrgTree().then((res) => {
+                getOrgTree({
+                    id: "",
+                    parentId: ""
+                }).then((res) => {
                     if(res.data.code === 0) {
                         const data = res.data.data;
                         commit('SET_ORGTREE', data);
