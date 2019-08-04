@@ -8,9 +8,9 @@
             <!-- 查询 -->
             <el-col :span="19" class="search">
               <div class="search-input">
-                <el-input v-model="searchUsername" placeholder="用户名" size="medium"></el-input>
+                <el-input v-model="tableGet.searchContent" placeholder="用户名" size="medium"></el-input>
               </div>
-              <el-button size="medium" type="primary">查询</el-button>
+              <el-button size="medium" type="primary" @click="handleSearchClick">查询</el-button>
             </el-col>
 
             <!-- 新增 -->
@@ -22,14 +22,13 @@
             <!-- 树 -->
             <el-col :span="6">
               <el-tree
-              :data="orgTree"
+              :data="comLeftOrgTree"
               :props="defaultProps"
-              accordion
               @node-click="handleNodeClick"></el-tree>
             </el-col>
             <el-col :span="18">
               <!-- 表格 -->
-              <el-table :data="tableData.content">
+              <el-table :data="tableData.content" v-loading="tableLoading">
                 <el-table-column
                   prop="username"
                   label="用户名">
@@ -94,7 +93,7 @@
                   :show-all-levels="false">
                 </el-cascader>
               </el-form-item>
-              <el-form-item label="手机号" prop="moblie">
+              <el-form-item label="手机号" prop="mobile">
                 <el-input v-model="addStaff.mobile" size="medium"></el-input>          
               </el-form-item>
               <el-form-item label="角色" prop="rolesArr">
@@ -175,6 +174,9 @@ export default {
         this.cascaderMenuRe(item);
       });
       return corgTree;
+    },
+    comLeftOrgTree() {
+      return [{ orgFullName: '全部', id: '', children: this.orgTree}]
     }
   },
   data() {
@@ -186,6 +188,7 @@ export default {
         checkStrictly: true,
         emitPath: false
       },
+      tableLoading: false,
       rules: {
         username: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
@@ -200,7 +203,7 @@ export default {
         orgId: [
           { required: true, message: '请选择所属机构', trigger: 'blur' }
         ],
-        moblie: [
+        mobile: [
           { required: true, message: '请填写手机号', trigger: 'blur' }
         ],
         rolesArr: [
@@ -213,7 +216,8 @@ export default {
         paging: 'true',
         pageNum: 1,
         pageSize: 10,
-        orgId: ""
+        orgId: "",
+        searchContent: ""
       },
       searchUsername: "",
       addStaffDialog: false,
@@ -243,17 +247,24 @@ export default {
   methods: {
     tableDateGet() {
       const that = this;
+      this.tableLoading = true;
       getStaffList(that.tableGet).then((res) => {
         if(res.data.code === 0) {
           const data = res.data.data;
           that.$set(that, 'tableData', deepClone(data));
+          this.tableLoading = false;
         }
       }).catch(()=> {
         this.$notify.error({ title: '获取数据失败', message: '网络连接错误。' });
       });
     },
     handleNodeClick(data) {
+      this.tableGet.pageNum = 1;
       this.tableGet.orgId = data.id;
+      this.tableDateGet();
+    },
+    handleSearchClick() {
+      this.tableGet.pageNum = 1;
       this.tableDateGet();
     },
     handleCurrentChange() {

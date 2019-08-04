@@ -8,9 +8,9 @@
             <!-- 查询 -->
             <el-col :span="19" class="search">
               <div class="search-input">
-                <el-input v-model="input" placeholder="店门名称/客户手机号"></el-input>
+                <el-input v-model="input" placeholder="店门名称/客户手机号" size="medium"></el-input>
               </div>
-              <el-button>查询</el-button>
+              <el-button type="primary" size="medium">查询</el-button>
             </el-col>
 
             <!-- 新增 -->

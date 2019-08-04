@@ -83,3 +83,11 @@
 .el-cascader {
     width: 100%;
 }
+
+// 表格样式覆盖
+.el-pager li.active {
+    color: $themeColor;
+}
+.el-pager li:hover {
+    color: $themeColor;
+}

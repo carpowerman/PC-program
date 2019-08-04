@@ -65,7 +65,7 @@
             <el-form-item label="父节点ID">
               <el-input v-model="addNode.parentId" size="medium" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="父节点名称" prop="parentId">
+            <el-form-item label="父节点名称">
               <el-cascader
                 v-model="addNode.parentId"
                 size="medium"
@@ -162,7 +162,6 @@ export default {
       this.$set(this, 'selectedNode', deepClone(data));
     },
     nodeDelete() {
-      let that = this;
       if(!this.selectedNode.id) {
         this.$notify.error({ title: '删除失败', message: '请选择一个节点。' });
         return false;
@@ -173,31 +172,37 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteOrgNode({
-          id: that.selectedNode.id
-        }).then(() => {
-          that.$notify.success({ title: '删除成功', message: '该节点已被删除。' });
-          that.$store.dispatch('GetOrgTree').then();
+          id: this.selectedNode.id
+        }).then((res) => {
+          if(res.data.code === 0) {
+            this.$notify.success({ title: '删除成功', message: '该节点已被删除。' });
+            this.$store.dispatch('GetOrgTree').then();
+          }
         })
         
       })
     },
     nodeSave() {
-      let that = this;
       this.$refs.saveNodeForm.validate((val) => {
         if(val) {
-          saveOrgNode(that.selectedNode).then(() => {
-              that.$notify.success({ title: '保存成功', message: '该节点信息已被修改。' });
-              that.$store.dispatch('GetOrgTree').then();
-          })
+          saveOrgNode(this.selectedNode).then((res) => {
+            if(res.data.code === 0) {
+              this.$notify.success({ title: '保存成功', message: '该节点信息已被修改。' });
+              this.$store.dispatch('GetOrgTree').then();
+            }
+          });
         }
       })
     },
     nodeAdd() {
-      console.log(this.addNode);
       this.$refs.addNodeForm.validate((val) => {
         if(val) {
-          addOrgNode(this.addNode).then(() => {
-            this.$notify.success({ title: '新增成功', message: '新增节点成功。' });
+          addOrgNode(this.addNode).then((res) => {
+            if(res.data.code === 0) {
+              this.$notify.success({ title: '新增成功', message: '新增节点成功。' });
+              this.$store.dispatch('GetOrgTree').then();
+              this.addNodeDialog = false;
+            }
           }).catch(() => {
             this.$notify.error({ title: '新增失败', message: '网络错误。' });
           });

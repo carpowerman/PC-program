@@ -42,6 +42,14 @@
                 <el-form-item label="节点权限映射"><el-input v-model="selectedNode.permissionNo" size="medium" :disabled="true"></el-input></el-form-item>
                 <el-form-item label="节点路径"><el-input v-model="selectedNode.path" size="medium" :disabled="true"></el-input></el-form-item>
                 <el-form-item label="节点名称" prop="permissionName"><el-input v-model="selectedNode.permissionName" size="medium"></el-input></el-form-item>
+                <el-form-item label="节点图标">
+                  <el-select v-model="selectedNode.icon">
+                    <el-option v-for="(item, index) in icon.icon" :key="index" :value="item.value">
+                      <span :class="item.value"></span>
+                      <span>{{item.value}}</span>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="节点类型">
                   <el-radio disabled v-model="selectedNode.permissionType" :label=0>目录</el-radio>
                   <el-radio disabled v-model="selectedNode.permissionType" :label=1>菜单</el-radio>
@@ -58,7 +66,7 @@
             <el-form-item label="父节点ID">
               <el-input v-model="addNode.parentId" size="medium" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="父节点名称" prop="parentId">
+            <el-form-item label="父节点名称">
               <el-cascader
                 v-model="addNode.parentId"
                 size="medium"
@@ -70,12 +78,20 @@
             <el-form-item label="节点权限映射" prop="permissionNo">
               <el-input v-model="addNode.permissionNo" size="medium"></el-input>          
             </el-form-item>
-            <el-form-item label="节点路径" prop="path">
+            <el-form-item label="节点路径">
               <el-input v-model="addNode.path" size="medium"></el-input>
             </el-form-item>
             <el-form-item label="节点名称" prop="permissionName">
               <el-input v-model="addNode.permissionName" size="medium"></el-input>
             </el-form-item>
+              <el-form-item label="节点图标">
+                <el-select v-model="addNode.icon">
+                  <el-option v-for="(item, index) in icon.icon" :key="index" :value="item.value">
+                    <span :class="item.value"></span>
+                    <span>{{item.value}}</span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
             <el-form-item label="节点类型" prop="permissionType">
               <el-radio v-model="addNode.permissionType" :label=0>目录</el-radio>
               <el-radio v-model="addNode.permissionType" :label=1>菜单</el-radio>
@@ -92,12 +108,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import { deepClone } from '@/util/util';
 import { deleteMenuNode, saveMenuNode, addMenuNode } from '@/api/menu';
 export default {
   computed: {
     ...mapGetters(['menu']),
+    ...mapState(['icon']),
     cascaderMenu() {
       let cmenu = deepClone(this.menu);
       cmenu.forEach((item) => {
@@ -123,7 +140,8 @@ export default {
         permissionType: "",
         path: "",
         orderNum: "",
-        remark: ""
+        remark: "",
+        icon: ""
       },
       rules: {
         parentId: [
@@ -154,7 +172,6 @@ export default {
       this.$set(this, 'selectedNode', deepClone(data));
     },
     nodeDelete() {
-      let that = this;
       if(!this.selectedNode.id) {
         this.$notify.error({ title: '删除失败', message: '请选择一个节点。' });
         return false;
@@ -165,10 +182,12 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteMenuNode({
-          id: that.selectedNode.id
-        }).then(() => {
-          that.$notify.success({ title: '删除成功', message: '该节点已被删除。' });
-          that.$store.dispatch('GetMenu').then();
+          id: this.selectedNode.id
+        }).then((res) => {
+          if(res.data.code === 0) {
+            this.$notify.success({ title: '删除成功', message: '该节点已被删除。' });
+            this.$store.dispatch('GetMenu').then();
+          }
         })
         
       })
@@ -177,19 +196,26 @@ export default {
       let that = this;
       this.$refs.saveNodeForm.validate((val) => {
         if(val) {
-          saveMenuNode(that.selectedNode).then(() => {
+          saveMenuNode(that.selectedNode).then((res) => {
+            if(res.data.code === 0) {
               that.$notify.success({ title: '保存成功', message: '该节点信息已被修改。' });
               that.$store.dispatch('GetMenu').then();
+            }
+          }).catch(() => {
+            that.$notify.error({ title: '保存失败', message: '网络错误。' });
           })
         }
       })
     },
     nodeAdd() {
-      console.log(this.addNode);
       this.$refs.addNodeForm.validate((val) => {
         if(val) {
-          addMenuNode(this.addNode).then(() => {
-            this.$notify.success({ title: '新增成功', message: '新增节点成功。' });
+          addMenuNode(this.addNode).then((res) => {
+            if(res.data.code === 0) {
+              this.$notify.success({ title: '新增成功', message: '新增节点成功。' });
+              this.$store.dispatch('GetMenu').then();
+              this.addNodeDialog = false;
+            }
           }).catch(() => {
             this.$notify.error({ title: '新增失败', message: '网络错误。' });
           });

@@ -6,6 +6,8 @@ import common from './modules/common'
 import tags from './modules/tags'
 import logs from './modules/logs'
 import organization from './modules/organization'
+import dataPermission from './modules/dataPermission';
+import icon from './modules/icon';
 import getters from './getters'
 
 import home from './modules/home';
@@ -19,7 +21,9 @@ const store = new Vuex.Store({
         logs,
         tags,
         home,
-        organization
+        organization,
+        dataPermission,
+        icon
     },
     getters,
 })

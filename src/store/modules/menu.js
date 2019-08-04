@@ -3,7 +3,7 @@ const menu = {
         component: {
             "sys_user": "views/staff/index",
             "customer": "views/customer/index",
-            "sys_role": "views/authorityManage/roleBind",
+            "sys_role": "views/role/index",
             'rule':"views/scoringRules/index",
             "sys_org": "views/organization/index",
             "sys_menu": "views/menu/index",
