@@ -21,7 +21,7 @@
             <!-- 树 -->
             <el-col :span="6">
               <el-tree
-              :data="orgTree"
+              :data="comOrgTree"
               :props="defaultProps"
               accordion
               @node-click="handleNodeClick"></el-tree>
@@ -76,6 +76,9 @@ import { deepClone } from '@/util/util';
 export default {
   computed: {
     ...mapGetters(['orgTree']),
+    comOrgTree() {
+      return [{ orgFullName: "全部", id: "", children: this.orgTree }];
+    }
   },
   data() {
     return {
