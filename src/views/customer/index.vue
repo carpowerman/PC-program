@@ -8,14 +8,13 @@
             <!-- 查询 -->
             <el-col :span="19" class="search">
               <div class="search-input">
-                <el-input v-model="input" placeholder="店门名称/客户手机号" size="medium"></el-input>
+                <el-input v-model="tableGet.searchContent" placeholder="客户名称/客户手机号" size="medium"></el-input>
               </div>
-              <el-button type="primary" size="medium">查询</el-button>
+              <el-button type="primary" size="medium" @click="tableDateGet">查询</el-button>
             </el-col>
 
             <!-- 新增 -->
-            <el-col :span="5" class="add">
-            </el-col>
+            <el-col :span="5" class="add"></el-col>
           </el-row>
           <el-row>
             <!-- 树 -->
@@ -38,19 +37,10 @@
                   label="客户手机号">
                 </el-table-column>
                 <el-table-column
-                  label="意向购车金额">
-                </el-table-column>
-                <el-table-column
-                  label="购车顾问">
-                </el-table-column>
-                <el-table-column
-                  label="所属门店">
-                </el-table-column>
-                <el-table-column
-                  label="门店地址">
-                </el-table-column>
-                <el-table-column
-                  label="状态">
+                  label="查看">
+                  <template slot-scope="scope">
+                    <el-button size="mini" @click="handleCustomerInfo(scope.row)">查看</el-button>
+                  </template>
                 </el-table-column>
               </el-table>
               <div class="table-foot">
@@ -64,6 +54,40 @@
               </div>
             </el-col>
           </el-row>
+
+          <!-- 菜单弹窗 -->
+          <el-dialog title="客户信息" :visible.sync="customerDialog">
+            <el-table
+              :data="selectedCustomer.preOrders">
+              <el-table-column
+                label="客户名称">
+                <template slot-scope="scope">{{selectedCustomer.custName}}</template>
+              </el-table-column>
+              <el-table-column
+                label="客户手机号">
+                <template slot-scope="scope">{{selectedCustomer.custMobile}}</template>
+              </el-table-column>
+              <el-table-column
+                label="业务员"
+                prop="salerName">
+              </el-table-column>
+              <el-table-column
+                label="所属机构"
+                prop="orgName">
+              </el-table-column>
+              <el-table-column
+                label="机构地址"
+                prop="orgAddress">
+              </el-table-column>
+              <el-table-column
+                label="状态"
+                prop="statusDesc">
+              </el-table-column>
+            </el-table>
+            <div slot="footer">
+              <el-button type="primary" @click="customerDialog = false">确 定</el-button>
+            </div>
+          </el-dialog>
         </div>
     </template>
   </basic-container>
@@ -92,8 +116,10 @@ export default {
         paging: 'true',
         pageNum: 1,
         pageSize: 10,
+        searchContent: ""
       },
-      input: ''
+      customerDialog: false,
+      selectedCustomer: {}
     }
   },
   created() {
@@ -122,6 +148,10 @@ export default {
     },
     handleCurrentChange() {
       this.tableDateGet();
+    },
+    handleCustomerInfo(obj) {
+      this.$set(this, 'selectedCustomer', obj);
+      this.customerDialog = true;
     }
   }
 }

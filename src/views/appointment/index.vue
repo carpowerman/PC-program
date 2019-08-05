@@ -8,21 +8,21 @@
             <!-- 查询 -->
             <el-col :span="19" class="search">
               <div class="search-input">
-                <el-input v-model="input" placeholder="店门名称/客户手机号"></el-input>
+                <el-input v-model="searchContent" placeholder="店门名称/客户手机号" size="medium"></el-input>
               </div>
-              <el-button>查询</el-button>
+              <el-button size="medium" type="primary">查询</el-button>
             </el-col>
 
             <!-- 新增 -->
             <el-col :span="5" class="add">
-              <el-button icon="el-icon-plus">新增</el-button>
+              <el-button icon="el-icon-plus" size="medium" type="primary">新增</el-button>
             </el-col>
           </el-row>
           <el-row>
             <!-- 树 -->
             <el-col :span="6">
               <el-tree
-              :data="orgTree"
+              :data="comOrgTree"
               :props="defaultProps"
               accordion
               @node-click="handleNodeClick"></el-tree>
@@ -39,18 +39,22 @@
                   label="客户手机号">
                 </el-table-column>
                 <el-table-column
+                  prop="intentionAmount"
                   label="意向购车金额">
                 </el-table-column>
                 <el-table-column
+                  prop="salerName"
                   label="购车顾问">
                 </el-table-column>
                 <el-table-column
+                  prop="orgName"
                   label="所属门店">
                 </el-table-column>
                 <el-table-column
                   label="门店地址">
                 </el-table-column>
                 <el-table-column
+                  prop="statusDesc"
                   label="状态">
                 </el-table-column>
                 <el-table-column
@@ -74,12 +78,15 @@
 </template>
 
 <script>
-import { getCustomerList } from '@/api/customer';
+import { getAppointList } from '@/api/appointment';
 import { mapGetters } from "vuex";
 import { deepClone } from '@/util/util';
 export default {
   computed: {
     ...mapGetters(['orgTree']),
+    comOrgTree() {
+      return [{ orgFullName: "全部", id: "", children: this.orgTree }];
+    }
   },
   data() {
     return {
@@ -90,11 +97,11 @@ export default {
       tableData: {},
       tableGet: {
         orgId: '',
-        paging: 'true',
+        paging: true,
         pageNum: 1,
         pageSize: 10,
+        searchContent: ""
       },
-      input: ''
     }
   },
   created() {
@@ -108,7 +115,7 @@ export default {
   methods: {
     tableDateGet() {
       const that = this;
-      getCustomerList(that.tableGet).then((res) => {
+      getAppointList(that.tableGet).then((res) => {
         if(res.data.code === 0) {
           const data = res.data.data;
           that.$set(that, 'tableData', deepClone(data));
