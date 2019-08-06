@@ -132,6 +132,12 @@
                   <el-option :value="2" label="审批不通过"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item label="业务类型" prop="carType">
+                <el-select v-model="addAppoint.carType" size="medium">
+                  <el-option :value="0" label="新车"></el-option>
+                  <el-option :value="1" label="二手车"></el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="地址" prop="orgAddress">
                 <el-input
                   type="textarea"
@@ -203,6 +209,9 @@ export default {
         status: [
           { required: true, message: '请选择预约状态', trigger: 'blue' }
         ],
+        carType: [
+          { required: true, message: '请选择业务类型', trigger: 'blue' }
+        ],
         orgAddress: [
           { required: true, message: '请填写地址', trigger: 'blue' }
         ]
@@ -225,7 +234,8 @@ export default {
         salerId: "",
         orgId: "",
         orgAddress: "",
-        status: ""
+        status: "",
+        carType: ""
       }
     }
   },

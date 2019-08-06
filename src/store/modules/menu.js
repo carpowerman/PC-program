@@ -4,7 +4,7 @@ const menu = {
             "sys_user": "views/staff/index",
             "customer": "views/customer/index",
             "sys_role": "views/role/index",
-            'rule':"views/scoringRules/index",
+            'rule':"views/rule/index",
             "sys_org": "views/organization/index",
             "sys_menu": "views/menu/index",
             "mini": "views/mini/index",
