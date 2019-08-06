@@ -8,15 +8,17 @@
               <div class="upload-body">
                 <div class="item" v-for="(item, index) in barC" :key="index">
                   <div class="block">
-                    <div class="delete" @click="handlerDelete(item.id, 1)"><i class="el-icon-delete"></i></div>
+                    <div class="delete" @click="handlerDelete(item.id)"><i class="el-icon-delete"></i></div>
                     <el-image :src="item.url" class="image" fit="cover"></el-image>
                   </div>
                 </div>
                 <div class="item">
                   <el-upload
-                    class="upload-demo"
                     drag
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    action=""
+                    :before-upload="upLoad.bind(null, 91)"
+                    :show-file-list="false"
+                    :with-credentials="true"
                     multiple>
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -30,15 +32,17 @@
               <div class="upload-body">
                 <div class="item" v-for="(item, index) in barB" :key="index">
                   <div class="block">
-                    <div class="delete" @click="handlerDelete(item.id, 0)"><i class="el-icon-delete"></i></div>
+                    <div class="delete" @click="handlerDelete(item.id)"><i class="el-icon-delete"></i></div>
                     <el-image :src="item.url" class="image" fit="cover"></el-image>
                   </div>
                 </div>
                 <div class="item">
                   <el-upload
-                    class="upload-demo"
                     drag
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    action=""
+                    :before-upload="upLoad.bind(null, 91)"
+                    :show-file-list="false"
+                    :with-credentials="true"
                     multiple>
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -52,7 +56,7 @@
               <div class="upload-body">
                 <div class="item" v-if="logo.length > 0">
                   <div class="block">
-                    <div class="delete" @click="handlerDelete(logo[0].id, 2)"><i class="el-icon-delete"></i></div>
+                    <div class="delete" @click="handlerDelete(logo[0].id)"><i class="el-icon-delete"></i></div>
                     <el-image :src="logo[0].url" class="image" fit="cover"></el-image>
                   </div>
                 </div>
@@ -60,7 +64,7 @@
                   <el-upload
                     drag
                     action=""
-                    :before-upload="upLoad"
+                    :before-upload="upLoad.bind(null, 92)"
                     :show-file-list="false"
                     :with-credentials="true"
                     multiple>
@@ -77,7 +81,8 @@
 </template>
 
 <script>
-import { getBarB, getBarC, getLogo, deleteFile, addFile } from '@/api/src';
+import { deleteFile, addFile, getFileList } from '@/api/src';
+import { deepClone } from '@/util/util';
 export default {
   data() {
     return {
@@ -88,57 +93,46 @@ export default {
     }
   },
   created() {
-    getBarB.then((res) => {
-      if(res.data.code === 0) {
-        this.$set(this, 'barB', res.data.data.content);
-      }
-    });
-    getBarC.then((res) => {
-      if(res.data.code === 0) {
-        this.$set(this, 'barC', res.data.data.content);
-      }
-    });
-    getLogo.then((res) => {
-      if(res.data.code === 0) {
-        this.$set(this, 'logo', res.data.data.content);
-      }
-    });
+    this.getSrc();
   },
   methods: {
-    handlerDelete(id, type) {
+    getSrc() {
+      [{ id: 90, type: 'barB' },
+      { id: 91, type: 'barC' },
+      { id: 92, type: 'logo' }].forEach((item) => {
+        getFileList({
+          bizId: "",
+          fileBizType: item.id,
+          paging: false,
+          pageNum: "",
+          pageSize: ""
+        }).then((res) => {
+          if(res.data.code === 0) {
+            this.$set(this, item.type, deepClone(res.data.data.content));
+          }
+        });
+      })
+    },
+    handlerDelete(id) {
       deleteFile({
         id: id
-      }).then(() => {
-        if(type==0) {
-          getBarB.then((res) => {
-            if(res.data.code === 0) {
-              this.$set(this, 'barB', res.data.data.content);
-            }
-          });
-        } else if(type==1) {
-          getBarC.then((res) => {
-            if(res.data.code === 0) {
-              this.$set(this, 'barC', res.data.data.content);
-            }
-          });
-        } else if(type==2) {
-          getLogo.then((res) => {
-            if(res.data.code === 0) {
-              this.$set(this, 'logo', res.data.data.content);
-            }
-          });
+      }).then((res) => {
+        if(res.data.code === 0) {
+          this.$notify.success({ title: "删除成功", message: "图片删除成功。" });
+          this.getSrc();
         }
       })
     },
-    upLoad(file) {
+    upLoad(type, file) {
       const formData = new FormData();
-      console.log(file);
       formData.append('files', file, file.name);
-      formData.append('fileBizType', 90);
+      formData.append('fileBizType', type);
       addFile(formData).then((res) => {
-        console.log(res);
+        if(res.data.code === 0) {
+          this.$notify.success({ title: "上传成功", message: "图片已成功上传。" });
+          this.getSrc();
+        }
       });
-
       return false;
     }
   },
