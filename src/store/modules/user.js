@@ -71,11 +71,12 @@ const user = {
         userName: '',
         userId: '',
         nickName: '',
-        avatar: '',
+        avatar: require('@/assets/images/avatar-default.png'),
+        orgName: "",
+        type: "",
         permission: {},
         roles: [],
-        menu: [],
-        menuAll: [],
+        menu: getStore({ name: 'menu' }) || [],
         token: getStore({ name: 'token' }) || '',
     },
     actions: {
@@ -133,8 +134,9 @@ const user = {
                             if(res.data.code === 0) {
                                 const data = res.data.data;
                                 commit('SET_NICKNAME', data.nickname);
-                                commit('SET_AVATAR', data.avatar);
+                                // commit('SET_AVATAR', data.avatar);
                                 commit('SET_ORGNAME', data.orgName);
+                                commit('SET_TYPE', data.type);
                                 resolve();
                             }
                         }).catch(err => {
@@ -235,13 +237,17 @@ const user = {
             state.nickName = nickname;
         },
         SET_AVATAR: (state, avatar) => {
-            state.avatar = avatar;
+            if(!avatar) state.avatar = avatar;
+        },
+        SET_ORGNAME: (state, orgName) => {
+            state.orgName = orgName
+        },
+        SET_TYPE: (state, type) => {
+            state.type = type;
         },
         SET_MENU: (state, menu) => {
-            state.menu = menu
-        },
-        SET_MENU_ALL: (state, menuAll) => {
-            state.menuAll = menuAll;
+            state.menu = menu;
+            setStore({ name: 'menu', content: state.menu, type: 'session' })
         },
         SET_ROLES: (state, roles) => {
             state.roles = roles;

@@ -11,8 +11,13 @@
               <div class="info">
                 <i class="iconfont car-o"></i>
                 <div>
-                  <span>用户类型：</span>
-                  <span>所属组织：</span>
+                  <span>用户类型：
+                    <template v-if="user.type == -1">超级管理员</template>
+                    <template v-else-if="user.type == 0">系统管理员</template>
+                    <template v-if="user.type == 1">普通账号</template>
+                    <template v-if="user.type == 2">会员账号</template>
+                  </span>
+                  <span>所属组织：{{user.orgName}}</span>
                 </div>
               </div>
             </div>
@@ -25,15 +30,15 @@
           <template v-slot:body>
             <div class="appointment">
               <div class="item">
-                <div class="num">{{home.appointment[0]}}</div>
+                <div class="num">{{appointment.orderedNum}}</div>
                 <div class="label">预约中数量</div>
               </div>
               <div class="item">
-                <div class="num">{{home.appointment[1]}}</div>
+                <div class="num">{{appointment.refusedNum}}</div>
                 <div class="label">已拒绝数量</div>
               </div>
               <div class="item">
-                <div class="num">{{home.appointment[2]}}</div>
+                <div class="num">{{appointment.totalNum}}</div>
                 <div class="label">总数量</div>
               </div>
             </div>
@@ -55,9 +60,9 @@
           <template v-slot:header>公告</template>
           <template v-slot:body>
             <ul class="notice">
-              <li v-for="(item, index) in home.notice" :key="index">
-                <p>{{item.text}}</p>
-                <span>{{item.date}}</span>
+              <li v-for="(item, index) in notice" :key="index">
+                <p>{{item.content}}</p>
+                <span>{{item.createdTime}}</span>
               </li>
             </ul>
           </template>
@@ -68,63 +73,88 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
+import { getHomeData, getNotice } from "@/api/home"
+import { deepClone } from "@/util/util"
 export default {
   name: "wel",
   data() {
     return {
+      appointment: {},
+      notice: []
     };
   },
   computed: {
-    ...mapGetters(["userInfo", "homeEcharts"]),
-    ...mapState(['home', 'user'])
-  },
-  mounted() {
-    this.myChart = this.$echarts.init(document.getElementById('echarts'));
-    this.myChart.setOption({
-      // 图例配置
-      legend: {},
-      // 柱状图颜色配置
-      color: ['#F6C506', '#232323'],
-      dataset: {
-        dimensions: ['item', '审核通过数量', '当月申请数量'],
-        source: this.homeEcharts
-      },
-      xAxis: { type: 'category' },
-      yAxis: {},
-      series: [
-        {
-          type: 'bar',
-          label: {
-            show: true,
-            position: 'top'
-          }
-        },
-        {
-          type: 'bar',
-          label: {
-            show: true,
-            position: 'top'
-          }
-        }
-      ],
-      // 提示框组件
-      tooltip: {
-        trigger: 'axis',
+    ...mapState(['home', 'user']),
+    comEchartsData(){
+      let temp = [
+        ['product', '审核通过数量', '当月申请数量'],
+      ]
+      if(this.appointment.orderChat) {
+        this.appointment.orderChat.forEach((item) => {
+          temp.push([item.dateStr, item.countApproved, item.countApplied]);
+        })
       }
-
-    });
-    console.log(this.myChart);
+      return temp;
+    }
   },
   created() {
-
+    getNotice({ paging: true, pageNum: 1, pageSize: 5 }).then((res) => {
+      if(res.data.code === 0) {
+        this.$set(this, 'notice', deepClone(res.data.data.content));
+      }
+    })
   },
-  methods: {}
+  mounted() {
+    getHomeData({}).then((res) => {
+      if(res.data.code === 0) {
+        this.$set(this, 'appointment', deepClone(res.data.data));
+        this.configEcharts();
+      }
+    });
+  },
+  methods: {
+    configEcharts() {
+      this.myChart = this.$echarts.init(document.getElementById('echarts'));
+      this.myChart.setOption({
+        // 图例配置
+        legend: {},
+        // 柱状图颜色配置
+        color: ['#F6C506', '#232323'],
+        dataset: {
+          source: this.comEchartsData
+        },
+        xAxis: { type: 'category' },
+        yAxis: {},
+        series: [
+          {
+            type: 'bar',
+            label: {
+              show: true,
+              position: 'top'
+            }
+          },
+          {
+            type: 'bar',
+            label: {
+              show: true,
+              position: 'top'
+            }
+          }
+        ],
+        // 提示框组件
+        tooltip: {
+          trigger: 'axis',
+        }
+      });
+    }
+  }
 };
 </script>
 
 <style scoped="scoped" lang="scss">
 .user {
+  min-height: 134px;
   .welcome {
     font-size: 18px;
     color: #020202;

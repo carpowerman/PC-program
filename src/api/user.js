@@ -33,7 +33,7 @@ export const getUserInfo = (id) => request({
 });
 
 export const refeshToken = () => request({
-    url: baseUrl + '/user/refesh',
+    url: baseUrl + '/auth/refresh',
     method: 'post'
 })
 

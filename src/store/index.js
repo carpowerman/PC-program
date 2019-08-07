@@ -10,8 +10,6 @@ import dataPermission from './modules/dataPermission';
 import icon from './modules/icon';
 import getters from './getters'
 
-import home from './modules/home';
-
 Vue.use(Vuex)
 const store = new Vuex.Store({
     modules: {
@@ -20,7 +18,6 @@ const store = new Vuex.Store({
         common,
         logs,
         tags,
-        home,
         organization,
         dataPermission,
         icon

@@ -14,27 +14,20 @@ router.beforeEach((to, from, next) => {
     const meta = to.meta || {};
     if (getToken()) {
         if (store.getters.isLock && to.path != lockPage) { //如果系统激活锁屏，全部跳转到锁屏页
-            console.log('token 1')
             next({ path: lockPage })
         } else if (to.path === '/login') { //如果登录成功访问登录页跳转到主页
-            console.log('token 2')
             next({ path: '/' })
         } else {
             //如果用户信息为空则获取用户信息，获取用户信息失败，跳转到登录页
-            console.log('token 3')
             if (store.getters.roles.length === 0) {
-                console.log('token 3-1')
                 store.dispatch('GetUserInfo').then(() => {
-                    console.log('token 3-1-1')
                     next({ ...to, replace: true })
                 }).catch(() => {
-                    console.log('token 3-1-2')
                     store.dispatch('FedLogOut').then(() => {
                         next({ path: '/login' })
                     })
                 })
             } else {
-                console.log('token 3-2')
                 const value = to.query.src || to.fullPath;
                 const label = to.query.name || to.name;
                 const meta = to.meta || router.$avueRouter.meta || {};
@@ -60,7 +53,6 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else {
-        console.log('not token');
         //判断是否需要认证，没有登录访问去登录页
         if (meta.isAuth === false) {
             next()

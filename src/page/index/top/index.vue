@@ -108,39 +108,24 @@ export default {
   name: "top",
   data () {
     return {
-      // 隐藏顶部菜单
-      showMenu: false,
-      // 隐藏顶部搜索
-      showSearch: false,
-      // 隐藏顶部选色器
-      showColor: false,
-      // 隐藏顶部 bug
-      showDebug: false,
-      // 隐藏顶部锁屏按钮
-      showLock: false,
-      // 隐藏顶部主题选择按钮
-      showTheme: false,
-      // 隐藏顶部语言选择按钮
-      showLang: false,
-      // 隐藏顶部全屏按钮
-      showFullScren: false,
+      showLang: false
     };
   },
   filters: {},
-  created () { },
+  created () {},
   mounted () {
     listenfullscreen(this.setScreen);
   },
   computed: {
     ...mapState({
-    //  showDebug: state => state.common.showDebug,
-    //  showTheme: state => state.common.showTheme,
-    //  showLock: state => state.common.showLock,
-    //  showFullScren: state => state.common.showFullScren,
+      showDebug: state => state.common.showDebug,
+      showTheme: state => state.common.showTheme,
+      showLock: state => state.common.showLock,
+      showFullScren: state => state.common.showFullScren,
       showCollapse: state => state.common.showCollapse,
-    //  showSearch: state => state.common.showSearch,
-    //  showMenu: state => state.common.showMenu,
-    //  showColor: state => state.common.showColor
+      showSearch: state => state.common.showSearch,
+      showMenu: state => state.common.showMenu,
+      showColor: state => state.common.showColor,
       nickName: state => state.user.nickName,
       avatar: state => state.user.avatar
     }), 
