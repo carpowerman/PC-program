@@ -124,7 +124,7 @@ const user = {
         },
         GetUserInfo({ state, commit }) {
             return new Promise((resolve, reject) => {
-                getUserPermission(state.userName).then((res) => {
+                getUserPermission({ username: state.userName}).then((res) => {
                     if(res.data.code === 0) {
                         const data = res.data.data;
                         commit('SET_ROLES', data.roles);

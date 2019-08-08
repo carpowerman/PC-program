@@ -16,11 +16,11 @@ export const loginByUsername = (username, password, code, redomStr) => request({
 });
 
 // 获取用户权限信息
-export const getUserPermission = () => request({
+export const getUserPermission = ({ username }) => request({
     url: baseUrl + '/user/allInfo',
     method: 'post',
     data: {
-        username: 'admin'
+        username: username
     }
 });
 
