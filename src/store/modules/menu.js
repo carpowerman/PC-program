@@ -9,7 +9,8 @@ const menu = {
             "sys_menu": "views/menu/index",
             "mini": "views/mini/index",
             "financial": "views/financial/index",
-            "appointment": "views/appointment/index"
+            "appointment": "views/appointment/index",
+            "sys_notice": "views/notice/index"
         }
     }
 }

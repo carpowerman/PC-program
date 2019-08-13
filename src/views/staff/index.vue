@@ -122,7 +122,7 @@
               <el-form-item label="用户名">
                 <el-input v-model="selectedStaff.username" :disabled="true" size="medium"></el-input>
               </el-form-item>
-              <el-form-item label="密码" prop="enPassowrd">
+              <el-form-item label="密码（不做修改请为空）">
                 <el-input v-model="selectedStaff.enPassword" size="medium" show-password></el-input>
               </el-form-item>
               <el-form-item label="昵称" prop="nickname">
@@ -321,17 +321,18 @@ export default {
       })
       this.$set(this.selectedStaff, 'rolesArr', temp);
       this.editStaffDialog = true;
-      console.log(this.selectedStaff);
-      console.log(obj);
     },
     handleEditStaff() {
-      let temp = encryption({
-        data: this.selectedStaff,
-        type: "Aes",
-        key: "/iqichenyun.com/",
-        param: ['enPassword']
-      });
-      this.selectedStaff.password = temp.enPassword;
+      let temp;
+      if(!this.selectedStaff.enPassword) {
+        temp = encryption({
+          data: this.selectedStaff,
+          type: "Aes",
+          key: "/iqichenyun.com/",
+          param: ['enPassword']
+        });
+        this.selectedStaff.password = temp.enPassword;
+      }
       temp = [];
       this.selectedStaff.rolesArr.forEach((item) => {
         temp.push({

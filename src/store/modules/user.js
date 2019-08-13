@@ -1,4 +1,4 @@
-import { setToken, removeToken } from '@/util/auth'
+import { setToken, removeToken, getUser, setUser } from '@/util/auth'
 import { setStore, getStore } from '@/util/store'
 // import { isURL, validatenull } from '@/util/validate'
 import { encryption, deepClone } from '@/util/util'
@@ -68,7 +68,7 @@ function replaceDoc(item, permission) {
 
 const user = {
     state: {
-        userName: '',
+        userName: getStore({ name: 'username' }) || getUser() || '',
         userId: '',
         nickName: '',
         avatar: require('@/assets/images/avatar-default.png'),
@@ -227,6 +227,7 @@ const user = {
             setStore({ name: 'token', content: state.token, type: 'session' })
         },
         SET_USERNAME: (state, username) => {
+            setUser(username);
             state.userName = username;
             setStore({ name: 'username', content: state.userName, type: 'session' })
         },
