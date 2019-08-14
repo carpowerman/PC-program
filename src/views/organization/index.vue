@@ -22,8 +22,9 @@
                 <div class="left-tree">
                     <el-tree
                     :data="orgTree"
+                    node-key="id"
                     :props="defaultProps"
-                    accordion
+                    :default-expanded-keys="defaultExpandedKeys"
                     @node-click="handleNodeClick"></el-tree>
                 </div>
             </el-col>
@@ -32,17 +33,8 @@
             <el-col :span="18">
               <template v-if="selectedNode.id">
                 <el-form label-width="120px" :model="selectedNode" :rules="rules" ref="saveNodeForm">
-                  <el-form-item label="父节点ID">
-                    <el-input v-model="selectedNode.parentId" size="medium" :disabled="true"></el-input>
-                  </el-form-item>
                   <el-form-item label="父节点名称">
                     <el-input v-model="selectedNode.parentName" size="medium" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="节点ID">
-                    <el-input v-model="selectedNode.id" size="medium" :disabled="true"></el-input>
-                  </el-form-item>
-                  <el-form-item label="节点映射">
-                    <el-input v-model="selectedNode.orgNo" size="medium" :disabled="true"></el-input>
                   </el-form-item>
                   <el-form-item label="节点名称" prop="orgFullName">
                     <el-input v-model="selectedNode.orgFullName" size="medium"></el-input>
@@ -110,6 +102,23 @@ export default {
         this.cascaderMenuRe(item);
       });
       return corgTree;
+    },
+    defaultExpandedKeys() {
+      let temp = [];
+      this.orgTree.forEach((item) => {
+        this.comDefaultExpandedKeys(item, temp);
+      })
+      return temp;
+    },
+    comDefaultExpandedKeys() {
+      return (item, temp) => {
+        if(item.children.length > 0) {
+          temp.push(item.id);
+          item.children.forEach((item) => {
+            this.comDefaultExpandedKeys(item, temp);
+          })
+        }
+      }
     }
   },
   data() {
@@ -154,8 +163,6 @@ export default {
     if(this.orgTree.length === 0) {
       this.$store.dispatch('GetOrgTree').then();
     }
-  },
-  mounted() {
   },
   methods: {
     handleNodeClick(data) {
@@ -202,6 +209,14 @@ export default {
               this.$notify.success({ title: '新增成功', message: '新增节点成功。' });
               this.$store.dispatch('GetOrgTree').then();
               this.addNodeDialog = false;
+              this.$set(this, 'addNode', {
+                parentId: "",
+                orgFullName: "",
+                orgSimpleName: "",
+                orgNo: "",
+                orgType: "",
+                orderNum: ""
+              });
             }
           }).catch(() => {
             this.$notify.error({ title: '新增失败', message: '网络错误。' });

@@ -66,14 +66,14 @@
 
 // 按钮样式覆盖
 .el-button--primary {
-    background-color: $themeColor;
+    background-color: #FFFFFF;
     border-color: $themeColor;
-    color: $fontColor;
+    color: $themeColor;
 }
 .el-button--primary:hover {
-    background-color: $secColor;
+    background-color: $themeColor;
     border-color: $themeColor;
-    color: $fontColor;
+    color: #FFFFFF;
 }
 
 //下拉框样式覆盖

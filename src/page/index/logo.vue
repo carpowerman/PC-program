@@ -1,5 +1,5 @@
 <template>
-  <div class="avue-logo">
+  <div class="avue-logo" @click="toHome">
     <transition name="fade">
       <span v-if="keyCollapse"
             class="avue-logo_subtitle"
@@ -24,9 +24,13 @@ export default {
   },
   created() {},
   computed: {
-    ...mapGetters(["website", "keyCollapse"])
+    ...mapGetters(["website", "keyCollapse", "tagWel"])
   },
-  methods: {}
+  methods: {
+    toHome() {
+      this.$router.push({ path: this.tagWel.value });
+    }
+  }
 };
 </script>
 
@@ -55,8 +59,8 @@ export default {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
   // color: rgba(255, 255, 255, 0.8);
   z-index: 1024;
-  color: #101010;
-  background-color: #F6C506;
+  color: #FFFFFF;
+  background-color: #161C2A;
   &_title {
     display: block;
     text-align: center;
@@ -70,5 +74,6 @@ export default {
     font-weight: bold;
     color: #fff;
   }
+  cursor: pointer;
 }
 </style>

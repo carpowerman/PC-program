@@ -23,7 +23,9 @@
             <el-col :span="6">
               <el-tree
               :data="comLeftOrgTree"
+              node-key="id"
               :props="defaultProps"
+              :default-expanded-keys="defaultExpandedKeys"
               @node-click="handleNodeClick"></el-tree>
             </el-col>
             <el-col :span="18">
@@ -162,7 +164,7 @@
 </template>
 
 <script>
-import { getStaffList, deleteStaff, editStaff, addStaff } from '@/api/staff';
+import { getStaffList, deleteStaff, addStaff, editStaff } from '@/api/staff';
 import { mapGetters } from "vuex";
 import { deepClone, encryption } from '@/util/util';
 export default {
@@ -176,7 +178,25 @@ export default {
       return corgTree;
     },
     comLeftOrgTree() {
-      return [{ orgFullName: '全部', id: '', children: this.orgTree}]
+      return [{ orgFullName: '全部', id: 0, children: this.orgTree}]
+    },
+    defaultExpandedKeys() {
+      let temp = [];
+      this.comLeftOrgTree.forEach((item) => {
+        this.comDefaultExpandedKeys(item, temp);
+      })
+      console.log(temp);
+      return temp;
+    },
+    comDefaultExpandedKeys() {
+      return (item, temp) => {
+        if(item.children.length > 0) {
+          temp.push(item.id);
+          item.children.forEach((item) => {
+            this.comDefaultExpandedKeys(item, temp);
+          })
+        }
+      }
     }
   },
   data() {
@@ -191,11 +211,12 @@ export default {
       tableLoading: false,
       rules: {
         username: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' }
+          { required: true, message: '用户名不能为空', trigger: 'blur' },
+          { min: 5, message: '用户名必须在 5 ~ 50 之间', trigger: 'blur' }
         ],
         enPassword: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { min: 6, message: '密码必须大于等于 6 个字符', trigger: 'change' }
+          { min: 6, message: '密码必须大于等于 6 个字符', trigger: 'blur' }
         ],
         nickname: [
           { required: true, message: '昵称不能为空', trigger: 'blur' }
@@ -260,7 +281,11 @@ export default {
     },
     handleNodeClick(data) {
       this.tableGet.pageNum = 1;
-      this.tableGet.orgId = data.id;
+      if(data.id != 0) {
+        this.tableGet.orgId = data.id;
+      } else {
+        delete this.tableGet.orgId;
+      }
       this.tableDateGet();
     },
     handleSearchClick() {
@@ -305,6 +330,16 @@ export default {
               this.$notify.success({ title: '添加成功', message: '已添加新用户。' });
               this.tableDateGet();
               this.addStaffDialog = false;
+              this.$set(this, 'addStaff', {
+                username: "",
+                enPassword: "",
+                password: "",
+                nickname: "",
+                mobile: "",
+                orgId: "",
+                rolesArr: [],
+                roles: [],
+              });
             }
           }).catch(() => {
             this.$notify.error({ title: '添加失败', message: '网络错误。' });
@@ -324,7 +359,7 @@ export default {
     },
     handleEditStaff() {
       let temp;
-      if(!this.selectedStaff.enPassword) {
+      if(this.selectedStaff.enPassword) {
         temp = encryption({
           data: this.selectedStaff,
           type: "Aes",
@@ -340,6 +375,7 @@ export default {
         })
       })
       this.selectedStaff.roles = temp;
+
       editStaff(this.selectedStaff).then((res) => {
         if(res.data.code === 0) {
           this.$notify.success({ title: '保存成功', message: '编辑已保存。' });

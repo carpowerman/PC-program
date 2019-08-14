@@ -22,7 +22,8 @@
               <el-tree
               :data="comOrgTree"
               :props="defaultProps"
-              accordion
+              node-key="id"
+              :default-expanded-keys="defaultExpandedKeys"
               @node-click="handleNodeClick"></el-tree>
             </el-col>
             <el-col :span="18">
@@ -101,7 +102,24 @@ export default {
   computed: {
     ...mapGetters(['orgTree']),
     comOrgTree() {
-      return [{ orgFullName: "全部", id: "", children: this.orgTree }];
+      return [{ orgFullName: "全部", id: 0, children: this.orgTree }];
+    },
+    defaultExpandedKeys() {
+      let temp = [];
+      this.comOrgTree.forEach((item) => {
+        this.comDefaultExpandedKeys(item, temp);
+      })
+      return temp;
+    },
+    comDefaultExpandedKeys() {
+      return (item, temp) => {
+        if(item.children.length > 0) {
+          temp.push(item.id);
+          item.children.forEach((item) => {
+            this.comDefaultExpandedKeys(item, temp);
+          })
+        }
+      }
     }
   },
   data() {
@@ -143,7 +161,12 @@ export default {
       });
     },
     handleNodeClick(data) {
-      this.tableGet.orgId = data.id;
+      this.tableGet.pageNum = 1;
+      if(data.id != 0) {
+        this.tableGet.orgId = data.id;
+      } else {
+        delete this.tableGet.orgId;
+      }
       this.tableDateGet();
     },
     handleCurrentChange() {

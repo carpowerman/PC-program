@@ -19,7 +19,7 @@
                   v-show="isSearch"></search>
         </transition>
         <!-- 主体视图层 -->
-        <div style="height:100%;overflow-y:auto;overflow-x:hidden;"
+        <div style="overflow-y:auto;overflow-x:hidden;"
              id="avue-view"
              v-show="!isSearch">
           <keep-alive>

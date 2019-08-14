@@ -50,15 +50,20 @@
     position: absolute;
     left: 240px;
     padding: 0;
-    padding-bottom: 20px;
     width: calc(100% - 240px);
     height: calc(100% - 70px);
     box-sizing: border-box;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#avue-view {
+    flex-grow: 1;
 }
 
 .avue-view {
-    padding: 40px !important;
+    padding: 20px !important;
     width: 100%;
     box-sizing: border-box;
 }

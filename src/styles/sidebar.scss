@@ -35,7 +35,7 @@
     padding-top: 60px;
     height: 100%;
     position: relative;
-    background-color: #20222a;
+    background-color: #192031;
     transition: width .2s;
     box-sizing: border-box;
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
@@ -78,10 +78,10 @@
                 left: 0;
                 bottom: 0;
                 width: 4px;
-                background: #409eff;
+                background: $themeColor;
                 position: absolute;
             }
-            background-color: rgba(0,0,0,.8);
+            background-color: #161C2A;
             i,span{
                 color:#fff;
             }

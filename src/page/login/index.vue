@@ -10,7 +10,7 @@
         <img class="img"
              src="https://avuex.avue.top/images/logo.png"
              alt="">
-        <p class="title">{{ $t('login.info') }}</p>
+        <p class="title">车力士后台管理系统</p>
       </div>
       <div class="login-border">
         <div class="login-main">
