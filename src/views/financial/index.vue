@@ -56,7 +56,7 @@
                     <div class="delete" @click="handlerDelete(conNewCar.third.id)"><i class="el-icon-delete"></i></div>
                     <el-image :src="conNewCar.third.url" class="image" fit="cover"></el-image>
                   </div>
-                  <div class="image-tip">购车须知</div>
+                  <div class="image-tip">首年福利</div>
                 </div>
                 <div class="item" v-else>
                   <el-upload
@@ -80,7 +80,7 @@
                   </div>
                   <div class="image-tip">申请流程</div>
                 </div>
-                <div class="item">
+                <div class="item" v-else>
                   <el-upload
                     drag
                     action=""
@@ -149,7 +149,7 @@
                     <div class="delete" @click="handlerDelete(conOldCar.third.id)"><i class="el-icon-delete"></i></div>
                     <el-image :src="conOldCar.third.url" class="image" fit="cover"></el-image>
                   </div>
-                  <div class="image-tip">购车须知</div>
+                  <div class="image-tip">首年福利</div>
                 </div>
                 <div class="item" v-else>
                   <el-upload
@@ -173,7 +173,7 @@
                   </div>
                   <div class="image-tip">申请流程</div>
                 </div>
-                <div class="item">
+                <div class="item" v-else>
                   <el-upload
                     drag
                     action=""
@@ -234,7 +234,7 @@ export default {
         } else if(item.remark == '2') {
           temp.third = item;
         } else if(item.remark == '3') {
-          temp.fourt = item;
+          temp.fourth = item;
         }
       })
       return temp;
