@@ -9,8 +9,7 @@
     </transition>
     <transition-group name="fade">
       <template v-if="!keyCollapse">
-        <span class="avue-logo_title"
-              key="1">{{website.indexTitle}} </span>
+       <img :src="website.indexTitle" class="avue-logo_title" key="1">
       </template>
     </transition-group>
   </div>

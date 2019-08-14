@@ -5,7 +5,8 @@ export default {
     title: "车力士",
     logo: "A",
     key: 'qichenyun',//配置主键,目前用于存储
-    indexTitle: '车力士', // 读入 store 站点名称
+    indexTitle: require('@/assets/images/cls-logo.png'), // 读入 store 站点名称
+    
     lockPage: '/lock',
     tokenTime: 18000,
     //http的status默认放行不才用统一处理的,
