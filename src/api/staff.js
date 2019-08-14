@@ -14,7 +14,7 @@ export const deleteStaff = (data) => request({
 });
 
 export const editStaff = (data) => request({
-    url: baseUrl + '/user/edit',
+    url: baseUrl + '/user/update',
     method: "post",
     data: data
 });

@@ -24,7 +24,8 @@
               <el-tree
               :data="comOrgTree"
               :props="defaultProps"
-              accordion
+              node-key="id"
+              :default-expanded-keys="defaultExpandedKeys"
               @node-click="handleNodeClick"></el-tree>
             </el-col>
             <el-col :span="18">
@@ -68,6 +69,13 @@
                 </el-table-column>
                 <el-table-column
                   label="操作"
+                  fixed="right">
+                  <template slot-scope="scope">
+                    <el-button size="mini" @click="handleEditAppoint(scope.row)">编 辑</el-button>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="审核"
                   fixed="right"
                   width="200">
                   <template slot-scope="scope">
@@ -150,6 +158,51 @@
             </el-form>
           </el-dialog>
 
+          <!-- 编辑窗口 -->
+          <el-dialog title="编辑预约" :visible.sync="editAppointDialog">
+            <el-form label-width="120px" :model="addAppoint" :rules="rules" ref="addAppointForm">
+              <el-form-item label="客户名称" prop="custId">
+                <el-select v-model="selectedAppoint.custId" size="medium">
+                  <el-option
+                    v-for="(item, index) in customerInfo"
+                    :key="index"
+                    :value="item.custId"
+                    :label="item.custName"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="所属门店" prop="orgId">
+                <el-cascader
+                  v-model="selectedAppoint.orgId"
+                  size="medium"
+                  :options="cascaderOrgTree"
+                  :props="defaultProps"
+                  :show-all-levels="false">
+                </el-cascader>
+              </el-form-item>
+              <el-form-item label="意向金额" prop="intentionAmount">
+                <el-input size="medium" v-model="selectedAppoint.intentionAmount"></el-input>
+              </el-form-item>
+              <el-form-item label="购车顾问" prop="salerId">
+                <el-select v-model="selectedAppoint.salerId" size="medium">
+                  <el-option
+                    v-for="(item, index) in staffInfo"
+                    :key="index"
+                    :value="item.id"
+                    :label="item.nickname"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="业务类型" prop="carType">
+                <el-select v-model="selectedAppoint.carType" size="medium">
+                  <el-option :value="0" label="新车"></el-option>
+                  <el-option :value="1" label="二手车"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button size="medium" type="primary" @click="handleEditAppoint">提 交</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+
         </div>
     </template>
   </basic-container>
@@ -165,7 +218,7 @@ export default {
   computed: {
     ...mapGetters(['orgTree']),
     comOrgTree() {
-      return [{ orgFullName: "全部", id: "", children: this.orgTree }];
+      return [{ orgFullName: "全部", id: 0, children: this.orgTree }];
     },
     comAddAppointCustMobild() {
       let temp = "";
@@ -183,6 +236,23 @@ export default {
       });
       return corgTree;
     },
+    defaultExpandedKeys() {
+      let temp = [];
+      this.comOrgTree.forEach((item) => {
+        this.comDefaultExpandedKeys(item, temp);
+      })
+      return temp;
+    },
+    comDefaultExpandedKeys() {
+      return (item, temp) => {
+        if(item.children.length > 0) {
+          temp.push(item.id);
+          item.children.forEach((item) => {
+            this.comDefaultExpandedKeys(item, temp);
+          })
+        }
+      }
+    }
   },
   data() {
     return {
@@ -221,7 +291,7 @@ export default {
         orgId: '',
         paging: true,
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 8,
         searchContent: ""
       },
       addAppointDialog: false,
@@ -236,7 +306,9 @@ export default {
         orgAddress: "",
         status: "",
         carType: ""
-      }
+      },
+      selectedAppoint: {},
+      editAppointDialog: false
     }
   },
   created() {
@@ -259,7 +331,12 @@ export default {
       });
     },
     handleNodeClick(data) {
-      this.tableGet.orgId = data.id;
+      this.tableGet.pageNum = 1;
+      if(data.id != 0) {
+        this.tableGet.orgId = data.id;
+      } else {
+        delete this.tableGet.orgId;
+      }
       this.tableDateGet();
     },
     handleCurrentChange() {
@@ -318,10 +395,44 @@ export default {
               this.$notify.success({ title: '增加成功', message: '预约列表已增加。' });
               this.addAppointDialog = false;
               this.tableDateGet();
+              this.$set(this, 'addAppoint', {
+                custId: "",
+                custMobile: "",
+                intentionAmount: "",
+                salerId: "",
+                orgId: "",
+                orgAddress: "",
+                status: "",
+                carType: ""
+              })
             }
           })
         }
       })
+    },
+    handleEditAppoint(obj) {
+      this.$set(this, 'selectedAppoint', obj);
+      Promise.all([
+        getCustomerList({
+          paging: false,
+          pageNum: "",
+          pageSize: ""
+        }),
+        getStaffList({
+          type: 1,
+          paging: false,
+          pageNum: "",
+          pageSize: ""
+        })
+      ]).then((resArr) => {
+        const data0 = resArr[0].data;
+        const data1 = resArr[1].data;
+        if(data0.code === 0 && data1.code === 0) {
+          this.$set(this, 'customerInfo', deepClone(data0.data.content));
+          this.$set(this, 'staffInfo', deepClone(data1.data.content));
+          this.editAppointDialog = true;
+        }
+      });
     }
   }
 }

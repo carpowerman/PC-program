@@ -163,10 +163,6 @@ export default {
       addNodeDialog: false,
     }
   },
-  created() {
-  },
-  mounted() {
-  },
   methods: {
     handleNodeClick(data) {
       this.$set(this, 'selectedNode', deepClone(data));
@@ -215,6 +211,16 @@ export default {
               this.$notify.success({ title: '新增成功', message: '新增节点成功。' });
               this.$store.dispatch('GetMenu').then();
               this.addNodeDialog = false;
+              this.$set(this, 'addNode', {
+                parentId: "",
+                permissionName: "",
+                permissionNo: "",
+                permissionType: "",
+                path: "",
+                orderNum: "",
+                remark: "",
+                icon: ""
+              })
             }
           }).catch(() => {
             this.$notify.error({ title: '新增失败', message: '网络错误。' });

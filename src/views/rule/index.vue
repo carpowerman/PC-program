@@ -41,6 +41,12 @@
                 </el-select>
               </template>
             </el-table-column>
+            <el-table-column
+              label="编辑">
+              <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="handleEditRuleDialog(scope.row)">编 辑</el-button>
+              </template>
+            </el-table-column>
           </el-table>
           <div class="table-foot">
             <el-pagination
@@ -88,6 +94,12 @@
                   <el-option label="启用" :value="0"></el-option>
                   <el-option label="禁用" :value="1"></el-option>
                 </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="编辑">
+              <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="handleEditRuleDialog(scope.row)">编 辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -139,6 +151,12 @@
                 </el-select>
               </template>
             </el-table-column>
+            <el-table-column
+              label="编辑">
+              <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="handleEditRuleDialog(scope.row)">编 辑</el-button>
+              </template>
+            </el-table-column>
           </el-table>
           <div class="table-foot">
             <el-pagination
@@ -153,7 +171,7 @@
       </el-tabs>
 
       <!-- 新增 -->
-      <el-dialog title="新增用户" :visible.sync="addRuleDialog">
+      <el-dialog title="新增规则" :visible.sync="addRuleDialog">
         <el-form label-width="120px" ref="addRuleForm" :model="addRule" :rules="rules">
           <el-form-item label="类型">
             <el-select v-model="tableGet.itemType" :disabled="true">
@@ -185,8 +203,27 @@
           </el-form-item>
         </el-form>
         <div slot="footer">
-          <el-button @click="addStaffDialog = false">取 消</el-button>
-          <el-button type="primary" @click="handleAddRole" size="medium">确 定</el-button>
+          <el-button @click="addRuleDialog = false">取 消</el-button>
+          <el-button type="primary" @click="handleEditRole" size="medium">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <!-- 编辑 -->
+      <el-dialog title="编辑规则" :visible.sync="editRuleDialog">
+        <el-form label-width="120px" ref="editRuleForm" :model="selectedRule" :rules="rules">
+          <el-form-item label="排序" prop="orderNum">
+            <el-input v-model="selectedRule.orderNum" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="项目名称" prop="itemName">
+            <el-input v-model="selectedRule.itemName" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="分值" prop="score">
+            <el-input v-model="selectedRule.score" size="medium"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click="editRuleDialog = false">取 消</el-button>
+          <el-button type="primary" @click="handleEditRole" size="medium">确 定</el-button>
         </div>
       </el-dialog>
     </template>
@@ -215,7 +252,9 @@ export default {
       },
       tableData: {},
       addRuleDialog: false,
-      addRule: {}
+      addRule: {},
+      editRuleDialog: false,
+      selectedRule: {}
     }
   },
   created() {
@@ -256,6 +295,23 @@ export default {
               this.$notify.success({ title: '添加成功', message: '规则已添加。' });
               this.tableDateGet();
               this.addRuleDialog = false;
+            }
+          })
+        }
+      })
+    },
+    handleEditRuleDialog(obj) {
+      this.$set(this, 'selectedRule', obj);
+      this.editRuleDialog = true;
+    },
+    handleEditRole() {
+      this.$refs.editRuleForm.validate((val) => {
+        if(val) {
+          saveRule([this.selectedRule]).then((res) => {
+            if(res.data.code === 0) {
+              this.$notify.success({ title: '修改成功', message: '字段值已修改。' });
+              this.editRuleDialog = false;
+              this.tableDateGet();
             }
           })
         }

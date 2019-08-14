@@ -1,6 +1,6 @@
 <template>
   <basic-container class="container">
-    <template v-slot:header>用户管理</template>
+    <template v-slot:header>角色管理</template>
     <template v-slot:body>
         <div class="body">
           <el-row class="row">
@@ -65,8 +65,8 @@
           </el-row>
 
 
-          <!-- 新增用户 -->
-          <el-dialog title="新增用户" :visible.sync="addRoleDialog">
+          <!-- 新增角色 -->
+          <el-dialog title="新增角色" :visible.sync="addRoleDialog">
             <el-form label-width="120px" ref="addRoleForm" :model="addRole" :rules="rules">
               <el-form-item label="角色名称" prop="roleName">
                 <el-input v-model="addRole.roleName" size="medium"></el-input>
@@ -93,13 +93,13 @@
               </el-form-item>
             </el-form>
             <div slot="footer">
-              <el-button @click="addStaffDialog = false">取 消</el-button>
+              <el-button @click="addRoleDialog = false">取 消</el-button>
               <el-button type="primary" @click="handleAddRole" size="medium">确 定</el-button>
             </div>
           </el-dialog>
 
-          <!-- 编辑用户 -->
-          <el-dialog title="编辑用户" :visible.sync="editRoleDialog">
+          <!-- 编辑角色 -->
+          <el-dialog title="编辑角色" :visible.sync="editRoleDialog">
             <el-form label-width="120px" ref="editRoleForm" :model="selectedRole" :rules="rules">
               <el-form-item label="角色名称" prop="roleName">
                 <el-input v-model="selectedRole.roleName" size="medium"></el-input>
@@ -262,7 +262,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(obj);
         delRole({ id: obj.id }).then(() => {
           this.$notify.success({ title: '删除成功', message: '该用户已被删除。' });
           this.tableDateGet();
@@ -286,6 +285,12 @@ export default {
               this.$notify.success({ title: '添加成功', message: '已添加新用户。' });
               this.tableDateGet();
               this.addRoleDialog = false;
+              this.$set(this, 'addRole', {
+                roleName: "",
+                roleNo: "",
+                remark: "",
+                dataPermType: ""
+              });
             }
           }).catch(() => {
             this.$notify.error({ title: '添加失败', message: '网络错误。' });

@@ -61,8 +61,9 @@
           <template v-slot:body>
             <ul class="notice">
               <li v-for="(item, index) in notice" :key="index">
-                <p>{{item.content}}</p>
                 <span>{{item.createdTime}}</span>
+                <p class="title">{{item.title}}</p>
+                <p class="content">{{item.content}}</p>
               </li>
             </ul>
           </template>
@@ -120,7 +121,7 @@ export default {
         // 图例配置
         legend: {},
         // 柱状图颜色配置
-        color: ['#F6C506', '#232323'],
+        color: ['#E41B48', '#EF9330'],
         dataset: {
           source: this.comEchartsData
         },
@@ -189,15 +190,24 @@ export default {
 
   li {
     border-bottom: 1px solid #E0E4ED;
-    padding: 0 0 30px 0;
-    margin-bottom: 30px;
-    p {
+    padding: 0 0 20px 0;
+    margin-bottom: 20px;
+    .title {
       color: #020202;
       font-size: 14px;
       font-weight: 400;
       margin: 0;
       padding: 5px 0;
       line-height: 22px;
+    }
+    .content {
+      color: #121212;
+      font-size: 12px;
+      font-weight: 400;
+      margin: 0;
+      padding: 0;
+      line-height: 22px;
+      text-indent: 2em;
     }
     span {
       color: #898D98;

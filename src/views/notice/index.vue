@@ -10,7 +10,7 @@
 
             <!-- 新增 -->
             <el-col :span="5" class="add">
-                <el-button type="primary" size="medium" @click="tableDateGet" icon="plus">新 增</el-button>
+                <el-button type="primary" size="medium" @click="addNoticeDialog = true" icon="plus">新 增</el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -18,17 +18,17 @@
               <!-- 表格 -->
               <el-table :data="tableData.content">
                 <el-table-column
-                  prop="custName"
+                  prop="title"
                   label="公告标题">
                 </el-table-column>
                 <el-table-column
-                  prop="custMobile"
+                  prop="content"
                   label="公告内容">
                 </el-table-column>
                 <el-table-column
-                  label="查看">
+                  label="操作">
                   <template slot-scope="scope">
-                    <el-button size="mini" @click="handleCustomerInfo(scope.row)">查看</el-button>
+                    <el-button size="mini" @click="handleEditNoticeDialog(scope.row)">编辑</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -44,37 +44,35 @@
             </el-col>
           </el-row>
 
-          <!-- 菜单弹窗 -->
-          <el-dialog title="客户信息" :visible.sync="customerDialog">
-            <el-table
-              :data="selectedCustomer.preOrders">
-              <el-table-column
-                label="客户名称">
-                <template slot-scope="scope">{{selectedCustomer.custName}}</template>
-              </el-table-column>
-              <el-table-column
-                label="客户手机号">
-                <template slot-scope="scope">{{selectedCustomer.custMobile}}</template>
-              </el-table-column>
-              <el-table-column
-                label="业务员"
-                prop="salerName">
-              </el-table-column>
-              <el-table-column
-                label="所属机构"
-                prop="orgName">
-              </el-table-column>
-              <el-table-column
-                label="机构地址"
-                prop="orgAddress">
-              </el-table-column>
-              <el-table-column
-                label="状态"
-                prop="statusDesc">
-              </el-table-column>
-            </el-table>
+          <!-- 新增公告 -->
+          <el-dialog title="新增公告" :visible.sync="addNoticeDialog">
+            <el-form label-width="120px" ref="addNoticeForm" :model="addNotice" :rules="rules">
+              <el-form-item label="公告标题" prop="title">
+                <el-input v-model="addNotice.title" size="medium"></el-input>
+              </el-form-item>
+              <el-form-item label="公告内容" prop="content">
+                <el-input type="textarea" v-model="addNotice.content" size="medium"></el-input>
+              </el-form-item>
+            </el-form>
             <div slot="footer">
-              <el-button type="primary" @click="customerDialog = false">确 定</el-button>
+              <el-button @click="addNoticeDialog = false">取 消</el-button>
+              <el-button type="primary" @click="handleAddNotice" size="medium">确 定</el-button>
+            </div>
+          </el-dialog>
+
+          <!-- 编辑公告 -->
+          <el-dialog title="编辑公告" :visible.sync="editNoticeDialog">
+            <el-form label-width="120px" ref="editNoticeForm" :model="selectedNotice" :rules="rules">
+              <el-form-item label="公告标题" prop="title">
+                <el-input v-model="selectedNotice.title" size="medium"></el-input>
+              </el-form-item>
+              <el-form-item label="公告内容" prop="content">
+                <el-input type="textarea" v-model="selectedNotice.content" size="medium"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer">
+              <el-button @click="editNoticeDialog = false">取 消</el-button>
+              <el-button type="primary" @click="handleEditNotice" size="medium">确 定</el-button>
             </div>
           </el-dialog>
         </div>
@@ -83,7 +81,8 @@
 </template>
 
 <script>
-import { getNoticeList } from '@/api/home';
+import { getNotice } from '@/api/home';
+import { addNotice, editNotice } from '@/api/notice';
 import { deepClone } from '@/util/util';
 export default {
   data() {
@@ -94,8 +93,18 @@ export default {
         pageNum: 1,
         pageSize: 10,
       },
-      customerDialog: false,
-      selectedCustomer: {}
+      rules: {
+        title: [
+          { required: true, message: '标题不能为空', trigger: 'blur' },
+        ],
+        content: [
+          { required: true, message: '内容不能为空', trigger: 'blur' },
+        ]
+      },
+      addNoticeDialog: false,
+      addNotice: {},
+      editNoticeDialog: false,
+      selectedNotice: {}
     }
   },
   created() {
@@ -104,7 +113,7 @@ export default {
   methods: {
     tableDateGet() {
       const that = this;
-      getNoticeList(that.tableGet).then((res) => {
+      getNotice(that.tableGet).then((res) => {
         if(res.data.code === 0) {
           const data = res.data.data;
           that.$set(that, 'tableData', deepClone(data));
@@ -116,9 +125,36 @@ export default {
     handleCurrentChange() {
       this.tableDateGet();
     },
-    handleCustomerInfo(obj) {
-      this.$set(this, 'selectedCustomer', obj);
-      this.customerDialog = true;
+    handleAddNotice() {
+      this.$refs.addNoticeForm.validate((val) => {
+        if(val) {
+          addNotice(this.addNotice).then((res) => {
+            if(res.data.code === 0) {
+              this.$notify.success({ title: '添加成功', message: '已添加新公告' });
+              this.addNoticeDialog = false;
+              this.addNotice = {};
+              this.tableDateGet();
+            }
+          });
+        }
+      });
+    },
+    handleEditNoticeDialog(obj) {
+      this.$set(this, 'selectedNotice', obj);
+      this.editNoticeDialog = true;
+    },
+    handleEditNotice() {
+      this.$refs.editNoticeForm.validate((val) => {
+        if(val) {
+          editNotice(this.selectedNotice).then((res) => {
+            if(res.data.code === 0) {
+              this.$notify.success({ title: '修改成功', message: '公告已修改' });
+              this.editNoticeDialog = false;
+              this.tableDateGet();
+            }
+          })
+        }
+      })
     }
   }
 }
