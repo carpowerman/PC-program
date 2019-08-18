@@ -128,8 +128,8 @@
             <el-table-column
               label="选择值">
               <template slot-scope="scope">
-                <template v-if="scope.row.chooseType == 0">Y</template>
-                <template v-else>N</template>
+                <template v-if="scope.row.chooseType == 0">N</template>
+                <template v-else>Y</template>
               </template>
             </el-table-column>
             <el-table-column
@@ -179,20 +179,14 @@
           </el-form-item>
           <el-form-item label="选择值" prop="chooseType">
             <el-select v-model="addRule.chooseType">
-              <el-option label="Y" :value="0"></el-option>
-              <el-option label="N" :value="1"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="状态" prop="disabledFlag">
-            <el-select v-model="addRule.disabledFlag" size="medium">
-              <el-option label="启用" :value="0"></el-option>
-              <el-option label="禁用" :value="1"></el-option>
+              <el-option label="N" :value="0"></el-option>
+              <el-option label="Y" :value="1"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer">
           <el-button @click="addRuleDialog = false">取 消</el-button>
-          <el-button type="primary" @click="handleEditRole" size="medium">确 定</el-button>
+          <el-button type="primary" @click="handleAddRole" size="medium">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -210,8 +204,8 @@
           </el-form-item>
           <el-form-item label="选择值" prop="chooseType">
             <el-select v-model="selectedRule.chooseType" size="medium">
-              <el-option label="Y" :value="0"></el-option>
-              <el-option label="N" :value="1"></el-option>
+              <el-option label="N" :value="0"></el-option>
+              <el-option label="Y" :value="1"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="状态" prop="disabledFlag">
@@ -287,6 +281,7 @@ export default {
       this.tableDateGet();
     },
     handleAddRole() {
+      console.log(this.$refs);
       this.$refs.addRuleForm.validate((val) => {
         if(val) {
           this.addRule.itemType = this.tableGet.itemType;

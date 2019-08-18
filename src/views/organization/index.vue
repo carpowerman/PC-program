@@ -54,9 +54,6 @@
 
         <el-dialog title="新增节点" :visible.sync="addNodeDialog">
           <el-form label-width="120px" ref="addNodeForm" :model="addNode" :rules="rules">
-            <el-form-item label="父节点ID">
-              <el-input v-model="addNode.parentId" size="medium" :disabled="true"></el-input>
-            </el-form-item>
             <el-form-item label="父节点名称">
               <el-cascader
                 v-model="addNode.parentId"
@@ -66,7 +63,7 @@
                 :show-all-levels="false">
               </el-cascader>
             </el-form-item>
-            <el-form-item label="节点权限映射" prop="orgNo">
+            <el-form-item label="节点编码" prop="orgNo">
               <el-input v-model="addNode.orgNo" size="medium"></el-input>          
             </el-form-item>
             <el-form-item label="节点名称" prop="orgFullName">
