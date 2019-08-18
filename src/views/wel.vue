@@ -7,9 +7,9 @@
           <template v-slot:header>客户资料</template>
           <template v-slot:body>
             <div class="user">
-              <div class="welcome"><i class="iconfont smile"></i>欢迎尊敬的 <b>{{user.nickName}}</b> 用户</div>
+              <div class="welcome"><img src="../assets/images/ic_smile.png" alt="">欢迎尊敬的 <b>{{user.nickName}}</b> 用户</div>
               <div class="info">
-                <i class="iconfont car-o"></i>
+                <img src="../assets/images/ic_car.png" alt="">
                 <div>
                   <span>用户类型：
                     <template v-if="user.type == -1">超级管理员</template>
@@ -57,13 +57,13 @@
       </el-col>
       <el-col :span="6" style="height: 100%">
         <basic-container style="height: 100%;">
-          <template v-slot:header>公告</template>
+          <template v-slot:header>公告 <span @click='getMore' class='more-notice'>查看更多>></span></template>
           <template v-slot:body>
             <ul class="notice">
               <li v-for="(item, index) in notice" :key="index">
-                <span>{{item.createdTime}}</span>
                 <p class="title">{{item.title}}</p>
                 <p class="content">{{item.content}}</p>
+                <span>{{item.createdTime}}</span>
               </li>
             </ul>
           </template>
@@ -115,6 +115,9 @@ export default {
     });
   },
   methods: {
+    getMore(){
+      this.$router.push({ path:'/notice/index'});
+    },
     configEcharts() {
       this.myChart = this.$echarts.init(document.getElementById('echarts'));
       this.myChart.setOption({
@@ -169,6 +172,9 @@ export default {
       margin-right: 6px;
     }
   }
+  img{
+    margin-right:10px;
+  }
   .info {
     font-size: 14px;
     color: #020202;
@@ -186,6 +192,11 @@ export default {
       display: block;
     }
   }
+}
+.more-notice{
+  text-align: right;
+  cursor: pointer;
+  float:right;
 }
 .notice {
   list-style-type: none;
@@ -218,6 +229,9 @@ export default {
     span {
       color: #898D98;
       font-size: 12px;
+      display: inline-block;
+      width: 100%;
+      text-align: right;
     }
   }
 }
