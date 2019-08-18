@@ -1,5 +1,5 @@
 // 基础路径 注意发布之前要先修改这里
-let publicPath = '/cls'
+let publicPath = '/'
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 module.exports = {
     publicPath: publicPath, // 根据你的实际情况更改这里
