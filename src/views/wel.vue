@@ -197,6 +197,8 @@ export default {
   text-align: right;
   cursor: pointer;
   float:right;
+  font-weight: 200;
+  color:#898D98;
 }
 .notice {
   list-style-type: none;
@@ -212,7 +214,7 @@ export default {
     .title {
       color: #020202;
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 600;
       margin: 0;
       padding: 5px 0;
       line-height: 22px;

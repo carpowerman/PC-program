@@ -329,16 +329,17 @@ export default {
               this.$notify.success({ title: '添加成功', message: '已添加新用户。' });
               this.tableDateGet();
               this.addStaffDialog = false;
-              this.$set(this, 'addStaff', {
-                username: "",
-                enPassword: "",
-                password: "",
-                nickname: "",
-                mobile: "",
-                orgId: "",
-                rolesArr: [],
-                roles: [],
-              });
+              this.$refs['addStaffForm'].resetFields()
+              // this.$set(this, 'addStaff', {
+              //   username: "",
+              //   enPassword: "",
+              //   password: "",
+              //   nickname: "",
+              //   mobile: "",
+              //   orgId: "",
+              //   rolesArr: [],
+              //   roles: [],
+              // });
             }
           }).catch(() => {
             this.$notify.error({ title: '添加失败', message: '网络错误。' });

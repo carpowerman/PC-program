@@ -10,13 +10,15 @@
               <el-button type="primary" size="medium" icon="el-icon-plus" @click="addRuleDialog = true">新 增</el-button>
             </el-col>
           </el-row>
-          <el-table :data="tableData.content">
+          <el-table :data="tableData.content" :height="tableHeight">
             <el-table-column
               label="排序"
+              width="100"
               prop="orderNum">
             </el-table-column>
             <el-table-column
               label="项目名称"
+              width="500"
               prop="itemName">
             </el-table-column>
             <el-table-column
@@ -61,12 +63,14 @@
               <el-button type="primary" size="medium" icon="el-icon-plus" @click="addRuleDialog = true">新 增</el-button>
             </el-col>
           </el-row>
-          <el-table :data="tableData.content">
+          <el-table :data="tableData.content"  :height="tableHeight">
             <el-table-column
               label="排序"
+               width="100"
               prop="orderNum">
             </el-table-column>
             <el-table-column
+            width="500"
               label="项目名称"
               prop="itemName">
             </el-table-column>
@@ -112,12 +116,14 @@
               <el-button type="primary" size="medium" icon="el-icon-plus" @click="addRuleDialog = true">新 增</el-button>
             </el-col>
           </el-row>
-          <el-table :data="tableData.content">
+          <el-table :data="tableData.content"  :height="tableHeight">
             <el-table-column
               label="排序"
+              width="100"
               prop="orderNum">
             </el-table-column>
             <el-table-column
+              width="500"
               label="项目名称"
               prop="itemName">
             </el-table-column>
@@ -244,6 +250,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
       },
+      tableHeight:'',
       tableData: {},
       addRuleDialog: false,
       addRule: {},
@@ -254,7 +261,18 @@ export default {
   created() {
     this.tableDateGet();
   },
+  mounted() {
+      this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
+  },
   methods: {
+    getHeight() {
+      this.tableHeight = document.body.clientHeight -450;
+      },
     tableDateGet() {
       getRuleList(this.tableGet).then((res) => {
         if(res.data.code === 0) {
