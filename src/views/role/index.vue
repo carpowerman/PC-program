@@ -18,10 +18,10 @@
               <el-button icon="el-icon-plus" type="primary" size="medium" @click="addRoleDialog = true">新增</el-button>
             </el-col>
           </el-row>
-          <el-row class="row">
-            <el-col :span="24">
+          <el-row class="row" style="flex-grow: 1;">
+            <el-col :span="24" style="height: 100%" id="tableBlock">
               <!-- 表格 -->
-              <el-table :data="tableData.content" v-loading="tableLoading">
+              <el-table :data="tableData.content" v-loading="tableLoading" :height="tableHeight">
                 <el-table-column
                   prop="roleName"
                   label="角色名">
@@ -227,15 +227,24 @@ export default {
       selectedRole: {},
       selectedRoleInfo: {},
       menuDialog: false,
+      tableHeight: 0,
     }
   },
   created() {
     if(this.orgTree.length === 0) {
       this.$store.dispatch('GetOrgTree').then();
     }
+   
     this.tableDateGet();
   },
+  mounted() {
+    this.initTableHeight();
+  },
   methods: {
+    initTableHeight() {
+      let pH = document.getElementById("tableBlock").offsetHeight;
+      this.tableHeight = pH - 60;
+    },
     tableDateGet() {
       const that = this;
       this.tableLoading = true;
@@ -372,6 +381,9 @@ export default {
 }
 .body {
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .row {

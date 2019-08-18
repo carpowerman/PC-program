@@ -144,10 +144,12 @@ export default {
 .upload-body {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin: 20px;
 
   .item {
     margin-right: 20px;
+    margin-bottom: 20px;
     .block {
       position: relative;
       width: 360px;

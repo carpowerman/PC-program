@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- 改写主页 -->
-    <el-row :span="24">
+    <el-row :span="24" style="flex-shrink: 0">
       <el-col :span="8">
         <basic-container>
           <template v-slot:header>客户资料</template>
           <template v-slot:body>
             <div class="user">
-              <div class="welcome"><i class="iconfont smile"></i>欢迎尊敬的 <b>{{user.nickName}}</b> 客户</div>
+              <div class="welcome"><i class="iconfont smile"></i>欢迎尊敬的 <b>{{user.nickName}}</b> 用户</div>
               <div class="info">
                 <i class="iconfont car-o"></i>
                 <div>
@@ -29,15 +29,15 @@
           <template v-slot:header>待办事项</template>
           <template v-slot:body>
             <div class="appointment">
-              <div class="item">
+              <div class="item" @click="toAppointment(0)">
                 <div class="num">{{appointment.orderedNum}}</div>
                 <div class="label">预约中数量</div>
               </div>
-              <div class="item">
+              <div class="item" @click="toAppointment(2)">
                 <div class="num">{{appointment.refusedNum}}</div>
                 <div class="label">已拒绝数量</div>
               </div>
-              <div class="item">
+              <div class="item" @click="toAppointment(99)">
                 <div class="num">{{appointment.totalNum}}</div>
                 <div class="label">总数量</div>
               </div>
@@ -46,17 +46,17 @@
         </basic-container>
       </el-col>
     </el-row>
-    <el-row :span="24">
-      <el-col :span="18">
-        <basic-container>
+    <el-row :span="24" class="second-row">
+      <el-col :span="18" style="height: 100%;">
+        <basic-container style="height: 100%">
           <template v-slot:header>数据图表</template>
           <template v-slot:body>
-            <div id="echarts" style="width: 100%;height: 500px;"></div>
+            <div id="echarts" style="width: 100%;height: 100%;"></div>
           </template>
         </basic-container>
       </el-col>
-      <el-col :span="6">
-        <basic-container>
+      <el-col :span="6" style="height: 100%">
+        <basic-container style="height: 100%;">
           <template v-slot:header>公告</template>
           <template v-slot:body>
             <ul class="notice">
@@ -100,7 +100,7 @@ export default {
     }
   },
   created() {
-    getNotice({ paging: true, pageNum: 1, pageSize: 5 }).then((res) => {
+    getNotice({ paging: false, pageNum: 1, pageSize: 5 }).then((res) => {
       if(res.data.code === 0) {
         this.$set(this, 'notice', deepClone(res.data.data.content));
       }
@@ -148,6 +148,10 @@ export default {
           trigger: 'axis',
         }
       });
+    },
+    toAppointment(type) {
+      if(type < 3) this.$router.push({ path: '/appointment/index', query: { type: type } })
+      else this.$router.push({ path: '/appointment/index' })
     }
   }
 };
@@ -187,6 +191,8 @@ export default {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  height: 100%;
+  overflow-y: auto;
 
   li {
     border-bottom: 1px solid #E0E4ED;
@@ -225,6 +231,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
     .num {
       font-size: 60px;
       font-weight: bold;
@@ -237,5 +244,11 @@ export default {
       padding-top: 30px;
     }
   }
+}
+
+.second-row {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: hidden;
 }
 </style>

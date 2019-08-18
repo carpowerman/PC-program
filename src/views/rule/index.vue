@@ -5,7 +5,7 @@
       <el-tabs type="card" v-model="tabsDefault" @tab-click="handleTabClick">
         <el-tab-pane label="加分项" name="add">
           <el-row>
-            <el-col :span="19"></el-col>
+            <el-col :span="19" style="height: 1px;"></el-col>
             <el-col :span="5" class="add">
               <el-button type="primary" size="medium" icon="el-icon-plus" @click="addRuleDialog = true">新 增</el-button>
             </el-col>
@@ -26,19 +26,15 @@
             <el-table-column
               label="选择值">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.chooseType" size="medium" @change="handleChooseTypeChange(scope.row)">
-                  <el-option label="N" :value="0"></el-option>
-                  <el-option label="Y" :value="1"></el-option>
-                </el-select>
+                <template v-if="scope.row.chooseType == 0">Y</template>
+                <template v-else>N</template>
               </template>
             </el-table-column>
             <el-table-column
-              label="操作">
+              label="状态">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.disabledFlag" size="medium" @change="handleChooseTypeChange(scope.row)">
-                  <el-option label="启用" :value="0"></el-option>
-                  <el-option label="禁用" :value="1"></el-option>
-                </el-select>
+                <template v-if="scope.row.disabledFlag == 0">启用</template>
+                <template v-else>禁用</template>
               </template>
             </el-table-column>
             <el-table-column
@@ -60,7 +56,7 @@
         </el-tab-pane>
         <el-tab-pane label="减分项" name="sub">
           <el-row>
-            <el-col :span="19"></el-col>
+            <el-col :span="19" style="height: 1px;"></el-col>
             <el-col :span="5" class="add">
               <el-button type="primary" size="medium" icon="el-icon-plus" @click="addRuleDialog = true">新 增</el-button>
             </el-col>
@@ -81,19 +77,15 @@
             <el-table-column
               label="选择值">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.chooseType" size="medium" @change="handleChooseTypeChange(scope.row)">
-                  <el-option label="N" :value="0"></el-option>
-                  <el-option label="Y" :value="1"></el-option>
-                </el-select>
+                <template v-if="scope.row.chooseType == 0">Y</template>
+                <template v-else>N</template>
               </template>
             </el-table-column>
             <el-table-column
-              label="操作">
+              label="状态">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.disabledFlag" size="medium" @change="handleChooseTypeChange(scope.row)">
-                  <el-option label="启用" :value="0"></el-option>
-                  <el-option label="禁用" :value="1"></el-option>
-                </el-select>
+                <template v-if="scope.row.disabledFlag == 0">启用</template>
+                <template v-else>禁用</template>
               </template>
             </el-table-column>
             <el-table-column
@@ -115,7 +107,7 @@
         </el-tab-pane>
         <el-tab-pane label="拒绝项" name="refuse">
           <el-row>
-            <el-col :span="19"></el-col>
+            <el-col :span="19" style="height: 1px;"></el-col>
             <el-col :span="5" class="add">
               <el-button type="primary" size="medium" icon="el-icon-plus" @click="addRuleDialog = true">新 增</el-button>
             </el-col>
@@ -136,19 +128,15 @@
             <el-table-column
               label="选择值">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.chooseType" size="medium" @change="handleChooseTypeChange(scope.row)">
-                  <el-option label="N" :value="0"></el-option>
-                  <el-option label="Y" :value="1"></el-option>
-                </el-select>
+                <template v-if="scope.row.chooseType == 0">Y</template>
+                <template v-else>N</template>
               </template>
             </el-table-column>
             <el-table-column
-              label="操作">
+              label="状态">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.disabledFlag" size="medium" @change="handleChooseTypeChange(scope.row)">
-                  <el-option label="启用" :value="0"></el-option>
-                  <el-option label="禁用" :value="1"></el-option>
-                </el-select>
+                <template v-if="scope.row.disabledFlag == 0">启用</template>
+                <template v-else>禁用</template>
               </template>
             </el-table-column>
             <el-table-column
@@ -191,8 +179,8 @@
           </el-form-item>
           <el-form-item label="选择值" prop="chooseType">
             <el-select v-model="addRule.chooseType">
-              <el-option label="N" :value="0"></el-option>
-              <el-option label="Y" :value="1"></el-option>
+              <el-option label="Y" :value="0"></el-option>
+              <el-option label="N" :value="1"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="状态" prop="disabledFlag">
@@ -219,6 +207,18 @@
           </el-form-item>
           <el-form-item label="分值" prop="score">
             <el-input v-model="selectedRule.score" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="选择值" prop="chooseType">
+            <el-select v-model="selectedRule.chooseType" size="medium">
+              <el-option label="Y" :value="0"></el-option>
+              <el-option label="N" :value="1"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="状态" prop="disabledFlag">
+            <el-select v-model="selectedRule.disabledFlag" size="medium">
+              <el-option label="启用" :value="0"></el-option>
+              <el-option label="禁用" :value="1"></el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer">

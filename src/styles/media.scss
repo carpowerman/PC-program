@@ -66,6 +66,9 @@
     padding: 20px !important;
     width: 100%;
     box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .avue-footer {

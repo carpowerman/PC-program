@@ -8,7 +8,7 @@
           {{time}}
         </div>
         <img class="img"
-             src="../../assets/images/cls-logo.png"
+             src="../../assets/images/log-logo.png"
              alt="">
         <p class="title">车力士后台管理系统</p>
       </div>

@@ -54,7 +54,7 @@
                 <el-table-column
                   prop="orgName"
                   label="所属门店"
-                  width="150">
+                  width="190">
                 </el-table-column>
                 <el-table-column
                   label="状态"
@@ -312,6 +312,9 @@ export default {
     }
   },
   created() {
+    if(this.$route.query.type) {
+      this.$set(this.tableGet, 'status', this.$route.query.type*1);
+    }
     this.tableDateGet();
   },
   mounted() {

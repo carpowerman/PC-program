@@ -23,6 +23,15 @@ export default {
   .el-card {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+
+
+    .el-card__body{
+      flex-grow: 1;
+      flex-shrink: 1;
+      overflow: hidden;
+    }
   }
   &:first-child {
     padding-top: 0;
