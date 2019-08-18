@@ -4,13 +4,13 @@
     <top-color v-show="false"></top-color>
     <div class="login-weaper animated bounceInDown">
       <div class="login-left">
-        <div class="login-time">
-          {{time}}
-        </div>
         <img class="img"
              src="../../assets/images/log-logo.png"
              alt="">
         <p class="title">车力士后台管理系统</p>
+         <div class="login-time">
+          {{time}}
+        </div>
       </div>
       <div class="login-border">
         <div class="login-main">
