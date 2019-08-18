@@ -290,6 +290,7 @@ export default {
               this.$notify.success({ title: '添加成功', message: '规则已添加。' });
               this.tableDateGet();
               this.addRuleDialog = false;
+              this.$refs['addRuleForm'].resetFields()
             }
           })
         }
