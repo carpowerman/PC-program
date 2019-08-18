@@ -40,7 +40,7 @@
                   <el-upload
                     drag
                     action=""
-                    :before-upload="upLoad.bind(null, 91)"
+                    :before-upload="upLoad.bind(null, 90)"
                     :show-file-list="false"
                     :with-credentials="true"
                     multiple>
