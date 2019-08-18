@@ -62,17 +62,22 @@
 .el-dropdown-menu__item--divided:before, .el-menu, .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .el-menu--horizontal>.el-submenu .el-submenu__title:hover{
     background-color: transparent !important;
 }
-
+.el-menu-item,.el-submenu__title{
+    padding:0 45px !important;
+}
+.el-submenu .el-menu-item{
+    padding:0 60px !important;
+}
 
 // 按钮样式覆盖
 .el-button--primary {
-    background-color: #FFFFFF;
-    border-color: $themeColor;
-    color: $themeColor;
-}
-.el-button--primary:hover {
     background-color: $themeColor;
     border-color: $themeColor;
+    color: #fff;
+}
+.el-button--primary:hover {
+    background-color: $themColorHover;
+    border-color: $themColorHover;
     color: #FFFFFF;
 }
 

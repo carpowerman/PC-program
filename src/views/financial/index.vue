@@ -288,6 +288,7 @@ export default {
 .upload-body {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin: 20px;
 
   .item {
