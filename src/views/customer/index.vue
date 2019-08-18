@@ -17,16 +17,7 @@
             <el-col :span="5" class="add"></el-col>
           </el-row>
           <el-row>
-            <!-- 树 -->
-            <el-col :span="6">
-              <el-tree
-              :data="comOrgTree"
-              :props="defaultProps"
-              node-key="id"
-              :default-expanded-keys="defaultExpandedKeys"
-              @node-click="handleNodeClick"></el-tree>
-            </el-col>
-            <el-col :span="18">
+            <el-col :span="24">
               <!-- 表格 -->
               <el-table :data="tableData.content">
                 <el-table-column
@@ -159,15 +150,6 @@ export default {
       }).catch(()=> {
         this.$notify.error({ title: '获取数据失败', message: '网络连接错误。' });
       });
-    },
-    handleNodeClick(data) {
-      this.tableGet.pageNum = 1;
-      if(data.id != 0) {
-        this.tableGet.orgId = data.id;
-      } else {
-        delete this.tableGet.orgId;
-      }
-      this.tableDateGet();
     },
     handleCurrentChange() {
       this.tableDateGet();
