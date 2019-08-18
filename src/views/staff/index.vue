@@ -211,8 +211,7 @@ export default {
       tableLoading: false,
       rules: {
         username: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' },
-          { min: 5, message: '用户名必须在 5 ~ 50 之间', trigger: 'blur' }
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
         enPassword: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
