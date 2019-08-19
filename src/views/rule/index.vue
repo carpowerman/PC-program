@@ -268,7 +268,6 @@ export default {
     this.tableDateGet();
   },
   mounted() {
-    
       this.getHeight()
       window.onresize = () => {
       return (() => {
@@ -277,17 +276,17 @@ export default {
     }
   },
   methods: {
-      opPermit() {
-      let _thisPermitArr = [];
-      let _thisPermit = {};
-      this.menu.forEach((item) => {
-        if(item.permissionNo == 'rule') _thisPermitArr = deepClone(item.children);
-      });
-      _thisPermitArr.forEach((item) => {
-        _thisPermit[item.permissionNo] = item.isPermit;
-      });
-      this.$set(this, 'permit', _thisPermit);
-      console.log(this.permit,'222')
+    opPermit() {
+        let _thisPermitArr = [];
+        let _thisPermit = {};
+        this.menu.forEach((item) => {
+          if(item.permissionNo == 'rule') _thisPermitArr = deepClone(item.children);
+        });
+        _thisPermitArr.forEach((item) => {
+          _thisPermit[item.permissionNo] = item.isPermit;
+        });
+        this.$set(this, 'permit', _thisPermit);
+        console.log(this.permit,'222')
     },
     getHeight() {
       this.tableHeight = document.body.clientHeight -350;

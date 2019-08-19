@@ -268,5 +268,6 @@ export default {
 .left-tree {
     width: 100%;
     padding-right: 15px;
+    overflow: auto;
 }
 </style>

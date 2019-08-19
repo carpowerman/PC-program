@@ -5,7 +5,7 @@
       <el-tabs v-model="tabsDefault" type="card">
           <el-tab-pane label="新车" name="new-car">
             <div class="tab-body">
-              <div class="upload-body">
+              <div class="upload-body" :style="{height:tabHeight}">
                 <!-- 首付比例 -->
                 <div class="item" v-if="conNewCar.first">
                   <div class="block">
@@ -98,7 +98,7 @@
           </el-tab-pane>
           <el-tab-pane label="二手车" name="old-car">
             <div class="tab-body">
-              <div class="upload-body">
+              <div class="upload-body" :style="{height:tabHeight}">
                 <!-- 首付比例 -->
                 <div class="item" v-if="conOldCar.first">
                   <div class="block">
@@ -203,6 +203,7 @@ export default {
       tabsDefault: 'new-car',
       newCar: [],
       oldCar: [],
+      tabHeight:''
     }
   },
   created() {
@@ -240,7 +241,18 @@ export default {
       return temp;
     },
   },
+  mounted() {
+      this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
+  },
   methods: {
+    getHeight() {
+      this.tabHeight = document.body.clientHeight -350+'px';
+      },
     getSrc() {
       [{ id: 93, type: 'newCar' },
       { id: 94, type: 'oldCar' }].forEach((item) => {
@@ -286,6 +298,8 @@ export default {
 
 <style lang="scss" scoped>
 .upload-body {
+  overflow: auto;
+  padding-top:10px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

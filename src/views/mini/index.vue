@@ -5,7 +5,7 @@
       <el-tabs v-model="tabsDefault" type="card">
           <el-tab-pane label="C端 banner" name="C-banner">
             <div class="tab-body">
-              <div class="upload-body">
+              <div class="upload-body" :style="{height:tabHeight}">
                 <div class="item" v-for="(item, index) in barC" :key="index">
                   <div class="block">
                     <div class="delete" @click="handlerDelete(item.id)"><i class="el-icon-delete"></i></div>
@@ -29,7 +29,7 @@
           </el-tab-pane>
           <el-tab-pane label="B端 banner" name="B-banner">
             <div class="tab-body">
-              <div class="upload-body">
+              <div class="upload-body" :style="{height:tabHeight}">
                 <div class="item" v-for="(item, index) in barB" :key="index">
                   <div class="block">
                     <div class="delete" @click="handlerDelete(item.id)"><i class="el-icon-delete"></i></div>
@@ -53,7 +53,7 @@
           </el-tab-pane>
           <el-tab-pane label="顶部 logo" name="top-logo">
             <div class="tab-body">
-              <div class="upload-body">
+              <div class="upload-body" :style="{height:tabHeight}">
                 <div class="item" v-if="logo.length > 0">
                   <div class="block">
                     <div class="delete" @click="handlerDelete(logo[0].id)"><i class="el-icon-delete"></i></div>
@@ -86,6 +86,7 @@ import { deepClone } from '@/util/util';
 export default {
   data() {
     return {
+      tabHeight:'',
       tabsDefault: 'C-banner',
       barB: [],
       barC: [],
@@ -95,7 +96,18 @@ export default {
   created() {
     this.getSrc();
   },
+  mounted() {
+      this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
+  },
   methods: {
+     getHeight() {
+      this.tabHeight = document.body.clientHeight -350+'px';
+      },
     getSrc() {
       [{ id: 90, type: 'barB' },
       { id: 91, type: 'barC' },
@@ -142,6 +154,8 @@ export default {
 
 <style lang="scss" scoped>
 .upload-body {
+  overflow: auto;
+  padding-top:10px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

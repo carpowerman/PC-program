@@ -1,7 +1,7 @@
 <template>
   <div class="avue-sidebar">
     <logo></logo>
-    <el-scrollbar style="height:100%">
+    <el-scrollbar :style="{height:menuHeight}" class='menu-scrop'>
       <div v-if="validatenull(menu)"
            class="avue-sidebar--tip">{{$t('menuTip')}}</div>
       <el-menu unique-opened
@@ -27,7 +27,9 @@ export default {
   name: "sidebar",
   components: { sidebarItem, logo },
   data() {
-    return {};
+    return {
+      menuHeight:''
+    };
   },
   created() {
     this.$store.dispatch("GetMenu").then(data => {
@@ -41,10 +43,24 @@ export default {
       return this.$router.$avueRouter.getValue(this.$route);
     }
   },
-  mounted() {},
-  methods: {}
+  mounted() {
+   this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
+  },
+  methods: {
+    getHeight(){
+       this.menuHeight = document.body.clientHeight -65+'px';
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
+.menu-scrop{
+  overflow: auto;
+}
 </style>
 
