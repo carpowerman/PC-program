@@ -195,7 +195,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button size="medium" type="primary" @click="handleEditAppoint">提 交</el-button>
+                <el-button size="medium" type="primary" @click="handleAppoint">提 交</el-button>
               </el-form-item>
             </el-form>
           </el-dialog>
@@ -206,7 +206,7 @@
 </template>
 
 <script>
-import { getAppointList, updateAppointStatus, AddAppointment } from '@/api/appointment';
+import { getAppointList, updateAppointStatus, AddAppointment,EditAppointment } from '@/api/appointment';
 import { getCustomerList } from '@/api/customer';
 import { getStaffList } from '@/api/staff';
 import { mapGetters } from "vuex";
@@ -402,7 +402,7 @@ export default {
       })
     },
     handleEditAppoint(obj) {
-      this.$set(this, 'selectedAppoint', obj);
+       this.$set(this, 'selectedAppoint', obj);
       Promise.all([
         getCustomerList({
           paging: false,
@@ -424,6 +424,15 @@ export default {
           this.editAppointDialog = true;
         }
       });
+    },
+    //编辑提交
+    handleAppoint(){
+      EditAppointment(this.selectedAppoint).then(res=>{
+        if(res.data.code==0){
+          this.editAppointDialog = false;
+          this.tableDateGet();
+        }
+      })
     }
   }
 }

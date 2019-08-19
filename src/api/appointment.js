@@ -18,3 +18,8 @@ export const AddAppointment = (data) => request({
     method: 'post',
     data: data
 });
+export const EditAppointment = (data) => request({
+    url: baseUrl + '/preod/edit',
+    method: 'post',
+    data: data
+});
