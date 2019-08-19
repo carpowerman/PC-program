@@ -8,7 +8,7 @@
             <!-- 查询 -->
             <el-col :span="19" class="search">
               <div class="search-input">
-                <el-input v-model="tableGet.searchContent" placeholder="用户名" size="medium"></el-input>
+                <el-input v-model="tableGet.searchContent" placeholder="用户名,手机号     " size="medium"></el-input>
               </div>
               <el-button size="medium" type="primary" @click="handleSearchClick">查询</el-button>
             </el-col>
@@ -20,17 +20,17 @@
           </el-row>
           <el-row class="row">
             <!-- 树 -->
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-tree
               :data="comLeftOrgTree"
               node-key="id"
               :props="defaultProps"
               :default-expanded-keys="defaultExpandedKeys"
               @node-click="handleNodeClick"></el-tree>
-            </el-col>
-            <el-col :span="18">
+            </el-col> -->
+            <el-col :span="24">
               <!-- 表格 -->
-              <el-table :data="tableData.content" v-loading="tableLoading">
+              <el-table :data="tableData.content" v-loading="tableLoading" :height="tableHeight">
                 <el-table-column
                   prop="username"
                   label="用户名">
@@ -201,6 +201,7 @@ export default {
   },
   data() {
     return {
+      tableHeight:"",
       defaultProps: {
         children: 'children',
         label: 'orgFullName',
@@ -264,7 +265,18 @@ export default {
     }
     this.tableDateGet();
   },
+   mounted() {
+  this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
+  },
   methods: {
+    getHeight() {
+      this.tableHeight = document.body.clientHeight -350;
+      },
     tableDateGet() {
       const that = this;
       this.tableLoading = true;

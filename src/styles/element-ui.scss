@@ -68,8 +68,17 @@
 .el-submenu .el-menu-item{
     padding:0 60px !important;
 }
-
+//弹窗样式覆盖
+.el-dialog__body {
+    padding: 15px 20px 5px;
+}
+.el-form-item{
+    margin-bottom:15px;
+}
 // 按钮样式覆盖
+.el-button{
+    padding:5px 10px;
+}
 .el-button--primary {
     background-color: $themeColor;
     border-color: $themeColor;

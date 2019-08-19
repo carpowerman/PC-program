@@ -16,7 +16,7 @@
           <el-row>
             <el-col :span="24">
               <!-- 表格 -->
-              <el-table :data="tableData.content">
+              <el-table :data="tableData.content" :height="tableHeight">
                 <el-table-column
                   prop="title"
                   label="公告标题">
@@ -87,6 +87,7 @@ import { deepClone } from '@/util/util';
 export default {
   data() {
     return {
+      tableHeight:'',
       tableData: {},
       tableGet: {
         paging: 'true',
@@ -110,7 +111,18 @@ export default {
   created() {
     this.tableDateGet();
   },
+   mounted() {
+      this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
+  },
   methods: {
+     getHeight() {
+      this.tableHeight = document.body.clientHeight -350;
+      },
     tableDateGet() {
       const that = this;
       getNotice(that.tableGet).then((res) => {

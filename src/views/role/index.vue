@@ -41,7 +41,7 @@
                 <el-table-column
                   label="目录权限">
                   <template slot-scope="scope">
-                    <el-button size="mini" @click="handleMenuDialog(scope.row)">编辑</el-button>
+                    <el-button size="mini" @click="handleMenuDialog(scope.row)">设置</el-button>
                   </template>
                 </el-table-column>
                 <el-table-column

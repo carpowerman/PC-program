@@ -66,7 +66,7 @@
                 <el-table-column
                   label="操作"
                   fixed="right"
-                  width="120">
+                  width="80">
                   <template slot-scope="scope">
                     <el-button size="mini" @click="handleEditAppoint(scope.row)">编 辑</el-button>
                   </template>
@@ -74,7 +74,7 @@
                 <el-table-column
                   label="审核"
                   fixed="right"
-                  width="180">
+                  width="150">
                   <template slot-scope="scope">
                     <el-button size="mini" v-if="scope.row.status != 0" @click="handleUpdateAppoint(scope.row, 0)">恢复为预约</el-button>
                     <el-button size="mini" type="primary" v-if="scope.row.status == 0" @click="handleUpdateAppoint(scope.row, 1)">通  过</el-button>
