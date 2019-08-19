@@ -84,6 +84,11 @@
     border-color: $themeColor;
     color: #fff;
 }
+.el-button--primary.is-active, .el-button--primary:active{
+    background-color: $themeColor;
+    border-color: $themeColor;
+    color: #fff;
+}
 .el-button--primary:hover {
     background-color: $themColorHover;
     border-color: $themColorHover;

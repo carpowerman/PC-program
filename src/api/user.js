@@ -1,7 +1,7 @@
 import request from '@/router/axios';
 import { baseUrl } from '@/config/env';
 // 登录
-export const loginByUsername = (username, password, code, redomStr) => request({
+export const loginByUsername = (username, password, code, redomStr,userType) => request({
     url: baseUrl + '/auth/login',
     method: 'post',
     meta: {
@@ -11,7 +11,8 @@ export const loginByUsername = (username, password, code, redomStr) => request({
         username,
         password,
         code,
-        redomStr
+        redomStr,
+        userType
     }
 });
 

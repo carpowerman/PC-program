@@ -74,11 +74,11 @@
                 <el-table-column
                   label="审核"
                   fixed="right"
-                  width="150">
+                  width="200">
                   <template slot-scope="scope">
-                    <el-button size="mini" v-if="scope.row.status != 0" @click="handleUpdateAppoint(scope.row, 0)">恢复为预约</el-button>
-                    <el-button size="mini" type="primary" v-if="scope.row.status == 0" @click="handleUpdateAppoint(scope.row, 1)">通  过</el-button>
-                    <el-button size="mini" type="primary" v-if="scope.row.status == 0" @click="handleUpdateAppoint(scope.row, 2)">不通过</el-button>
+                    <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status != 0" @click="handleUpdateAppoint(scope.row, 0)">恢复预约</el-button>
+                    <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status != 1" @click="handleUpdateAppoint(scope.row, 1)">通  过</el-button>
+                    <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status !=2" @click="handleUpdateAppoint(scope.row, 2)">不通过</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -455,7 +455,10 @@ export default {
   flex-direction: row-reverse;
   margin-top: 20px;
 }
-
+.appoint-btn{
+  width:60px;
+  padding:5px 0;
+}
 .appointed {
   color: #67C23A;
 }

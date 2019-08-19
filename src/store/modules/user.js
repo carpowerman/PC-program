@@ -87,12 +87,13 @@ const user = {
                 data: userInfo,
                 type: 'Aes',
                 key: '/iqichenyun.com/',
-                param: ['password']
+                param: ['password'],
+                userType:1
             });
             // 发起 api 请求
             return new Promise((resolve) => {
                 // api 请求 --@/api/user.js
-                loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr).then(res => {
+                loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr,userInfo.userType).then(res => {
                     const data = res.data;
                     if(data.code === 0) {
                         // token 存入 store

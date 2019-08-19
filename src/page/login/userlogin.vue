@@ -88,7 +88,8 @@ export default {
         username: "",
         password: "",
         code: "",
-        redomStr: ""
+        redomStr: "",
+        userType:1
       },
       checked: false,
       code: {
