@@ -6,11 +6,11 @@ let iconfontUrl = `//at.alicdn.com/t/font_$key.css`;
 let codeUrl = `${baseUrl}/code`
 const env = process.env
 if (env.NODE_ENV == 'development') {
-     baseUrl = `https://cls.qichenyun.com:9450/cls`; // 开发环境地址
+     baseUrl = `https://dev.qichenyun.com:9450/cls`; // 开发环境地址
 } else if (env.NODE_ENV == 'production') {
-    baseUrl = `https://cls.qichenyun.com:9450/cls`; //生产环境地址
+    baseUrl = `https://dev.qichenyun.com:9450/cls`; //生产环境地址
 } else if (env.NODE_ENV == 'test') {
-    baseUrl = `https://cls.qichenyun.com:9450/cls`; //测试环境地址
+    baseUrl = `https://cls.qichenyun.com:9450/cls`; //打包上传正式环境地址所有的都改成cls
 }
 export {
     baseUrl,
