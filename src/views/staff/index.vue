@@ -7,15 +7,20 @@
 
             <!-- 查询 -->
             <el-col :span="19" class="search">
-              <div class="search-input">
-                <el-input v-model="tableGet.searchContent" placeholder="用户名,手机号     " size="medium"></el-input>
-              </div>
-              <el-button size="medium" type="primary" @click="handleSearchClick">查询</el-button>
+              <template v-if="permit.sys_user_search">
+                <div class="search-input">
+                  <el-input v-model="tableGet.searchContent" placeholder="用户名,手机号" size="medium"></el-input>
+                </div>
+                <el-button size="medium" type="primary" @click="handleSearchClick">查询</el-button>
+              </template>
+
             </el-col>
 
             <!-- 新增 -->
             <el-col :span="5" class="add">
-              <el-button icon="el-icon-plus" type="primary" size="medium" @click="addStaffDialog = true">新增</el-button>
+              <template v-if="permit.sys_user_add">
+                <el-button icon="el-icon-plus" type="primary" size="medium" @click="addStaffDialog = true">新增</el-button>
+              </template>
             </el-col>
           </el-row>
           <el-row class="row">
@@ -56,8 +61,8 @@
                 <el-table-column
                   label="操作">
                   <template slot-scope="scope">
-                    <el-button size="mini" @click="handleEditDialog(scope.row)">编辑</el-button>
-                    <el-button size="mini" @click="handleDeleteStaff(scope.row)">删除</el-button>
+                    <el-button size="mini" @click="handleEditDialog(scope.row)" v-if="permit.sys_user_edit">编辑</el-button>
+                    <el-button size="mini" @click="handleDeleteStaff(scope.row)" v-if="permit.sys_user_delete">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -169,7 +174,7 @@ import { mapGetters } from "vuex";
 import { deepClone, encryption } from '@/util/util';
 export default {
   computed: {
-    ...mapGetters(['orgTree', 'role']),
+    ...mapGetters(['orgTree', 'role', 'menu']),
     cascaderOrgTree() {
       let corgTree = deepClone(this.orgTree);
       corgTree.forEach((item) => {
@@ -253,7 +258,8 @@ export default {
         roles: [],
       },
       editStaffDialog: false,
-      selectedStaff: {}
+      selectedStaff: {},
+      permit: {}
     }
   },
   created() {
@@ -264,10 +270,11 @@ export default {
       this.$store.dispatch('GetRoleList').then();
     }
     this.tableDateGet();
+    this.opPermit();
   },
-   mounted() {
-  this.getHeight()
-      window.onresize = () => {
+  mounted() {
+    this.getHeight()
+    window.onresize = () => {
       return (() => {
         this.getHeight()
       })()
@@ -276,7 +283,7 @@ export default {
   methods: {
     getHeight() {
       this.tableHeight = document.body.clientHeight -350;
-      },
+    },
     tableDateGet() {
       const that = this;
       this.tableLoading = true;
@@ -407,6 +414,21 @@ export default {
           this.cascaderMenuRe(item);
         });
       }
+    },
+    opPermit() {
+      let _thisPermitArr = [];
+      let _thisPermit = {};
+      this.menu.forEach((item) => {
+        if(item.permissionNo == 'sys') {
+          item.children.forEach((item) => {
+            if(item.permissionNo == 'sys_user') _thisPermitArr = deepClone(item.children);
+          });
+        }
+      });
+      _thisPermitArr.forEach((item) => {
+        _thisPermit[item.permissionNo] = item.isPermit;
+      });
+      this.$set(this, 'permit', _thisPermit);
     }
   }
 }
