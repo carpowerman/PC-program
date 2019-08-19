@@ -7,10 +7,12 @@
 
             <!-- 查询 -->
             <el-col :span="19" class="search">
-              <div class="search-input">
-                <el-input v-model="tableGet.searchContent" placeholder="客户名称/客户手机号" size="medium"></el-input>
-              </div>
-              <el-button type="primary" size="medium" @click="tableDateGet">查询</el-button>
+              <template v-if="permit.customer_search">
+                <div class="search-input">
+                  <el-input v-model="tableGet.searchContent" placeholder="客户名称/客户手机号" size="medium"></el-input>
+                </div>
+                <el-button type="primary" size="medium" @click="tableDateGet">查询</el-button>
+              </template>
             </el-col>
 
             <!-- 新增 -->
@@ -91,7 +93,7 @@ import { mapGetters } from "vuex";
 import { deepClone } from '@/util/util';
 export default {
   computed: {
-    ...mapGetters(['orgTree']),
+    ...mapGetters(['orgTree','menu']),
     comOrgTree() {
       return [{ orgFullName: "全部", id: 0, children: this.orgTree }];
     },
@@ -128,11 +130,13 @@ export default {
         searchContent: ""
       },
       customerDialog: false,
-      selectedCustomer: {}
+      selectedCustomer: {},
+      permit:{}
     }
   },
   created() {
     this.tableDateGet();
+    this.opPermit();
   },
   mounted() {
     if(this.orgTree.length === 0) {
@@ -140,6 +144,18 @@ export default {
     }
   },
   methods: {
+      opPermit() {
+      let _thisPermitArr = [];
+      let _thisPermit = {};
+      this.menu.forEach((item) => {
+        if(item.permissionNo == 'customer') _thisPermitArr = deepClone(item.children);
+      });
+      _thisPermitArr.forEach((item) => {
+        _thisPermit[item.permissionNo] = item.isPermit;
+      });
+      this.$set(this, 'permit', _thisPermit);
+      console.log(this.permit,'222')
+    },
     tableDateGet() {
       const that = this;
       getCustomerList(that.tableGet).then((res) => {

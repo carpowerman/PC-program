@@ -10,7 +10,9 @@
 
             <!-- 新增 -->
             <el-col :span="5" class="add">
+              <template v-if="permit.sys_notice_add">
                 <el-button type="primary" size="medium" @click="addNoticeDialog = true" icon="plus">新 增</el-button>
+              </template>
             </el-col>
           </el-row>
           <el-row>
@@ -28,7 +30,7 @@
                 <el-table-column
                   label="操作">
                   <template slot-scope="scope">
-                    <el-button size="mini" @click="handleEditNoticeDialog(scope.row)">编辑</el-button>
+                    <el-button size="mini" @click="handleEditNoticeDialog(scope.row)" v-if="permit.sys_notice_edit">编辑</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -84,7 +86,11 @@
 import { getNotice } from '@/api/home';
 import { addNotice, editNotice } from '@/api/notice';
 import { deepClone } from '@/util/util';
+import { mapGetters } from "vuex";
 export default {
+   computed: {
+    ...mapGetters(['menu']),
+   },
   data() {
     return {
       tableHeight:'',
@@ -105,11 +111,13 @@ export default {
       addNoticeDialog: false,
       addNotice: {},
       editNoticeDialog: false,
-      selectedNotice: {}
+      selectedNotice: {},
+        permit: {}
     }
   },
   created() {
     this.tableDateGet();
+    this.opPermit();
   },
    mounted() {
       this.getHeight()
@@ -120,6 +128,22 @@ export default {
     }
   },
   methods: {
+      opPermit() {
+      let _thisPermitArr = [];
+      let _thisPermit = {};
+      this.menu.forEach((item) => {
+        if(item.permissionNo == 'sys') {
+          item.children.forEach((item) => {
+            if(item.permissionNo == 'sys_notice') _thisPermitArr = deepClone(item.children);
+          });
+        }
+      });
+      _thisPermitArr.forEach((item) => {
+        _thisPermit[item.permissionNo] = item.isPermit;
+      });
+      this.$set(this, 'permit', _thisPermit);
+      console.log(this.permit,'222')
+    },
      getHeight() {
       this.tableHeight = document.body.clientHeight -350;
       },

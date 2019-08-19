@@ -6,7 +6,7 @@
         <el-tab-pane label="加分项" name="add">
           <el-row>
             <el-col :span="19" style="height: 1px;"></el-col>
-            <el-col :span="5" class="add">
+            <el-col :span="5" class="add" v-if='permit.rule_add'>
               <el-button type="primary" size="medium" icon="el-icon-plus" @click="addRuleDialog = true">新 增</el-button>
             </el-col>
           </el-row>
@@ -41,7 +41,7 @@
             </el-table-column>
             <el-table-column
               label="编辑">
-              <template slot-scope="scope">
+              <template slot-scope="scope" v-if='permit.rule_edit'>
                 <el-button type="primary" size="mini" @click="handleEditRuleDialog(scope.row)">编 辑</el-button>
               </template>
             </el-table-column>
@@ -233,9 +233,14 @@
 <script>
 import { getRuleList, saveRule } from '@/api/rule';
 import { deepClone } from '@/util/util';
+import { mapGetters } from "vuex";
 export default {
+    computed: {
+    ...mapGetters(['menu']),
+    },
   data() {
     return {
+      permit:{},
       tabsDefault: 'add',
       rules: {
         orderNum: [{ required: true, message: '排序值不能为空', trigger: 'blur' }],
@@ -259,10 +264,11 @@ export default {
     }
   },
   created() {
-   
+   this.opPermit();
     this.tableDateGet();
   },
   mounted() {
+    
       this.getHeight()
       window.onresize = () => {
       return (() => {
@@ -271,6 +277,18 @@ export default {
     }
   },
   methods: {
+      opPermit() {
+      let _thisPermitArr = [];
+      let _thisPermit = {};
+      this.menu.forEach((item) => {
+        if(item.permissionNo == 'rule') _thisPermitArr = deepClone(item.children);
+      });
+      _thisPermitArr.forEach((item) => {
+        _thisPermit[item.permissionNo] = item.isPermit;
+      });
+      this.$set(this, 'permit', _thisPermit);
+      console.log(this.permit,'222')
+    },
     getHeight() {
       this.tableHeight = document.body.clientHeight -350;
       },

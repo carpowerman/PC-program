@@ -7,15 +7,19 @@
 
             <!-- 查询 -->
             <el-col :span="19" class="search">
-              <div class="search-input">
-                <el-input v-model="tableGet.searchContent" placeholder="店门名称/客户手机号" size="medium"></el-input>
-              </div>
-              <el-button size="medium" type="primary" @click="tableDateGet">查询</el-button>
+              <template v-if="permit.appiont_search">
+                <div class="search-input">
+                  <el-input v-model="tableGet.searchContent" placeholder="店门名称/客户手机号" size="medium"></el-input>
+                </div>
+                <el-button size="medium" type="primary" @click="tableDateGet">查询</el-button>
+              </template>
             </el-col>
 
             <!-- 新增 -->
             <el-col :span="5" class="add">
-              <el-button icon="el-icon-plus" size="medium" type="primary" @click="handleAddAppointDialog">新增</el-button>
+                <template v-if="permit.appiont_add">
+                  <el-button icon="el-icon-plus" size="medium" type="primary" @click="handleAddAppointDialog">新增</el-button>
+              </template>
             </el-col>
           </el-row>
           <el-row>
@@ -68,14 +72,14 @@
                   fixed="right"
                   width="80">
                   <template slot-scope="scope">
-                    <el-button size="mini" @click="handleEditAppoint(scope.row)">编 辑</el-button>
+                    <el-button size="mini" @click="handleEditAppoint(scope.row)" v-if='permit.appiont_add'>编 辑</el-button>
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="审核"
                   fixed="right"
                   width="200">
-                  <template slot-scope="scope">
+                  <template slot-scope="scope" v-if='permit.appointBtn'>
                     <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status != 0" @click="handleUpdateAppoint(scope.row, 0)">恢复预约</el-button>
                     <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status != 1" @click="handleUpdateAppoint(scope.row, 1)">通  过</el-button>
                     <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status !=2" @click="handleUpdateAppoint(scope.row, 2)">不通过</el-button>
@@ -213,7 +217,7 @@ import { mapGetters } from "vuex";
 import { deepClone } from '@/util/util';
 export default {
   computed: {
-    ...mapGetters(['orgTree']),
+    ...mapGetters(['orgTree','menu']),
     comOrgTree() {
       return [{ orgFullName: "全部", id: 0, children: this.orgTree }];
     },
@@ -253,6 +257,7 @@ export default {
   },
   data() {
     return {
+      permit:{},
       defaultProps: {
         children: 'children',
         label: 'orgFullName',
@@ -313,6 +318,7 @@ export default {
       this.$set(this.tableGet, 'status', this.$route.query.type*1);
     }
     this.tableDateGet();
+    this.opPermit();
   },
   mounted() {
     if(this.orgTree.length === 0) {
@@ -320,6 +326,18 @@ export default {
     }
   },
   methods: {
+      opPermit() {
+      let _thisPermitArr = [];
+      let _thisPermit = {};
+      this.menu.forEach((item) => {
+        if(item.permissionNo == 'appointment') _thisPermitArr = deepClone(item.children);
+      });
+      _thisPermitArr.forEach((item) => {
+        _thisPermit[item.permissionNo] = item.isPermit;
+      });
+      this.$set(this, 'permit', _thisPermit);
+      console.log(this.permit,'222')
+    },
     tableDateGet() {
       getAppointList(this.tableGet).then((res) => {
         if(res.data.code === 0) {

@@ -7,15 +7,19 @@
 
             <!-- 查询 -->
             <el-col :span="19" class="search">
-              <div class="search-input">
-                <el-input v-model="tableGet.searchContent" placeholder="用户名" size="medium"></el-input>
-              </div>
-              <el-button size="medium" type="primary" @click="handleSearchClick">查询</el-button>
+              <template v-if="permit.sys_role_search">
+                <div class="search-input">
+                  <el-input v-model="tableGet.searchContent" placeholder="用户名" size="medium"></el-input>
+                </div>
+                <el-button size="medium" type="primary" @click="handleSearchClick">查询</el-button>
+              </template>
             </el-col>
 
             <!-- 新增 -->
             <el-col :span="5" class="add">
-              <el-button icon="el-icon-plus" type="primary" size="medium" @click="addRoleDialog = true">新增</el-button>
+               <template v-if="permit.sys_role_add">
+                  <el-button icon="el-icon-plus" type="primary" size="medium" @click="addRoleDialog = true">新增</el-button>
+              </template>
             </el-col>
           </el-row>
           <el-row class="row" style="flex-grow: 1;">
@@ -41,14 +45,14 @@
                 <el-table-column
                   label="目录权限">
                   <template slot-scope="scope">
-                    <el-button size="mini" @click="handleMenuDialog(scope.row)">设置</el-button>
+                   <el-button size="mini" @click="handleMenuDialog(scope.row)">设置</el-button>  <!-- v-if="permit.sys_role_set" -->
                   </template>
                 </el-table-column>
                 <el-table-column
                   label="操作">
                   <template slot-scope="scope">
-                    <el-button size="mini" @click="handleEditDialog(scope.row)">编辑</el-button>
-                    <el-button size="mini" @click="handleDeleteRole(scope.row)">删除</el-button>
+                    <el-button size="mini" @click="handleEditDialog(scope.row)" v-if="permit.sys_role_edit">编辑</el-button>
+                    <el-button size="mini" @click="handleDeleteRole(scope.row)" v-if="permit.sys_role_delete">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -162,6 +166,7 @@ import { deepClone } from '@/util/util';
 import { mapState, mapGetters } from 'vuex';
 export default {
   computed: {
+    
     ...mapState(['dataPermission']),
     ...mapGetters(['menu', 'orgTree']),
     comRoleOrg() {
@@ -228,13 +233,14 @@ export default {
       selectedRoleInfo: {},
       menuDialog: false,
       tableHeight: 0,
+      permit:{}
     }
   },
   created() {
     if(this.orgTree.length === 0) {
       this.$store.dispatch('GetOrgTree').then();
     }
-   
+    this.opPermit();
     this.tableDateGet();
   },
   mounted() {
@@ -371,6 +377,23 @@ export default {
       }).catch(() => {
         this.$notify.error({ title: '保存失败', message: '网络错误' });
       })
+    },
+      opPermit() {
+      let _thisPermitArr = [];
+      let _thisPermit = {};
+      console.log(this.menu,'this.menu')
+      this.menu.forEach((item) => {
+        if(item.permissionNo == 'sys') {
+          item.children.forEach((item) => {
+            if(item.permissionNo == 'sys_role') _thisPermitArr = deepClone(item.children);
+          });
+        }
+      });
+      _thisPermitArr.forEach((item) => {
+        _thisPermit[item.permissionNo] = item.isPermit;
+      });
+      this.$set(this, 'permit', _thisPermit);
+      console.log(this.permit,'12121')
     }
   }
 }

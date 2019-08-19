@@ -9,8 +9,8 @@
             <!-- 操作按钮组 -->
             <el-col :span="24" class="search">
                 <el-button-group>
-                    <el-button type="primary" size="medium" icon="el-icon-plus" @click.native="addNodeDialog = true">新增</el-button>
-                    <el-button type="primary" size="medium" icon="el-icon-delete" @click="nodeDelete">删除</el-button>
+                    <el-button type="primary" size="medium" icon="el-icon-plus" @click.native="addNodeDialog = true" v-if='permit.org_add'>新增</el-button>
+                    <el-button type="primary" size="medium" icon="el-icon-delete" @click="nodeDelete" v-if='permit.org_delete'>删除</el-button>
                 </el-button-group>
             </el-col>
           </el-row>
@@ -43,7 +43,7 @@
                     <el-radio disabled v-model="selectedNode.orgType" :label=0>公司</el-radio>
                     <el-radio disabled v-model="selectedNode.orgType" :label=1>部门</el-radio>
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item v-if='permit.org_save'>
                     <el-button type="primary" @click="nodeSave" size="medium">保存</el-button>
                   </el-form-item>
                 </el-form>
@@ -92,7 +92,7 @@ import { deepClone } from '@/util/util';
 import { deleteOrgNode, saveOrgNode, addOrgNode } from '@/api/organization';
 export default {
   computed: {
-    ...mapGetters(['orgTree']),
+    ...mapGetters(['orgTree','menu']),
     cascaderOrgTree() {
       let corgTree = deepClone(this.orgTree);
       corgTree.forEach((item) => {
@@ -120,6 +120,7 @@ export default {
   },
   data() {
     return {
+      permit:{},
       heightData:'',
       defaultProps: {
         children: 'children',
@@ -158,6 +159,7 @@ export default {
     }
   },
   created() {
+    this.opPermit();
     if(this.orgTree.length === 0) {
       this.$store.dispatch('GetOrgTree').then();
     }
@@ -171,6 +173,22 @@ export default {
     }
   },
   methods: {
+     opPermit() {
+      let _thisPermitArr = [];
+      let _thisPermit = {};
+      this.menu.forEach((item) => {
+       if(item.permissionNo == 'sys') {
+          item.children.forEach((item) => {
+            if(item.permissionNo == 'sys_org') _thisPermitArr = deepClone(item.children);
+          });
+        }
+      });
+      _thisPermitArr.forEach((item) => {
+        _thisPermit[item.permissionNo] = item.isPermit;
+      });
+      this.$set(this, 'permit', _thisPermit);
+      console.log(this.permit,'222')
+    },
       getHeight() {
       this.heightData = document.body.clientHeight -250+'px';
       },

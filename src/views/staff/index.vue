@@ -429,6 +429,7 @@ export default {
         _thisPermit[item.permissionNo] = item.isPermit;
       });
       this.$set(this, 'permit', _thisPermit);
+      console.log(this.permit,'222')
     }
   }
 }
