@@ -19,7 +19,7 @@
           <el-row>
             <!-- 树 -->
             <el-col :span="6">
-                <div class="left-tree">
+                <div class="left-tree"  :style="{height:heightData}">
                     <el-tree
                     :data="menu"
                     :props="defaultProps"
@@ -125,6 +125,7 @@ export default {
   },
   data() {
     return {
+      heightData:'',
       defaultProps: {
         children: 'children',
         label: 'permissionName',
@@ -163,7 +164,18 @@ export default {
       addNodeDialog: false,
     }
   },
+   mounted() {
+      this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
+  },
   methods: {
+    getHeight() {
+      this.heightData = document.body.clientHeight -250+'px';
+      },
     handleNodeClick(data) {
       this.$set(this, 'selectedNode', deepClone(data));
     },

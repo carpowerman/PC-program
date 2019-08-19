@@ -80,6 +80,18 @@ const user = {
         token: getStore({ name: 'token' }) || '',
     },
     actions: {
+          //刷新token
+          RefeshToken({ state, commit }) {
+            return new Promise((resolve, reject) => {
+                refeshToken(state.refeshToken).then(res => {
+                    const data = res.data.data;
+                    commit('SET_TOKEN', data);
+                    resolve(data);
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
         //根据用户名登录
         LoginByUsername({ commit }, userInfo) {
             // 加密，需与后端协调
@@ -150,18 +162,7 @@ const user = {
             });
 
         },
-        //刷新token
-        RefeshToken({ state, commit }) {
-            return new Promise((resolve, reject) => {
-                refeshToken(state.refeshToken).then(res => {
-                    const data = res.data.data;
-                    commit('SET_TOKEN', data);
-                    resolve(data);
-                }).catch(error => {
-                    reject(error)
-                })
-            })
-        },
+      
         // 登出
         LogOut({ commit }) {
             return new Promise((resolve, reject) => {
