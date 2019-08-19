@@ -19,10 +19,10 @@
           <el-row>
             <!-- 树 -->
             <el-col :span="6">
-                <div class="left-tree">
+                <div class="left-tree" :style="{height:heightData}" >
                     <el-tree
                     :data="orgTree"
-                    node-key="id"
+                     node-key="id"
                     :props="defaultProps"
                     :default-expanded-keys="defaultExpandedKeys"
                     @node-click="handleNodeClick"></el-tree>
@@ -120,6 +120,7 @@ export default {
   },
   data() {
     return {
+      heightData:'',
       defaultProps: {
         children: 'children',
         label: 'orgFullName',
@@ -161,7 +162,18 @@ export default {
       this.$store.dispatch('GetOrgTree').then();
     }
   },
+    mounted() {
+      this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
+  },
   methods: {
+      getHeight() {
+      this.heightData = document.body.clientHeight -250+'px';
+      },
     handleNodeClick(data) {
       this.$set(this, 'selectedNode', deepClone(data));
     },
@@ -245,5 +257,6 @@ export default {
 .left-tree {
     width: 100%;
     padding-right: 15px;
+    overflow: auto;
 }
 </style>
