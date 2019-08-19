@@ -18,21 +18,9 @@ const getters = {
     roles: state => state.user.roles,
     permission: state => state.user.permission,
     menu: state => state.user.menu,
-    menuAll: state => state.user.menuAll,
     logsList: state => state.logs.logsList,
     logsLen: state => state.logs.logsList.length || 0,
     logsFlag: (state, getters) => getters.logsLen === 0,
-    homeEcharts: state => {
-        let echartsData = [];
-        state.home.echarts.forEach((item) => {
-            echartsData.push({
-                item: item.label,
-                '审核通过数量': item.passed,
-                '当月申请数量': item.total
-            });
-        });
-        return echartsData;
-    },
     role: state => state.role.roleList,
     orgTree: state => state.organization.tree
 }
