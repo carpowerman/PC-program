@@ -259,6 +259,7 @@ export default {
     }
   },
   created() {
+   
     this.tableDateGet();
   },
   mounted() {
@@ -271,7 +272,7 @@ export default {
   },
   methods: {
     getHeight() {
-      this.tableHeight = document.body.clientHeight -450;
+      this.tableHeight = document.body.clientHeight -350;
       },
     tableDateGet() {
       getRuleList(this.tableGet).then((res) => {
