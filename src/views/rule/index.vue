@@ -28,8 +28,8 @@
             <el-table-column
               label="选择值">
               <template slot-scope="scope">
-                <template v-if="scope.row.chooseType == 0">Y</template>
-                <template v-else>N</template>
+                <template v-if="scope.row.chooseType == 0">N</template>
+                <template v-else>Y</template>
               </template>
             </el-table-column>
             <el-table-column
@@ -81,8 +81,8 @@
             <el-table-column
               label="选择值">
               <template slot-scope="scope">
-                <template v-if="scope.row.chooseType == 0">Y</template>
-                <template v-else>N</template>
+                <template v-if="scope.row.chooseType == 0">N</template>
+                <template v-else>Y</template>
               </template>
             </el-table-column>
             <el-table-column

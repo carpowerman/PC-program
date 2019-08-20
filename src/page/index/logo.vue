@@ -49,7 +49,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  width: 240px;
+  width: 220px;
   height: 64px;
   line-height: 70px;
   text-align: center;
