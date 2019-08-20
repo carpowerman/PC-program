@@ -148,7 +148,7 @@
               show-checkbox
               :check-strictly="true"
               node-key="id"
-              :default-checked-keys="comRoleMenu">
+              :default-checked-keys="selectedRolePermit">
             </el-tree>
             <div slot="footer">
               <el-button @click="menuDialog = false">取 消</el-button>
@@ -175,15 +175,6 @@ export default {
         this.selectedRoleInfo.orgs.forEach((item) => {
           temp.push(item.id);
         })
-      }
-      return temp;
-    },
-    comRoleMenu() {
-      let temp = [];
-      if(this.selectedRoleInfo.permissions) {
-        this.selectedRoleInfo.permissions.forEach((item) => {
-          temp.push(item.id);
-        });
       }
       return temp;
     }
@@ -231,6 +222,7 @@ export default {
       editRoleDialog: false,
       selectedRole: {},
       selectedRoleInfo: {},
+      selectedRolePermit: [],
       menuDialog: false,
       tableHeight: 0,
       permit:{}
@@ -355,10 +347,17 @@ export default {
     handleMenuDialog(obj) {
       roleInfo({ id: obj.id }).then((res) => {
         if(res.data.code === 0) {
-          this.$set(this, 'selectedRoleInfo', res.data.data);
+          this.$set(this, 'selectedRoleInfo', deepClone(res.data.data));
+          let temp = [];
+          this.selectedRoleInfo.permissions.forEach((item) => {
+            temp.push(item.id);
+          });
+          this.$set(this, 'selectedRolePermit', temp);
+          this.menuDialog = true;
+          this.$refs.roleMenuTree.setCheckedNodes(temp);
         }
       })
-      this.menuDialog = true;
+
     },
     handleRoleMenu() {
       let temp = this.$refs.roleMenuTree.getCheckedNodes(false, true);
