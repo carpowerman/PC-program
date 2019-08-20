@@ -18,6 +18,7 @@ const icon = {
             { value: "iconfont icon-ic_home" },
             { value: "iconfont icon-ic_financial" },
             { value: "iconfont icon-ic_applets" },
+            { value: "iconfont icon-ic_setting" },
         ]
     }
 }
