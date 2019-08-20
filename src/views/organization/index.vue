@@ -33,13 +33,25 @@
             <el-col :span="18">
               <template v-if="selectedNode.id">
                 <el-form label-width="120px" :model="selectedNode" :rules="rules" ref="saveNodeForm">
-                  <el-form-item label="父节点名称">
+                  <el-form-item label="上级机构">
                     <el-input v-model="selectedNode.parentName" size="medium" :disabled="true"></el-input>
                   </el-form-item>
-                  <el-form-item label="节点名称" prop="orgFullName">
+                  <el-form-item label="机构全称" prop="orgFullName">
                     <el-input v-model="selectedNode.orgFullName" size="medium"></el-input>
                   </el-form-item>
-                  <el-form-item label="节点类型">
+                  <el-form-item label="机构简称" prop="orgSimpleName">
+                    <el-input v-model="selectedNode.orgSimpleName" size="medium"></el-input>
+                  </el-form-item>
+                   <el-form-item label="负责人" prop="header">
+                    <el-input v-model="selectedNode.header" size="medium"></el-input>
+                  </el-form-item>
+                   <el-form-item label="负责人手机号" prop="headerMobile">
+                    <el-input v-model="selectedNode.headerMobile" size="medium"></el-input>
+                  </el-form-item>
+                   <el-form-item label="门店地址" prop="address">
+                    <el-input v-model="selectedNode.address" size="medium"></el-input>
+                  </el-form-item>
+                  <el-form-item label="机构类型">
                     <el-radio disabled v-model="selectedNode.orgType" :label=0>公司</el-radio>
                     <el-radio disabled v-model="selectedNode.orgType" :label=1>部门</el-radio>
                   </el-form-item>
@@ -52,9 +64,9 @@
           </el-row>
         </div>
 
-        <el-dialog title="新增节点" :visible.sync="addNodeDialog">
+        <el-dialog title="新增机构" :visible.sync="addNodeDialog">
           <el-form label-width="120px" ref="addNodeForm" :model="addNode" :rules="rules">
-            <el-form-item label="父节点名称">
+            <el-form-item label="上级机构">
               <el-cascader
                 v-model="addNode.parentId"
                 size="medium"
@@ -63,16 +75,16 @@
                 :show-all-levels="false">
               </el-cascader>
             </el-form-item>
-            <el-form-item label="节点编码" prop="orgNo">
+            <el-form-item label="机构编码" prop="orgNo">
               <el-input v-model="addNode.orgNo" size="medium"></el-input>          
             </el-form-item>
-            <el-form-item label="节点名称" prop="orgFullName">
+            <el-form-item label="机构全称" prop="orgFullName">
               <el-input v-model="addNode.orgFullName" size="medium"></el-input>
             </el-form-item>
-            <el-form-item label="节点简称" prop="orgSimpleName">
+            <el-form-item label="机构简称" prop="orgSimpleName">
               <el-input v-model="addNode.orgSimpleName" size="medium"></el-input>
             </el-form-item>
-            <el-form-item label="节点类型" prop="orgType">
+            <el-form-item label="机构类型" prop="orgType">
               <el-radio v-model="addNode.orgType" :label=0>公司</el-radio>
               <el-radio v-model="addNode.orgType" :label=1>部门</el-radio>
             </el-form-item>
@@ -140,19 +152,29 @@ export default {
       },
       rules: {
         parentId: [
-          { required: true, message: '请选择父节点', trigger: 'change' }
+          { required: true, message: '请选择上级机构', trigger: 'change' }
         ],
         orgNo: [
-          { required: true, message: '请填写节点映射', trigger: 'change' }
+          { required: true, message: '请填写机构映射', trigger: 'change' }
         ],
         orgFullName: [
-          { required: true, message: '请填写节点名称', trigger: 'blur' }
+          { required: true, message: '请填写机构全称', trigger: 'blur' }
         ],
         orgSimpleName: [
-          { required: true, message: '请填写节点简称', trigger: 'change' }
+          { required: true, message: '请填写机构简称', trigger: 'blur' }
+        ],
+       
+        header: [
+          { required: true, message: '请填写负责人', trigger: 'blur' }
+        ],
+        headerMobile: [
+          { required: true, message: '请填写手机号', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: '请填写地址', trigger: 'blur' }
         ],
         orgType: [
-          { required: true, message: '请选择节点类型', trigger: 'change' }
+          { required: true, message: '请选择机构类型', trigger: 'change' }
         ]
       },
       addNodeDialog: false,
@@ -197,10 +219,10 @@ export default {
     },
     nodeDelete() {
       if(!this.selectedNode.id) {
-        this.$notify.error({ title: '删除失败', message: '请选择一个节点。' });
+        this.$notify.error({ title: '删除失败', message: '请选择一个机构。' });
         return false;
       }
-      this.$confirm('确认删除该节点？', '提示', {
+      this.$confirm('确认删除该机构？', '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
@@ -209,7 +231,7 @@ export default {
           id: this.selectedNode.id
         }).then((res) => {
           if(res.data.code === 0) {
-            this.$notify.success({ title: '删除成功', message: '该节点已被删除。' });
+            this.$notify.success({ title: '删除成功', message: '该机构已被删除。' });
             this.$store.dispatch('GetOrgTree').then();
           }
         })
@@ -221,7 +243,7 @@ export default {
         if(val) {
           saveOrgNode(this.selectedNode).then((res) => {
             if(res.data.code === 0) {
-              this.$notify.success({ title: '保存成功', message: '该节点信息已被修改。' });
+              this.$notify.success({ title: '保存成功', message: '该机构信息已被修改。' });
               this.$store.dispatch('GetOrgTree').then();
             }
           });
@@ -233,7 +255,7 @@ export default {
         if(val) {
           addOrgNode(this.addNode).then((res) => {
             if(res.data.code === 0) {
-              this.$notify.success({ title: '新增成功', message: '新增节点成功。' });
+              this.$notify.success({ title: '新增成功', message: '新增机构成功。' });
               this.$store.dispatch('GetOrgTree').then();
               this.addNodeDialog = false;
               this.$set(this, 'addNode', {

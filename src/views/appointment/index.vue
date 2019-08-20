@@ -64,6 +64,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                prop="orgAddress"
                   label="门店地址"
                   width="250">
                 </el-table-column>
