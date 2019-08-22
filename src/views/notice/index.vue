@@ -31,6 +31,7 @@
                   label="操作">
                   <template slot-scope="scope">
                     <el-button size="mini" @click="handleEditNoticeDialog(scope.row)" v-if="permit.sys_notice_edit">编辑</el-button>
+                    <el-button size="mini" @click="handledeleteNotice(scope.row)" v-if="permit.sys_notice_delete">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -84,7 +85,7 @@
 
 <script>
 import { getNotice } from '@/api/home';
-import { addNotice, editNotice } from '@/api/notice';
+import { addNotice, editNotice ,delNotice} from '@/api/notice';
 import { deepClone } from '@/util/util';
 import { mapGetters } from "vuex";
 export default {
@@ -174,6 +175,17 @@ export default {
           });
         }
       });
+    },
+    handledeleteNotice(obj){
+      let paramId={
+        id:obj.id
+      }
+          delNotice(paramId).then((res) => {
+            if(res.data.code === 0) {
+              this.$notify.success({ title: '删除成功', message: '公告已删除' });
+              this.tableDateGet();
+            }
+          })
     },
     handleEditNoticeDialog(obj) {
       this.$set(this, 'selectedNotice', obj);

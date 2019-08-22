@@ -19,3 +19,10 @@ export const editNotice = ({ id, title, content }) => request({
         content: content
     }
 })
+export const delNotice = ({ id}) => request({
+    url: baseUrl + '/notice/del',
+    method: 'post',
+    data: {
+        id: id
+    }
+})
