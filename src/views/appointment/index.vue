@@ -25,7 +25,7 @@
           <el-row>
             <el-col :span="24">
               <!-- 表格 -->
-              <el-table :data="tableData.content" style="width: 100%">
+              <el-table :data="tableData.content" style="width: 100%" :height="tableHeight">
                 <el-table-column
                   prop="custName"
                   label="客户名称"
@@ -258,6 +258,7 @@ export default {
   },
   data() {
     return {
+      tableHeight:'',
       permit:{},
       defaultProps: {
         children: 'children',
@@ -325,8 +326,17 @@ export default {
     if(this.orgTree.length === 0) {
       this.$store.dispatch('GetOrgTree').then();
     }
+      this.getHeight()
+      window.onresize = () => {
+      return (() => {
+        this.getHeight()
+      })()
+    }
   },
   methods: {
+      getHeight() {
+      this.tableHeight = document.body.clientHeight -250+'px';
+      },
       opPermit() {
       let _thisPermitArr = [];
       let _thisPermit = {};
