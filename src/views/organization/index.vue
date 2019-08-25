@@ -84,14 +84,14 @@
             <el-form-item label="机构简称" prop="orgSimpleName">
               <el-input v-model="addNode.orgSimpleName" size="medium"></el-input>
             </el-form-item>
-             <el-for-item label="负责人" prop="header">
-                <el-input v-model="addNode.header" size="medium"></el-input>
-             </el-for-item>
-                   <el-form-item label="负责人手机号" prop="headerMobile">
-                    <el-input v-model="addNode.headerMobile" size="medium"></el-input>
-                  </el-form-item>
-                   <el-form-item label="门店地址" prop="address">
-                    <el-input v-model="addNode.address" size="medium"></el-input>
+            <el-form-item label="负责人" prop="header">
+              <el-input v-model="addNode.header" size="medium"></el-input>
+            </el-form-item>
+            <el-form-item label="负责人手机号" prop="headerMobile">
+              <el-input v-model="addNode.headerMobile" size="medium"></el-input>
+            </el-form-item>
+            <el-form-item label="门店地址" prop="address">
+              <el-input v-model="addNode.address" size="medium"></el-input>
             </el-form-item>
             <el-form-item label="机构类型" prop="orgType">
               <el-radio v-model="addNode.orgType" :label=0>公司</el-radio>

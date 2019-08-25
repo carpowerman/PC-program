@@ -45,7 +45,7 @@
                 <el-table-column
                   label="目录权限">
                   <template slot-scope="scope">
-                   <el-button size="mini" @click="handleMenuDialog(scope.row)">设置</el-button>  <!-- v-if="permit.sys_role_set" -->
+                   <el-button size="mini" @click="handleMenuDialog(scope.row)" v-if="permit.sys_role_set">设置</el-button>  <!-- v-if="permit.sys_role_set" -->
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -237,6 +237,11 @@ export default {
   },
   mounted() {
     this.initTableHeight();
+    window.onresize = () => {
+      return (() => {
+        this.initTableHeight()
+      })()
+    }
   },
   methods: {
     initTableHeight() {
