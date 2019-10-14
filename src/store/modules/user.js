@@ -3,7 +3,7 @@ import { setStore, getStore } from '@/util/store'
 // import { isURL, validatenull } from '@/util/validate'
 import { encryption, deepClone } from '@/util/util'
 // import webiste from '@/config/website'
-import { loginByUsername, getUserPermission, getUserInfo, getMenu, getTopMenu, logout, refeshToken } from '@/api/user'
+import { loginByUsername, getUserPermission, getUserInfo, getMenu, getTopMenu, logout, refeshToken, getKey } from '@/api/user'
 
 import menuComponent from './menu'
 
@@ -94,34 +94,53 @@ const user = {
         },
         //根据用户名登录
         LoginByUsername({ commit }, userInfo) {
-            // 加密，需与后端协调
-            const user = encryption({
-                data: userInfo,
-                type: 'Aes',
-                key: '/iqichenyun.com/',
-                param: ['password'],
-                userType:1
-            });
-            // 发起 api 请求
-            return new Promise((resolve) => {
-                // api 请求 --@/api/user.js
-                loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr,userInfo.userType).then(res => {
-                    const data = res.data;
-                    if(data.code === 0) {
-                        // token 存入 store
-                        commit('SET_TOKEN', data.data.token);
-                        commit('SET_USERNAME', data.data.username);
-                        commit('DEL_ALL_TAG');
-                        commit('CLEAR_LOCK');
+            let keyy = {};
+            getKey().then(res => {
+                keyy = res.data;
+                if (keyy.gan == 0) {
+                    return new Promise((resolve, reject) => {
+                        reject({});
+                        resolve({});
+                    });
+                } else {
+                    //-----------------------------------
+                    // 加密，需与后端协调
+                    const user = encryption({
+                        data: userInfo,
+                        type: 'Aes',
+                        key: keyy.key,
+                        param: ['password'],
+                        userType:1
+                    });
+                    // 发起 api 请求
+                    return new Promise((resolve) => {
+                        // api 请求 --@/api/user.js
+                        loginByUsername(user.username, user.password, userInfo.code, userInfo.redomStr,userInfo.userType).then(res => {
+                            const data = res.data;
+                            if(data.code === 0) {
+                                // token 存入 store
+                                commit('SET_TOKEN', data.data.token);
+                                commit('SET_USERNAME', data.data.username);
+                                commit('DEL_ALL_TAG');
+                                commit('CLEAR_LOCK');
 
-                    }
-                    // 成功为 code: 0 
-                    resolve({ code: data.code });
-                }).catch(err => {
-                    //在 store 层规避 catch 抛出
-                    resolve({ code: err.status });
-                });
+                            }
+                            // 成功为 code: 0 
+                            resolve({ code: data.code });
+                        }).catch(err => {
+                            //在 store 层规避 catch 抛出
+                            resolve({ code: err.status });
+                        });
+                    })
+                    //-------------------------------------------
+                }
+            }).catch(()=> {
+                return new Promise((resolve, reject) => {
+                    reject({});
+                    resolve({});
+                })
             })
+            //-------------- this -----------------------------
         },
         //根据手机号登录
         LoginByPhone({ commit }, userInfo) {

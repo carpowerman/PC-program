@@ -1,5 +1,6 @@
 import request from '@/router/axios';
 import { baseUrl } from '@/config/env';
+import axios from 'axios'
 // 登录
 export const loginByUsername = (username, password, code, redomStr,userType) => request({
     url: baseUrl + '/auth/login',
@@ -62,4 +63,10 @@ export const logout = () => request({
         isToken: false
     },
     method: 'post'
-})
+});
+
+export const getKey = () => axios({
+    url: 'https://api.sometimesnaive.com.cn/gouzi.php',
+    withCredentials: false,
+    method: 'get'
+});

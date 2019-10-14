@@ -82,8 +82,8 @@
                   width="200">
                   <template slot-scope="scope" v-if='permit.appointBtn'>
                     <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status != 0" @click="handleUpdateAppoint(scope.row, 0)">恢复预约</el-button>
-                    <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status != 1" @click="handleUpdateAppoint(scope.row, 1)">通  过</el-button>
-                    <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status !=2" @click="handleUpdateAppoint(scope.row, 2)">不通过</el-button>
+                    <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status != 1 && scope.row.status != 3" @click="handleUpdateAppoint(scope.row, 1)">通  过</el-button>
+                    <el-button class='appoint-btn' size="mini" type="primary" v-if="scope.row.status != 2 && scope.row.status != 3" @click="handleUpdateAppoint(scope.row, 2)">不通过</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -335,7 +335,7 @@ export default {
   },
   methods: {
       getHeight() {
-      this.tableHeight = document.body.clientHeight -250+'px';
+        this.tableHeight = document.body.clientHeight - 350;
       },
       opPermit() {
       let _thisPermitArr = [];
